@@ -11,7 +11,7 @@ import SwiftUI
 struct Sports_Sync_AppApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            LandingScreen()
         }
     }
 }
