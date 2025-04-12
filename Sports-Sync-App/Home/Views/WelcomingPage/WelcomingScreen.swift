@@ -7,12 +7,30 @@
 
 import SwiftUI
 
+
 struct WelcomingScreen: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            WelcomingImage()
+            
+            VStack {
+                
+                WelcomingText()
+                
+                ActivatedButton(buttonText: .continueText, action: {})
+                    .padding(.top, 50)
+            }
+            .padding()
+            .background(Color.white)
+            .shadow(color : .white , radius: 100 ,y : -100)
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            
+        }
+        
     }
 }
 
 #Preview {
     WelcomingScreen()
 }
+

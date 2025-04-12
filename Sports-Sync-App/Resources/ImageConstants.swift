@@ -10,5 +10,6 @@ import SwiftUI
 
 struct ImageConstants{
     
-    var appImage = Image(.sportSync)
+    var appImage = Image("SportSync")
+    var welcomeBikeImage = Image("welcomeBikeImage")
 }

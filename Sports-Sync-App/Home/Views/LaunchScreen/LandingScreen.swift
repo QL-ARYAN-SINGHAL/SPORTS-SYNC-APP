@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 11/04/25.
-//
-
 import SwiftUI
 
 struct LandingScreen: View {
@@ -18,6 +11,7 @@ struct LandingScreen: View {
     
     var body: some View {
         VStack {
+            // Splash Screen
             if showSplash {
                 VStack {
                     imageConstants.appImage
@@ -25,16 +19,19 @@ struct LandingScreen: View {
                         .scaledToFit()
                         .frame(width: 200, height: 200)
                         .offset(x: offsetAnimation)
-                        .animation(
-                            .interpolatingSpring(stiffness: 100, damping: 10),
-                            value: offsetAnimation
-                        )
-                }
-                .onAppear {
-                    offsetAnimation = 0
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        showSplash = false
-                    }
+                        .onAppear {
+                            withAnimation(.interpolatingSpring(stiffness: 100, damping: 10)) {
+                                offsetAnimation = 0
+                            }
+                            
+                            // Dispatch queue to set timer to toggle showSplash after 2 sec
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                
+                                withAnimation(.easeInOut(duration: 0.5)) {
+                                    showSplash = false
+                                }
+                            }
+                        }
                 }
             } else {
                 WelcomingScreen()
