@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct SegmentController: View {
+    @State private var currentView: Int = 0
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Picker("Currently on", selection: $currentView) {
+            Text(verbatim: .logInText).tag(0)
+            Text(verbatim: .signUpText).tag(1)
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal, 20)
     }
 }
 

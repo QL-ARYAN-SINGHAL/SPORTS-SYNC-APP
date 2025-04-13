@@ -9,7 +9,29 @@ import SwiftUI
 
 struct SignUpView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading,spacing: 10){
+            Text(verbatim: .signUpText)
+                .font(.title2)
+                .fontWeight(.medium)
+            
+            Text(verbatim: .signUpHeadline)
+                .font(.body)
+                .foregroundColor(.black.opacity(0.8))
+        }
+        .frame(width: 300,alignment: .leading)
+        .padding(.leading,-50	)
+        
+        VStack{
+            SignUpFields()
+            
+            SignUpAge()
+                .padding(.vertical)
+            
+            SignUpGender()
+            
+            SignUpButton()
+        }
+       
     }
 }
 

@@ -10,5 +10,11 @@ extension String {
     static let emailPlaceholder = "Email address"
     static let passwordPlaceholder = "Your password"
     static let forgotPassword = "Forgot Password?"
+    static let firstNamePlaceholder = "First Name"
+    static let lastNamePlaceholder = "Last Name"
+    static let confirmPasswordPlaceholder = "Confirm Password"
+    static let age = "Your age"
+    static let gender = "Gender"
+    static let signUpHeadline = "Enter your details"
     
 }
