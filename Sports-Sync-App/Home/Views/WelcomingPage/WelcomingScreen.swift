@@ -7,30 +7,37 @@
 
 import SwiftUI
 
-
 struct WelcomingScreen: View {
+    @State private var isActive = false
+
     var body: some View {
-        ZStack {
-            WelcomingImage()
-            
-            VStack {
-                
-                WelcomingText()
-                
-                ActivatedButton(buttonText: .continueText, action: {})
+        NavigationStack {
+            ZStack {
+                WelcomingImage()
+
+                VStack {
+                    WelcomingText()
+
+                    NavigationLink(destination: SegmentController(), isActive: $isActive) {
+                        EmptyView()
+                    }
+
+                    ActivatedButton(buttonText: .continueText, action: {
+                        isActive = true
+                    })
                     .padding(.top, 50)
+                }
+                .padding()
+                .background(Color.white)
+                .shadow(color: .white, radius: 100, y: -100)
+                .frame(maxHeight: .infinity, alignment: .bottom)
             }
-            .padding()
-            .background(Color.white)
-            .shadow(color : .white , radius: 100 ,y : -100)
-            .frame(maxHeight: .infinity, alignment: .bottom)
-            
+           
         }
-        
+       
     }
 }
 
 #Preview {
     WelcomingScreen()
 }
-
