@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SignUpButton: View {
     var body: some View {
-        ActivatedButton(buttonText: .signUpText, action: {})
+        ActivatedButton(buttonText: .signUpText, action: {
+            
+        })
            
     }
 }

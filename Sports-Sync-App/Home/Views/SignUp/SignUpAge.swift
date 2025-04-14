@@ -8,26 +8,27 @@
 import SwiftUI
 
 struct SignUpAge: View {
-    @State private var value: Double = 0
-    @State private var step: Double = 1
+    @ObservedObject var signUpData = SignUpDataModel()
+    @StateObject var progressValidation = ProgressValueCalculator()
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
-            HStack {
-                Text("Your Age: \(Int(value))")
-                    .font(.subheadline)
-                    .padding(.leading, 5)
-            }
             
-            //MARK: AGE SLIDER
-            Slider(value: $value, in: 10...100, step: 1)
-                .tint(.primaryBlue)
-                .frame(width:300 )
-        }
-        .padding(.leading,-60)
+            Text(signUpData.ageLabel)
+                .font(Font.custom(.fontJakarta, size: 14))
+                .padding(.leading, 5)
+            
        
+            Slider(value: $signUpData.ageValue, in: 10...100, step: 1)
+                .tint(.appTint)
+                .frame(width: 300)
+                .onChange(of: signUpData.ageValue) { _ in
+                    progressValidation.calculateProgress()
+                }
+        }
+        .padding(.leading, -60)
     }
-    }
-
+}
 
 #Preview {
     SignUpAge()

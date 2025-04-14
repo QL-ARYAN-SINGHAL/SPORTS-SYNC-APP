@@ -16,8 +16,8 @@ struct ActivatedButton: View {
             Text(buttonText)
                 .font(.system(size: 18))
                 .foregroundColor(.white)
-                .frame(width: 350, height: 60)
-                .background(Color.primaryBlue)
+                .frame(width: 350, height: 50)
+                .background(Color.appTint)
                 .cornerRadius(12)
         }
         .padding()

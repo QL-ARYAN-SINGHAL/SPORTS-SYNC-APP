@@ -9,28 +9,25 @@ import SwiftUI
 
 struct SignUpView: View {
     var body: some View {
-        VStack(alignment: .leading,spacing: 10){
-            Text(verbatim: .signUpText)
-                .font(.title2)
-                .fontWeight(.medium)
-            
-            Text(verbatim: .signUpHeadline)
-                .font(.body)
-                .foregroundColor(.black.opacity(0.8))
-        }
-        .frame(width: 300,alignment: .leading)
-        .padding(.leading,-50	)
-        
+       
         VStack{
+            SignUpHeading()
+            
             SignUpFields()
             
             SignUpAge()
-                .padding(.vertical)
+                .padding(.top,10)
             
             SignUpGender()
-            
+               
             SignUpButton()
+                
+            
+            Divider()
+            
+            SignUpProgressBar()
         }
+        .padding(.top,-13)
        
     }
 }

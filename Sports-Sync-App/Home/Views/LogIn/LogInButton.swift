@@ -8,24 +8,37 @@
 import SwiftUI
 
 struct LogInButton: View {
+    @ObservedObject var logInValidation = LoginValidation()
+    @State private var shouldNavigate = false
+    var logInData = LoginDataModal()
+    
     var body: some View {
-        VStack(alignment: .leading){
+        VStack(alignment: .leading) {
             
-            //MARK: FORGOT PASSWORD BUTTON
-            Button (action : {} , label: {
+            // MARK: FORGOT PASSWORD BUTTON
+            Button(action: {}, label: {
                 Text(verbatim: .forgotPassword)
-                    .font(.body)
-                    .padding(.leading , 15)
+                    .font(Font.custom(.fontJakarta, size: 12))
+                    .padding(.leading, 15)
             })
-           
-            //MARK: LOGIN BUTTON TO GET YOUR LOGGED IN
             
-            ActivatedButton(buttonText: .logInText, action: {})
+            // MARK: LOGIN BUTTON TO GET YOU LOGGED IN
+            ActivatedButton(buttonText: .logInText, action: {
+                let isValid = logInValidation.isEmailValid(email: logInData.loginEmail)
+                let isPasswordValid = logInValidation.isPasswordValid(password: logInData.loginPassword)
+                
+                if isValid && isPasswordValid {
+                    self.shouldNavigate = true
+                }
+            })
             
-            
-            
+          
+            NavigationLink(
+                destination: WelcomingScreen(),
+                isActive: $shouldNavigate,
+                label: { EmptyView() }
+            )
         }
-        
     }
 }
 

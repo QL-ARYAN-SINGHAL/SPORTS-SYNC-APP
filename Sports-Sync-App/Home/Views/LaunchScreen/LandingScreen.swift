@@ -14,24 +14,26 @@ struct LandingScreen: View {
             // Splash Screen
             if showSplash {
                 VStack {
-                    imageConstants.appImage
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
-                        .offset(x: offsetAnimation)
-                        .onAppear {
-                            withAnimation(.interpolatingSpring(stiffness: 100, damping: 10)) {
-                                offsetAnimation = 0
-                            }
-                            
-                            // Dispatch queue to set timer to toggle showSplash after 2 sec
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    Group {
+                        imageConstants.appImage
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 200, height: 200)
+                            .offset(x: offsetAnimation)
+                            .onAppear {
+                                withAnimation(.interpolatingSpring(stiffness: 100, damping: 10)) {
+                                    offsetAnimation = 0
+                                }
                                 
-                                withAnimation(.easeInOut(duration: 0.5)) {
-                                    showSplash = false
+                                // Dispatch queue to set timer to toggle showSplash after 2 sec
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        showSplash = false
+                                    }
                                 }
                             }
-                        }
+                    }
                 }
             } else {
                 WelcomingScreen()

@@ -16,5 +16,7 @@ extension String {
     static let age = "Your age"
     static let gender = "Gender"
     static let signUpHeadline = "Enter your details"
+    static let signUpProgressText = "Details Complete"
+    static let fontJakarta = "PlusJakarta-Regular"
     
 }

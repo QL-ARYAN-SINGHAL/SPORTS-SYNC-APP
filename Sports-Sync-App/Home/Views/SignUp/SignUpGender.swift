@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SignUpGender: View {
-    @State var selectedGender: Gender?
+    @ObservedObject var signUpData = SignUpDataModel()
+    @StateObject var progressValidation = ProgressValueCalculator()
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -23,23 +24,24 @@ struct SignUpGender: View {
                     Spacer()
                     Toggle("", isOn: Binding(
                         get: {
-                            selectedGender == gender
+                            signUpData.selectedGender == gender
                         },
                         set: { isOn in
                             if isOn {
-                                selectedGender = gender
+                                signUpData.selectedGender = gender
                             } else {
-                                selectedGender = nil
+                                signUpData.selectedGender = nil
                             }
                         }
                     ))
                     .labelsHidden()
+                   
                 }
             }
         }
-        .tint(.primaryBlue)
+        .tint(.appTint)
         .padding(.top, 10)
-        .padding(.horizontal)
+        .padding(.horizontal,28)
     }
 }
 

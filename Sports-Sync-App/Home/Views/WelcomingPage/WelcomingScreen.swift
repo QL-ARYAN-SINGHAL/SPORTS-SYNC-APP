@@ -14,9 +14,21 @@ struct WelcomingScreen: View {
         NavigationStack {
             ZStack {
                 WelcomingImage()
+                
+                
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.white.opacity(1), Color.white.opacity(1),
+                        Color.white.opacity(0.3),
+                        Color.white.opacity(0.2)]),
+                    startPoint: .bottom,
+                    endPoint: .top
+                )
+                .ignoresSafeArea()
+
 
                 VStack {
                     WelcomingText()
+                    
 
                     NavigationLink(destination: SegmentController(), isActive: $isActive) {
                         EmptyView()
@@ -26,11 +38,15 @@ struct WelcomingScreen: View {
                         isActive = true
                     })
                     .padding(.top, 50)
+                    
                 }
+                
                 .padding()
-                .background(Color.white)
-                .shadow(color: .white, radius: 100, y: -100)
+                
                 .frame(maxHeight: .infinity, alignment: .bottom)
+                
+                
+             
             }
            
         }
