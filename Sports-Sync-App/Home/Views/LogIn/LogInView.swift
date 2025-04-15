@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LogInView: View {
+    @StateObject private var loginDataModel = LoginDataModal()
     var body: some View {
         VStack{
             
@@ -15,7 +16,9 @@ struct LogInView: View {
                 .padding()
             LogInButton()
         }
+        .environmentObject(loginDataModel)
     }
+        
 }
 
 #Preview {

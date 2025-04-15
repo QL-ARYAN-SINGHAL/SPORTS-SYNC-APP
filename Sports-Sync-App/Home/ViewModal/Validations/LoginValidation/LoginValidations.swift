@@ -10,6 +10,7 @@ import SwiftUI
 class LoginValidation: ObservableObject {
     @Published var logInData = LoginDataModal()
     @Published var showAlert = false
+    @Published var signUpData = SignUpDataModel()
 
     func isEmailValid<T>(email: T) -> Bool {
         
@@ -34,4 +35,6 @@ class LoginValidation: ObservableObject {
         }
         return isPasswordValid
     }
+    
+ 
 }

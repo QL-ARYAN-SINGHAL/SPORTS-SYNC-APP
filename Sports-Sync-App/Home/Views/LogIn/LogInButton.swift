@@ -10,7 +10,7 @@ import SwiftUI
 struct LogInButton: View {
     @ObservedObject var logInValidation = LoginValidation()
     @State private var shouldNavigate = false
-    var logInData = LoginDataModal()
+    @EnvironmentObject var logInData: LoginDataModal
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -24,11 +24,20 @@ struct LogInButton: View {
             
             // MARK: LOGIN BUTTON TO GET YOU LOGGED IN
             ActivatedButton(buttonText: .logInText, action: {
+                
+    //MARK: To check LogIn validations
+               
+
                 let isValid = logInValidation.isEmailValid(email: logInData.loginEmail)
+                
+         //       print("Email is valid: \(isValid)")
+                
                 let isPasswordValid = logInValidation.isPasswordValid(password: logInData.loginPassword)
                 
                 if isValid && isPasswordValid {
                     self.shouldNavigate = true
+                    
+        //            print("Yes it will navigate since validation are coorect")
                 }
             })
             

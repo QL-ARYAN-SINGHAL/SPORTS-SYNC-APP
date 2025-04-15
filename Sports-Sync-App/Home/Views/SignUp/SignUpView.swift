@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct SignUpView: View {
+    
+    @StateObject private var signUpDataModal = SignUpDataModel()
+    
     var body: some View {
+       
        
         VStack{
             SignUpHeading()
@@ -28,10 +32,14 @@ struct SignUpView: View {
             SignUpProgressBar()
         }
         .padding(.top,-13)
+        .environmentObject(signUpDataModal)
        
     }
+        
 }
 
 #Preview {
     SignUpView()
 }
+
+

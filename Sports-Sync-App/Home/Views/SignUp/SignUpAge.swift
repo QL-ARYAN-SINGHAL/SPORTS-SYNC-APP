@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignUpAge: View {
-    @ObservedObject var signUpData = SignUpDataModel()
+    @EnvironmentObject var signUpData: SignUpDataModel
     @StateObject var progressValidation = ProgressValueCalculator()
     
     var body: some View {
@@ -18,7 +18,6 @@ struct SignUpAge: View {
                 .font(Font.custom(.fontJakarta, size: 14))
                 .padding(.leading, 5)
             
-       
             Slider(value: $signUpData.ageValue, in: 10...100, step: 1)
                 .tint(.appTint)
                 .frame(width: 300)
@@ -32,4 +31,6 @@ struct SignUpAge: View {
 
 #Preview {
     SignUpAge()
+        .environmentObject(SignUpDataModel())
 }
+

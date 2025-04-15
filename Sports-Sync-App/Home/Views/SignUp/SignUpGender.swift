@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignUpGender: View {
-    @ObservedObject var signUpData = SignUpDataModel()
+    @EnvironmentObject var signUpData: SignUpDataModel
     @StateObject var progressValidation = ProgressValueCalculator()
 
     var body: some View {
@@ -29,22 +29,25 @@ struct SignUpGender: View {
                         set: { isOn in
                             if isOn {
                                 signUpData.selectedGender = gender
+                                progressValidation.calculateProgress()
                             } else {
                                 signUpData.selectedGender = nil
                             }
                         }
                     ))
                     .labelsHidden()
-                   
                 }
             }
         }
         .tint(.appTint)
         .padding(.top, 10)
-        .padding(.horizontal,28)
+        .padding(.horizontal, 28)
     }
 }
 
 #Preview {
     SignUpGender()
+        .environmentObject(SignUpDataModel()) 
 }
+
+
