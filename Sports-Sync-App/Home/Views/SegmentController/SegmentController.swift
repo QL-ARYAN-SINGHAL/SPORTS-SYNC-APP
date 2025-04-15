@@ -18,24 +18,30 @@ struct SegmentController: View {
             //MARK: CUSTOMISE YOUR SEGMENT CONTROLLER WITH SCROLLVIEW ADDING 2 BUTTON AND NAVIGATE TO LOGIN AND SIGNUP ON TAP
             
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing:0){
-                    ForEach(0..<options.count, id: \.self) { index in
-                        Text(options[index])
-                            .bold()
-                            .frame(width: 90, height: 45)
-                            .background(currentView == index ? Color.appTint : Color.white
-                         
-                            )
+                ZStack{
+                    RoundedRectangle(cornerRadius: 10).fill(Color.appTint)
+                        .frame(width:90,height: 45,alignment: .leading)
+                        .padding(.leading,-90)
+                        .offset(x: CGFloat(currentView) * 90)
+                
+                    HStack(spacing:0){
+                        ForEach(0..<options.count, id: \.self) { index in
+                            Text(options[index])
+                                .bold()
+                                .frame(width: 90, height: 45)
+                               
                             
-                            .foregroundColor(currentView == index ? Color.white : Color.appTint)
-                            .cornerRadius(10)
-                            .onTapGesture {
-                                withAnimation {
-                                    currentView = index
+                                .foregroundColor(currentView == index ? Color.white : Color.appTint)
+                                .cornerRadius(10)
+                                .onTapGesture {
+                                    withAnimation {
+                                        currentView = index
+                                    }
                                 }
-                            }
+                            
+                        }}
+                   
                         
-                    }
                     
                 }
                
