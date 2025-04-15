@@ -21,9 +21,7 @@ struct SignUpAge: View {
             Slider(value: $signUpData.ageValue, in: 10...100, step: 1)
                 .tint(.appTint)
                 .frame(width: 300)
-                .onChange(of: signUpData.ageValue) { _ in
-                    progressValidation.calculateProgress()
-                }
+              
         }
         .padding(.leading, -60)
     }

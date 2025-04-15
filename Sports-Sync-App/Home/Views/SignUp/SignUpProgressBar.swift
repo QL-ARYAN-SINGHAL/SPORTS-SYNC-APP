@@ -10,7 +10,7 @@ import SwiftUI
 struct SignUpProgressBar: View {
     
     @StateObject var progressValidation = ProgressValueCalculator()
-
+    @EnvironmentObject var signUpData: SignUpDataModel
     
     var body: some View {
         
@@ -18,21 +18,21 @@ struct SignUpProgressBar: View {
             
             Text(verbatim: .signUpProgressText)
                 .font(Font.custom(.fontJakarta, size: 12))
-                .frame(width: 370, alignment: .leading)
+                .frame(width: UIScreen.main.bounds.width*0.9, alignment: .leading)
                 .foregroundStyle(.black.opacity(0.7))
             
             
             HStack{
                 
-                Text("\(progressValidation.progress)%")
+                Text("\(progressValidation.calculateProgress(from: signUpData ))%")
                 
-                ProgressView(value: Double(Int(progressValidation.progress)), total: 100)
+                ProgressView(value: Double(Int(progressValidation.calculateProgress(from: signUpData))), total: 100)
                     .tint(.appTint)
                     .cornerRadius(12)
                     .scaleEffect(x: 1, y: 2.2, anchor: .center)
           
             }
-            
+            .frame(width: UIScreen.main.bounds.width*0.9)
             .padding(.leading,-5)
             
         }
@@ -42,6 +42,4 @@ struct SignUpProgressBar: View {
     }
 }
 
-#Preview {
-    SignUpProgressBar()
-}
+

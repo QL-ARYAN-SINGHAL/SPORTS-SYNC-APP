@@ -10,40 +10,70 @@ import SwiftUI
 struct SegmentController: View {
     @State private var currentView: Int = 0
 
+    @Namespace private var namespace
+    let options = ["Log In", "Sign Up"]
+
     var body: some View {
         VStack {
-            Picker("Currently on", selection: $currentView) {
-                //verbatim is to show text as it is
-               
-                    Text(verbatim: .logInText).tag(0)
+            //MARK: CUSTOMISE YOUR SEGMENT CONTROLLER WITH SCROLLVIEW ADDING 2 BUTTON AND NAVIGATE TO LOGIN AND SIGNUP ON TAP
+            
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing:0){
+                    ForEach(0..<options.count, id: \.self) { index in
+                        Text(options[index])
+                            .bold()
+                            .frame(width: 90, height: 45)
+                            .background(currentView == index ? Color.appTint : Color.white
+                         
+                            )
+                            
+                            .foregroundColor(currentView == index ? Color.white : Color.appTint)
+                            .cornerRadius(10)
+                            .onTapGesture {
+                                withAnimation {
+                                    currentView = index
+                                }
+                            }
                         
+                    }
                     
-                    Text(verbatim: .signUpText).tag(1)
-                
-            }
-            
-            
-            .pickerStyle(.segmented)
-            .tint(.appTint)
-            .padding(.horizontal, 20)
-           
-            
-        }
-        
-        .frame(width: UIScreen.main.bounds.width*0.5
-               ,height: 20)
-       
-        .navigationBarBackButtonHidden()
-        
-        
-        if currentView == 0{
-            LogInView()
-                
-        }
-        else{
-            SignUpView()
+                }
                
+                .frame(width: 210, height: 65, alignment: .center)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                )
+                .padding(.horizontal, 100)
+               
+                .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            if value.translation.width > 45 {
+                                if currentView < options.count - 1 {
+                                    withAnimation {
+                                        currentView += 1
+                                    }
+                                }
+                            } else if value.translation.width < 45 {
+                                if currentView > 0 {
+                                    withAnimation{
+                                        currentView -= 1
+                                    }
+                                }
+                            }
+                        }
+                )
+            }
+
+           
+            if currentView == 0 {
+                LogInView()
+            } else {
+                SignUpView()
+            }
         }
+        .navigationBarBackButtonHidden()
         Spacer()
     }
 }
@@ -51,4 +81,3 @@ struct SegmentController: View {
 #Preview {
     SegmentController()
 }
-

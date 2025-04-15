@@ -12,30 +12,30 @@ struct SignUpView: View {
     @StateObject private var signUpDataModal = SignUpDataModel()
     
     var body: some View {
-       
-       
-        VStack{
-            SignUpHeading()
-            
-            SignUpFields()
-            
-            SignUpAge()
-                .padding(.top,10)
-            
-            SignUpGender()
-               
-            SignUpButton()
-                
-            
-            Divider()
-            
-            SignUpProgressBar()
-        }
-        .padding(.top,-13)
-        .environmentObject(signUpDataModal)
-       
-    }
         
+        ScrollView{
+            VStack{
+                SignUpHeading()
+                
+                SignUpFields()
+                
+                SignUpAge()
+                
+                
+                SignUpGender()
+                
+                SignUpButton()
+                
+                
+                Divider()
+                
+                SignUpProgressBar()
+            }
+            
+            .environmentObject(signUpDataModal)
+            
+        }
+    }
 }
 
 #Preview {

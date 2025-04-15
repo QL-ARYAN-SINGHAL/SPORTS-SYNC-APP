@@ -18,5 +18,10 @@ extension String {
     static let signUpHeadline = "Enter your details"
     static let signUpProgressText = "Details Complete"
     static let fontJakarta = "PlusJakarta-Regular"
+    static let signUpAlertMessage = "Invalid email password format, mismatched passwords, or missing details. Please try again."
+    static let signUpAlertTitle = "Invalid Credentials!"
+    
+    static let logInAlertMessage = "Check your email or password. Please try again."
+    static let logInAlertTitle = "Invalid Email or Password!"
     
 }

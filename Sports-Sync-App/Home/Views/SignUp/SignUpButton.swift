@@ -37,6 +37,13 @@ struct SignUpButton: View {
             
           
         }
+        .alert(isPresented: $logInValidation.showAlert) {
+            Alert(
+                title: Text(verbatim: .signUpAlertTitle),
+                message: Text(verbatim: .signUpAlertMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
 
         NavigationLink(
             destination: WelcomingScreen(),

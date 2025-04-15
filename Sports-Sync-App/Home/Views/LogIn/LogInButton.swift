@@ -11,46 +11,51 @@ struct LogInButton: View {
     @ObservedObject var logInValidation = LoginValidation()
     @State private var shouldNavigate = false
     @EnvironmentObject var logInData: LoginDataModal
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             
             // MARK: FORGOT PASSWORD BUTTON
+            
             Button(action: {}, label: {
                 Text(verbatim: .forgotPassword)
                     .font(Font.custom(.fontJakarta, size: 12))
                     .padding(.leading, 15)
             })
             
-            // MARK: LOGIN BUTTON TO GET YOU LOGGED IN
+            // MARK: Button to validate and navigate
+            
             ActivatedButton(buttonText: .logInText, action: {
                 
-    //MARK: To check LogIn validations
-               
-
-                let isValid = logInValidation.isEmailValid(email: logInData.loginEmail)
+                // Validate email and password
                 
-         //       print("Email is valid: \(isValid)")
+                let isValidEmail = logInValidation.isEmailValid(email: logInData.loginEmail)
+                let isValidPassword = logInValidation.isPasswordValid(password: logInData.loginPassword)
                 
-                let isPasswordValid = logInValidation.isPasswordValid(password: logInData.loginPassword)
                 
-                if isValid && isPasswordValid {
+                if isValidEmail && isValidPassword {
                     self.shouldNavigate = true
-                    
-        //            print("Yes it will navigate since validation are coorect")
-                }
+                } 
             })
+            .alert(isPresented: $logInValidation.showAlert) {
+                Alert(
+                    title: Text(verbatim: .logInAlertTitle),
+                    message: Text(verbatim: .logInAlertMessage),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
             
-          
             NavigationLink(
                 destination: WelcomingScreen(),
                 isActive: $shouldNavigate,
                 label: { EmptyView() }
             )
+            
         }
     }
 }
 
 #Preview {
     LogInButton()
+        .environmentObject(LoginDataModal())
 }

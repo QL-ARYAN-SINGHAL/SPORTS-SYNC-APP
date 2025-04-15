@@ -18,4 +18,5 @@ class SignUpDataModel :ObservableObject{
     var ageLabel: String {
         "Age: \(Int(ageValue))"
     }
+    @Published var progress: Int = 0
 }

@@ -11,3 +11,7 @@ class LoginDataModal:ObservableObject{
     @Published  var loginEmail: String = ""
     @Published  var loginPassword: String = ""
 }
+
+class excnsdklnds {
+    
+}
