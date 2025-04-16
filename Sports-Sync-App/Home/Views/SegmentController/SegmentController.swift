@@ -10,8 +10,7 @@ import SwiftUI
 struct SegmentController: View {
     @State private var currentView: Int = 0
 
-    @Namespace private var namespace
-    let options = ["Log In", "Sign Up"]
+    let options = ["LogIn", "SignUp"]
 
     var body: some View {
         VStack {
@@ -19,10 +18,15 @@ struct SegmentController: View {
             
             ScrollView(.horizontal, showsIndicators: false) {
                 ZStack{
+                    
+                    //MARK: Round Rectangle that switches between the viewcontrolelrs
+                    
                     RoundedRectangle(cornerRadius: 10).fill(Color.appTint)
                         .frame(width:90,height: 45,alignment: .leading)
                         .padding(.leading,-90)
                         .offset(x: CGFloat(currentView) * 90)
+                    
+                    //MARK: HStack having two options to switch to
                 
                     HStack(spacing:0){
                         ForEach(0..<options.count, id: \.self) { index in
@@ -30,13 +34,14 @@ struct SegmentController: View {
                                 .bold()
                                 .frame(width: 90, height: 45)
                                
-                            
                                 .foregroundColor(currentView == index ? Color.white : Color.appTint)
                                 .cornerRadius(10)
+                            
+                            //onTap gesture for animation and to be on a currentview
                                 .onTapGesture {
-                                    withAnimation {
+                                    
                                         currentView = index
-                                    }
+                                    
                                 }
                             
                         }}
@@ -57,15 +62,15 @@ struct SegmentController: View {
                         .onChanged { value in
                             if value.translation.width > 45 {
                                 if currentView < options.count - 1 {
-                                    withAnimation {
+                                    
                                         currentView += 1
-                                    }
+                                    
                                 }
                             } else if value.translation.width < 45 {
                                 if currentView > 0 {
-                                    withAnimation{
+                                   
                                         currentView -= 1
-                                    }
+                                    
                                 }
                             }
                         }

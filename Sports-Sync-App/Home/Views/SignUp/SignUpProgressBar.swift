@@ -25,7 +25,7 @@ struct SignUpProgressBar: View {
             HStack{
                 
                 Text("\(progressValidation.calculateProgress(from: signUpData ))%")
-                
+                    .bold()
                 ProgressView(value: Double(Int(progressValidation.calculateProgress(from: signUpData))), total: 100)
                     .tint(.appTint)
                     .cornerRadius(12)

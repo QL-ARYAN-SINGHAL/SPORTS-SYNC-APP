@@ -15,10 +15,12 @@ struct LandingScreen: View {
             if showSplash {
                 VStack {
                     Group {
-                        imageConstants.appImage
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 200, height: 200)
+                        Text(verbatim: .appName)
+                            .fontWeight(.bold)
+                            
+                            .font(Font.custom(.fontJakartaBold, size: 28))
+                            .foregroundStyle(.appTint)
+                           
                             .offset(x: offsetAnimation)
                             .onAppear {
                                 withAnimation(.interpolatingSpring(stiffness: 100, damping: 10)) {

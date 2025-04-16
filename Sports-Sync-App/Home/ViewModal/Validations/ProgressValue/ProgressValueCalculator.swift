@@ -29,7 +29,7 @@ class ProgressValueCalculator: ObservableObject {
             if signUpData.selectedGender != nil {
                 newProgress += 17
             }
-            if signUpData.ageValue != 12 {
+            if signUpData.ageValue != 0 {
                 newProgress += 15
             }
             

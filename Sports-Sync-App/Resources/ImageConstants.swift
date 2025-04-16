@@ -12,4 +12,6 @@ struct ImageConstants{
     
     var appImage = Image("SportSync")
     var welcomeBikeImage = Image("welcomeBikeImage")
+    var successImage = Image("Success")
+    var navigationBackImage = Image("NavigationBackImage")
 }

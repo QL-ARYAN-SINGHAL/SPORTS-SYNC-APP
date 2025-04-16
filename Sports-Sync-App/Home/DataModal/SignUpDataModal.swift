@@ -14,7 +14,7 @@ class SignUpDataModel :ObservableObject{
     @Published var firstName: String = ""
     @Published var lastName: String = ""
     @Published var selectedGender: Gender? = nil
-    @Published var ageValue: Double = 12
+    @Published var ageValue: Double = 0
     var ageLabel: String {
         "Age: \(Int(ageValue))"
     }

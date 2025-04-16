@@ -1,7 +1,7 @@
 import Foundation
 
 extension String {
-    static let appName = "Sports-Sync"
+    static let appName = "SportSync"
     static let continueText = "Continue"
     static let welcomeHeadline = "The ultimate app for sports addicts!"
     static let welcomeSubtitle = "Every game,every fan,one app"
@@ -23,5 +23,14 @@ extension String {
     
     static let logInAlertMessage = "Check your email or password. Please try again."
     static let logInAlertTitle = "Invalid Email or Password!"
-    
+    static let forgotPasswordTitle = "Forgot your password ?"
+    static let forgotPasswordMessage = "We’ll sent you new password on your mail"
+    static let resetPasswordString = "Reset Password"
+    static let OTPTitle = "OTP Verification"
+    static let OTPMessage = "We have sent OTP to"
+    static let OTPButtonTitle = "Send OTP"
+    static let resetOTPString = "Resend OTP in "
+    static let signUpSuccessString = "Sign up successful"
+    static let signUpSuccessMessage = "You will be redirected to the main page in a few moments"
+    static let fontJakartaBold = "PlusJakartaSans-Bold"
 }
