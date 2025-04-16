@@ -7,6 +7,7 @@
 import SwiftUI
 
 class SignUpDataModel :ObservableObject{
+    
     @Published var value: Int = 0
     @Published var signUpEmail: String = ""
     @Published var signUpPassword: String = ""
@@ -19,4 +20,5 @@ class SignUpDataModel :ObservableObject{
         "Age: \(Int(ageValue))"
     }
     @Published var progress: Int = 0
+    
 }

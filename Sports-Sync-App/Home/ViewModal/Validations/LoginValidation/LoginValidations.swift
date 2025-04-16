@@ -19,6 +19,10 @@ class LoginValidation: ObservableObject {
         let isValid = emailTest.evaluate(with: email)
 
         if !isValid {
+            DispatchQueue.main.async {
+                self.showAlert = true
+            }
+
             showAlert = true
         }
 
