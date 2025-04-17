@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    
-    @StateObject private var signUpDataModal = SignUpDataModel()
-    
+    @StateObject var formViewModal = FormViewModal()
     var body: some View {
         
         ScrollView{
@@ -32,9 +30,10 @@ struct SignUpView: View {
                 SignUpProgressBar()
             }
             
-            .environmentObject(signUpDataModal)
+          
             
         }
+        .environmentObject(formViewModal)
     }
 }
 

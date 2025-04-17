@@ -7,17 +7,22 @@
 
 import SwiftUI
 
+//MARK: PARENT VIEW THAT HAS STATEOBJECT OF VIEW MODAL TO ACCESS BUILDER LOGIC AND DATA MODAL
+
 struct LogInView: View {
-    
+    @StateObject var formViewModal = FormViewModal()
     var body: some View {
         VStack{
             LogInFields()
                 .padding()
             LogInButton()
+               
         }
+        .environmentObject(formViewModal)
+//MARK: ENVIRONMENT OBJECT TO KEEP TRACK OF CHANGE OF DATA PRESENT INSIDE OUR DATA MODAL
        
     }
-        
+      
 }
 
 #Preview {

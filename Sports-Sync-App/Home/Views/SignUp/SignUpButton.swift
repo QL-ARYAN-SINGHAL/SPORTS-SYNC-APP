@@ -8,31 +8,31 @@
 //
 //  SignUpButton.swift
 //  Sports-Sync-App
-//
 //  Created by ARYAN SINGHAL on 13/04/25.
-//
+
 
 import SwiftUI
 
 struct SignUpButton: View {
-    @ObservedObject var logInValidation = LoginValidation()
-    @EnvironmentObject var signUpData: SignUpDataModel
+    @EnvironmentObject var formViewModal: FormViewModal
     @State private var shouldNavigate = false
  
-   
 
     var body: some View {
         ActivatedButton(buttonText: .signUpText) {
             
             // MARK: SignUp email validation
-            let isValid = logInValidation.isEmailValid(email: signUpData.signUpEmail)
+            
+            let isValid = formViewModal.isEmailValid(email: formViewModal.signUpData.signUpEmail)
             
             // MARK: SignUp Password validation
-            let isPasswordValid = logInValidation.isPasswordValid(password: signUpData.signUpPassword)
+            
+            let isPasswordValid = formViewModal.isPasswordValid(password: formViewModal.signUpData.signUpPassword)
             
             // MARK: SignUp Gender & Confirm password validation
+            
             if isValid && isPasswordValid {
-                if signUpData.confirmPassword == signUpData.signUpPassword && signUpData.selectedGender != nil {
+                if formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword && formViewModal.signUpData.selectedGender != nil {
                     shouldNavigate = true
                 } else {
                     shouldNavigate = false
@@ -44,7 +44,7 @@ struct SignUpButton: View {
        
         
         
-        .alert(isPresented: $logInValidation.showAlert) {
+        .alert(isPresented: $formViewModal.showAlert) {
             Alert(
                 title: Text(verbatim: .signUpAlertTitle),
                 message: Text(verbatim: .signUpAlertMessage),
@@ -62,5 +62,5 @@ struct SignUpButton: View {
 
 #Preview {
     SignUpButton()
-        .environmentObject(SignUpDataModel())
+      
 }

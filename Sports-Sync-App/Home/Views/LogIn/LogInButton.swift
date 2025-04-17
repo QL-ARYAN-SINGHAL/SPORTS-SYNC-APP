@@ -9,8 +9,10 @@ import SwiftUI
 
 struct LogInButton: View {
    
-    @StateObject var logInValidation = LoginValidation()
+    //MARK: ENVIRONMENT OBJECT THAT USES BUILDER LOGIC TO VALIDATE OUR EMAIL AND PASSWORD
+    
     @State private var shouldNavigate = false
+    @EnvironmentObject var formViewModal : FormViewModal
   
     var body: some View {
         NavigationStack{
@@ -24,9 +26,6 @@ struct LogInButton: View {
                         .foregroundStyle(.blueTint)
                 }
                 )
-                    
-                
-               
                 
                 // MARK: Button to validate and navigate
                 
@@ -34,8 +33,9 @@ struct LogInButton: View {
                     
                     // Validate email and password
                     
-                    let isValidEmail = logInValidation.isEmailValid(email:$logInValidation.logInData.loginEmail)
-                    let isValidPassword = logInValidation.isPasswordValid(password: $logInValidation.logInData.loginPassword)
+                    let isValidEmail = formViewModal.isEmailValid(email:formViewModal.logInData.loginEmail)
+                    print("email is -> \(formViewModal.logInData.loginEmail)")
+                    let isValidPassword = formViewModal.isPasswordValid(password: formViewModal.logInData.loginPassword)
                     
                     
                     if isValidEmail && isValidPassword {
@@ -43,11 +43,7 @@ struct LogInButton: View {
                     }
                 })
                 
-               
-              
-                
-                
-                .alert(isPresented: $logInValidation.showAlert) {
+                .alert(isPresented: $formViewModal.showAlert) {
                     Alert(
                         title: Text(verbatim: .logInAlertTitle),
                         message: Text(verbatim: .logInAlertMessage),

@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SignUpProgressBar: View {
     
-    @StateObject var progressValidation = ProgressValueCalculator()
-    @EnvironmentObject var signUpData: SignUpDataModel
+  
+    @EnvironmentObject var formViewModal: FormViewModal
     
     var body: some View {
         
@@ -24,9 +24,9 @@ struct SignUpProgressBar: View {
             
             HStack{
                 
-                Text("\(progressValidation.calculateProgress(from: signUpData ))%")
+                Text("\(formViewModal.calculateProgress(from: formViewModal.signUpData ))%")
                     .bold()
-                ProgressView(value: Double(Int(progressValidation.calculateProgress(from: signUpData))), total: 100)
+                ProgressView(value: Double(Int(formViewModal.calculateProgress(from: formViewModal.signUpData))), total: 100)
                     .tint(.appTint)
                     .cornerRadius(12)
                     .scaleEffect(x: 1, y: 2.2, anchor: .center)

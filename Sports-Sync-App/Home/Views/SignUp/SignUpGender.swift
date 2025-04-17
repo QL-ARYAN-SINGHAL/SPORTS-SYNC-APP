@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct SignUpGender: View {
-    @EnvironmentObject var signUpData: SignUpDataModel
-    @StateObject var progressValidation = ProgressValueCalculator()
+    @EnvironmentObject var formViewModal: FormViewModal
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -30,18 +29,18 @@ struct SignUpGender: View {
                     Toggle("", isOn: Binding(
                         get: {
                             
-                            signUpData.selectedGender == gender
+                            formViewModal.signUpData.selectedGender == gender
                         },
                         set: {
                             isOn in
                             if isOn {
                                 
-                                signUpData.selectedGender = gender
-                                progressValidation
+                                formViewModal.signUpData.selectedGender = gender
+                                
                                 
                             } else {
                                 
-                                signUpData.selectedGender = nil
+                                formViewModal.signUpData.selectedGender = nil
                                 
                             }
                             
@@ -64,7 +63,7 @@ struct SignUpGender: View {
 
 #Preview {
     SignUpGender()
-        .environmentObject(SignUpDataModel())
+        
 }
 
 

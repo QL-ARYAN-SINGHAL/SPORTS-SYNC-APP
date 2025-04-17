@@ -7,8 +7,10 @@
 
 import Foundation
 
-struct LoginDataModal{
+struct LoginDataModal {
+    //MARK: data modal for login
+    
     var loginEmail: String = ""
-     var loginPassword: String = ""
+    var loginPassword: String = ""
 }
 
