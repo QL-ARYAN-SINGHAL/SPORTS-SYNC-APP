@@ -19,9 +19,9 @@ struct SignUpButton: View {
     @EnvironmentObject var signUpData: SignUpDataModel
     @State private var shouldNavigate = false
     var isDisabled: Bool {
-        return signUpData.signUpEmail.isEmpty &&
-        signUpData.signUpPassword.isEmpty &&
-        signUpData.selectedGender == nil &&
+        return signUpData.signUpEmail.isEmpty ||
+        signUpData.signUpPassword.isEmpty ||
+        signUpData.selectedGender == nil ||
         signUpData.confirmPassword.isEmpty
    }
    

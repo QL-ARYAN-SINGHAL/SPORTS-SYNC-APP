@@ -39,9 +39,7 @@ struct SegmentController: View {
                             
                             //onTap gesture for animation and to be on a currentview
                                 .onTapGesture {
-                                    
                                         currentView = index
-                                    
                                 }
                             
                         }}
@@ -62,15 +60,15 @@ struct SegmentController: View {
                         .onChanged { value in
                             if value.translation.width > 45 {
                                 if currentView < options.count - 1 {
-                                    
+                                    withAnimation{
                                         currentView += 1
-                                    
+                                    }
                                 }
                             } else if value.translation.width < 45 {
                                 if currentView > 0 {
-                                   
+                                    withAnimation{
                                         currentView -= 1
-                                    
+                                    }
                                 }
                             }
                         }
