@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-class SignUpDataModel :ObservableObject{
+class SignUpDataModel : ObservableObject{
     
     @Published var value: Int = 0
     @Published var signUpEmail: String = ""

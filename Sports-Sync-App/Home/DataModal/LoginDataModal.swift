@@ -7,11 +7,8 @@
 
 import Foundation
 
-class LoginDataModal:ObservableObject{
-    @Published  var loginEmail: String = ""
-    @Published  var loginPassword: String = ""
+struct LoginDataModal{
+    var loginEmail: String = ""
+     var loginPassword: String = ""
 }
 
-class excnsdklnds {
-    
-}

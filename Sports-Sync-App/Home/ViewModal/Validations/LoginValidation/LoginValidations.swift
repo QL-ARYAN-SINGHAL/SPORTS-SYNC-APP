@@ -9,6 +9,7 @@ import SwiftUI
 
 class LoginValidation: ObservableObject {
     @Published var showAlert = false
+    @Published var logInData = LoginDataModal()
     
 
     func isEmailValid<T>(email: T) -> Bool {

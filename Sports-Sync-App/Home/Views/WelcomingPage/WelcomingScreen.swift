@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WelcomingScreen: View {
     @State private var isActive = false
+    @State private var isDisabling = false
 
     var body: some View {
         NavigationStack {
@@ -36,7 +37,9 @@ struct WelcomingScreen: View {
 
                     ActivatedButton(buttonText: .continueText, action: {
                         isActive = true
+                            
                     })
+                    
                     .padding(.top, 50)
                     
                 }

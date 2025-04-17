@@ -1,15 +1,14 @@
 import SwiftUI
 
 struct LogInFields: View {
-    
-    @EnvironmentObject private var logInData :LoginDataModal
+    @StateObject var logInValidation = LoginValidation()
 
     var body: some View {
         VStack(spacing: 17) {
            
-            FormTextfields(textField: $logInData.loginEmail, placeholder: .emailPlaceholder)
+            FormTextfields(textField: $logInValidation.logInData.loginEmail, placeholder: .emailPlaceholder)
           
-            ReusableSecureField(text: $logInData.loginPassword, placeholder: .passwordPlaceholder)
+            ReusableSecureField(text:$logInValidation.logInData.loginPassword, placeholder: .passwordPlaceholder)
         }
         .padding()
     }

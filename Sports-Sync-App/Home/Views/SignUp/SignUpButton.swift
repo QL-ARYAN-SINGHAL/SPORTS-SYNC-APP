@@ -18,12 +18,7 @@ struct SignUpButton: View {
     @ObservedObject var logInValidation = LoginValidation()
     @EnvironmentObject var signUpData: SignUpDataModel
     @State private var shouldNavigate = false
-    var isDisabled: Bool {
-        return signUpData.signUpEmail.isEmpty ||
-        signUpData.signUpPassword.isEmpty ||
-        signUpData.selectedGender == nil ||
-        signUpData.confirmPassword.isEmpty
-   }
+ 
    
 
     var body: some View {
@@ -47,8 +42,7 @@ struct SignUpButton: View {
             }
         }
        
-        .background(isDisabled ? Color.gray : Color.appTint)
-        .disabled(isDisabled)
+        
         
         .alert(isPresented: $logInValidation.showAlert) {
             Alert(

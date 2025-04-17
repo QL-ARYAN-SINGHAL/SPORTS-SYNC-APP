@@ -9,10 +9,9 @@ import SwiftUI
 
 struct LogInButton: View {
    
-    @ObservedObject var logInValidation = LoginValidation()
+    @StateObject var logInValidation = LoginValidation()
     @State private var shouldNavigate = false
-    @EnvironmentObject var logInData: LoginDataModal
-
+  
     var body: some View {
         NavigationStack{
             VStack(alignment: .leading) {
@@ -35,14 +34,19 @@ struct LogInButton: View {
                     
                     // Validate email and password
                     
-                    let isValidEmail = logInValidation.isEmailValid(email: logInData.loginEmail)
-                    let isValidPassword = logInValidation.isPasswordValid(password: logInData.loginPassword)
+                    let isValidEmail = logInValidation.isEmailValid(email:$logInValidation.logInData.loginEmail)
+                    let isValidPassword = logInValidation.isPasswordValid(password: $logInValidation.logInData.loginPassword)
                     
                     
                     if isValidEmail && isValidPassword {
                         self.shouldNavigate = true
                     }
                 })
+                
+               
+              
+                
+                
                 .alert(isPresented: $logInValidation.showAlert) {
                     Alert(
                         title: Text(verbatim: .logInAlertTitle),
@@ -66,5 +70,5 @@ struct LogInButton: View {
 
 #Preview {
     LogInButton()
-        .environmentObject(LoginDataModal())
+       
 }

@@ -10,16 +10,17 @@ import SwiftUI
 struct ActivatedButton: View {
     let buttonText: String
     let action: () -> Void
-    
+    @State var isDisabled : Bool = false
     var body: some View {
         Button(action: action) {
             Text(buttonText)
                 .font(.system(size: 18))
-                .foregroundColor(.white)
+                .foregroundColor(isDisabled ? .disabledFont : Color.white)
                 .frame(width: 360, height: 50)
-                .background(Color.appTint)
+                .background(isDisabled ? .disabledButton :  Color.appTint)
                 .cornerRadius(12)
         }
+        
         .padding()
     }
 }
