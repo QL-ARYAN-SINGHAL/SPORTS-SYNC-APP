@@ -7,18 +7,20 @@
 
 import SwiftUI
 import FirebaseAuth
-import Firebase 
+import FirebaseAppCheck
+import FirebaseCore
 
-      
 
 @main
 struct Sports_Sync_AppApp: App {
+    @StateObject var firebaseValidation = FirebaseValidation()
     init(){
         FirebaseApp.configure()
     }
     var body: some Scene {
         WindowGroup {
             LandingScreen()
+                .environmentObject(firebaseValidation)
             
         }
     }

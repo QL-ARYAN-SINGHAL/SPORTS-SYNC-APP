@@ -45,9 +45,11 @@ struct LogInButton: View {
                         
                         // Trigger user registration in firebase
                         Task{
-                            try await firebaseValidation.signUp(withEmail: formViewModal.logInData.loginEmail, withPassword: formViewModal.logInData.loginPassword)
+                            try await firebaseValidation.signIn(withEmail: formViewModal.logInData.loginEmail, withPassword: formViewModal.logInData.loginPassword)
+                                self.shouldNavigate = true
+                            
                         }
-                        self.shouldNavigate = true
+                       
                     }
                 })
                 

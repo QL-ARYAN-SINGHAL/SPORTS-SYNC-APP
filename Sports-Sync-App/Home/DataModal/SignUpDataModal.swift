@@ -8,6 +8,7 @@ import SwiftUI
 
 struct SignUpDataModel:Codable{
     
+     var id: String = UUID().uuidString
      var signUpEmail: String = ""
      var signUpPassword: String = ""
      var confirmPassword: String = ""
@@ -21,3 +22,5 @@ struct SignUpDataModel:Codable{
      var progress: Int = 0
     
 }
+
+
