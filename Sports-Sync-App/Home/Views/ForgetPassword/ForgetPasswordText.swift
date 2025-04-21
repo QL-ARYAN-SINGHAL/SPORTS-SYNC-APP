@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ForgetPasswordText: View {
+  
     var body: some View {
         VStack(alignment: .leading,spacing: 10){
             Text(verbatim: .forgotPasswordTitle)

@@ -14,6 +14,7 @@ class FirebaseValidation: ObservableObject {
     @Published var signUpData = SignUpDataModel()
     @Published var userSession: FirebaseAuth.User?
     @Published var currentUser: SignUpDataModel?
+    @Published var isAuthenticated: Bool = false
     
     init() {
         self.userSession = Auth.auth().currentUser
@@ -21,9 +22,6 @@ class FirebaseValidation: ObservableObject {
            await  fetchUser()
         }
     }
-    
-    
-    
     
     
     //function to signUp user through login page
@@ -93,11 +91,15 @@ class FirebaseValidation: ObservableObject {
     
     //function to reset password
     
-    func resetPassword(by email: String) async {
-        do {
-            try await Auth.auth().sendPasswordReset(withEmail: email)
-        } catch {
-            print("Error in resetting password: \(error.localizedDescription)")
-        }
+    func resetPassword(by email: String , resetCompletion: @escaping (Result<Bool,Error>) -> Void)  {
+       
+        Auth.auth().sendPasswordReset(withEmail: email,completion: {
+            (error) in
+            if let error = error{
+                resetCompletion(.failure(error))
+            }else{
+                resetCompletion(.success(true))
+            }
+        })   
     }
 }

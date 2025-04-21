@@ -9,50 +9,44 @@ import SwiftUI
 
 struct LogInButton: View {
    
-    //MARK: ENVIRONMENT OBJECT THAT USES BUILDER LOGIC TO VALIDATE OUR EMAIL AND PASSWORD
-    
     @State private var shouldNavigate = false
-    @EnvironmentObject var formViewModal : FormViewModal
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+    @EnvironmentObject var formViewModal: FormViewModal
+    @EnvironmentObject var firebaseValidation: FirebaseValidation
     
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             VStack(alignment: .leading) {
                 
-                // MARK: FORGOT PASSWORD NAVIGATION
+                // Forgot Password Navigation
                 NavigationLink(destination: ForgetPasswordView()
-                    .environmentObject(firebaseValidation), label:{
+                    .environmentObject(firebaseValidation)) {
                     Text(verbatim: .forgotPassword)
                         .font(Font.custom(.fontJakarta, size: 12))
                         .padding(.leading, 18)
                         .foregroundStyle(.blueTint)
                 }
-                )
-                
-                // MARK: Button to validate and navigate
-                
-                ActivatedButton(buttonText: .logInText, action: {
-                    
-                    // Validate email and password
-                    
-                    let isValidEmail = formViewModal.isEmailValid(email:formViewModal.logInData.loginEmail)
-                    print("email is -> \(formViewModal.logInData.loginEmail)")
-                    let isValidPassword = formViewModal.isPasswordValid(password: formViewModal.logInData.loginPassword)
-                    
-                    
-                    if isValidEmail && isValidPassword {
-                        
-                        
-                        // Trigger user registration in firebase
-                        Task{
-                            try await firebaseValidation.signIn(withEmail: formViewModal.logInData.loginEmail, withPassword: formViewModal.logInData.loginPassword)
-                                self.shouldNavigate = true
+
+                // Login Button
+                ActivatedButton(buttonText: .logInText) {
+                    Task {
+                        do {
+                            try await firebaseValidation.signIn(
+                                withEmail: formViewModal.logInData.loginEmail,
+                                withPassword: formViewModal.logInData.loginPassword
+                            )
                             
+                            // Check if user is now authenticated
+                            if firebaseValidation.isAuthenticated {
+                                shouldNavigate = true
+                            } else {
+                                formViewModal.showAlert = true
+                            }
+                        } catch {
+                           print("Error found to match user credentials: \(error.localizedDescription)")
+                            formViewModal.showAlert = true
                         }
-                       
                     }
-                })
-                
+                }
                 .alert(isPresented: $formViewModal.showAlert) {
                     Alert(
                         title: Text(verbatim: .logInAlertTitle),
@@ -60,19 +54,18 @@ struct LogInButton: View {
                         dismissButton: .default(Text("OK"))
                     )
                 }
-                
+
+                // Navigation after login
                 NavigationLink(
                     destination: WelcomingScreen(),
                     isActive: $shouldNavigate,
                     label: { EmptyView() }
                 )
-        
-
             }
-          
         }
     }
 }
+
 
 #Preview {
     LogInButton()

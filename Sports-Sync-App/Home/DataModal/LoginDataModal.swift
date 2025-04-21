@@ -12,6 +12,7 @@ struct LoginDataModal:Codable {
    
     var loginEmail: String = ""
     var loginPassword: String = ""
+    var forgotEmailText: String = ""
 }
 
 //extension LoginDataModal {

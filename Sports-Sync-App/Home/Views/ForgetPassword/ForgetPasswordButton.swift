@@ -15,6 +15,7 @@
 import SwiftUI
 
 struct ForgetPasswordButton: View {
+    @State private var showErrorAlert = false
     @State private var shouldNavigate = false
     @EnvironmentObject var formViewModal: FormViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
@@ -23,8 +24,15 @@ struct ForgetPasswordButton: View {
         VStack {
             ActivatedButton(buttonText: .resetPasswordString) {
                 Task {
-                    await firebaseValidation.resetPassword(by: formViewModal.logInData.loginEmail)
-                    shouldNavigate = true
+                    firebaseValidation.resetPassword(by: formViewModal.logInData.forgotEmailText) { result in
+                        switch result {
+                        case .success(_):
+                            shouldNavigate = true
+                        case .failure(_):
+                            showErrorAlert = true
+                            print("Error caught here")
+                        }
+                    }
                 }
             }
 
@@ -32,6 +40,13 @@ struct ForgetPasswordButton: View {
                 destination: ResetPasswordSuccess(),
                 isActive: $shouldNavigate,
                 label: { EmptyView() }
+            )
+        }
+        .alert(isPresented: $showErrorAlert) {
+            Alert(
+                title: Text("Email invalid or not registered"),
+                message: Text("Try email again!"),
+                dismissButton: .default(Text("OK"))
             )
         }
     }

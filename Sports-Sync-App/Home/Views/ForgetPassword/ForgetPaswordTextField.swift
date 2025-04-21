@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct ForgetPaswordTextField: View {
-    @State private var emailtext: String = ""
+    @EnvironmentObject var formViewModal: FormViewModal
+    @EnvironmentObject var firebaseValidation : FirebaseValidation
+    
     var body: some View {
         VStack{
             
-            FormTextfields(textField: $emailtext, placeholder: .emailPlaceholder)
+            FormTextfields(textField: $formViewModal.logInData.forgotEmailText, placeholder: .emailPlaceholder)
              
         }
     }
