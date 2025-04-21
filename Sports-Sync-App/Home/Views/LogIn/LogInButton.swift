@@ -13,13 +13,15 @@ struct LogInButton: View {
     
     @State private var shouldNavigate = false
     @EnvironmentObject var formViewModal : FormViewModal
-  
+    @EnvironmentObject var firebaseValidation : FirebaseValidation
+    
     var body: some View {
         NavigationStack{
             VStack(alignment: .leading) {
                 
                 // MARK: FORGOT PASSWORD NAVIGATION
-                NavigationLink(destination: ForgetPasswordView(), label:{
+                NavigationLink(destination: ForgetPasswordView()
+                    .environmentObject(firebaseValidation), label:{
                     Text(verbatim: .forgotPassword)
                         .font(Font.custom(.fontJakarta, size: 12))
                         .padding(.leading, 18)
@@ -39,6 +41,12 @@ struct LogInButton: View {
                     
                     
                     if isValidEmail && isValidPassword {
+                        
+                        
+                        // Trigger user registration in firebase
+                        Task{
+                            try await firebaseValidation.signUp(withEmail: formViewModal.logInData.loginEmail, withPassword: formViewModal.logInData.loginPassword)
+                        }
                         self.shouldNavigate = true
                     }
                 })

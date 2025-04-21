@@ -6,12 +6,20 @@
 //
 
 import SwiftUI
+import FirebaseAuth
+import Firebase 
+
+      
 
 @main
 struct Sports_Sync_AppApp: App {
+    init(){
+        FirebaseApp.configure()
+    }
     var body: some Scene {
         WindowGroup {
             LandingScreen()
+            
         }
     }
 }

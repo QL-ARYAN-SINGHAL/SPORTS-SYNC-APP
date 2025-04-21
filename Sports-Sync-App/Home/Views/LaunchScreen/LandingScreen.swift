@@ -5,6 +5,7 @@ struct LandingScreen: View {
     //MARK: STATES
     @State private var offsetAnimation: CGFloat = UIScreen.main.bounds.width
     @State private var showSplash = true
+    @EnvironmentObject var firebaseValidation : FirebaseValidation
     
     //MARK: INSTANCES OF FILES
     private var imageConstants = ImageConstants()
@@ -39,6 +40,14 @@ struct LandingScreen: View {
                 }
             } else {
                 WelcomingScreen()
+            }
+            
+            //MARK: THIS IS TO MAINTAIN USER SESSION WHEN HE LOGS IN SO THAT ON REOPENING HE DOES NOT HAVE TO AGAIN LOGIN
+            if firebaseValidation.userSession != nil{
+                //USER WILL BE ON PROFILE PAGE
+            }else{
+                //USER AGAIN HAE TO LOGIN AND FILL IN DETAILSZ
+                SegmentController()
             }
         }
     }

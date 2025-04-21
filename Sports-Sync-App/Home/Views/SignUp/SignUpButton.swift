@@ -15,6 +15,7 @@ import SwiftUI
 
 struct SignUpButton: View {
     @EnvironmentObject var formViewModal: FormViewModal
+    @EnvironmentObject var firebaseValidation : FirebaseValidation
     @State private var shouldNavigate = false
  
 
@@ -33,6 +34,17 @@ struct SignUpButton: View {
             
             if isValid && isPasswordValid {
                 if formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword && formViewModal.signUpData.selectedGender != nil {
+                 
+                    Task{
+                        //Trigger user registration in firebase
+                        try await firebaseValidation.register(
+                            withEmail : formViewModal.signUpData.signUpEmail,
+                            password :formViewModal.signUpData.signUpPassword,
+                            firstName : formViewModal.signUpData.firstName,
+                            lastName : formViewModal.signUpData.lastName,
+                            age : formViewModal.signUpData.ageValue ,
+                            gender :formViewModal.signUpData.selectedGender?.rawValue ?? "")
+                    }
                     shouldNavigate = true
                 } else {
                     shouldNavigate = false

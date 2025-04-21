@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SegmentController: View {
     @State private var currentView: Int = 0
-
+    
+   
+    
     let options = ["LogIn", "SignUp"]
 
     var body: some View {
@@ -81,6 +83,8 @@ struct SegmentController: View {
             } else {
                 SignUpView()
             }
+            
+           
         }
         .navigationBarBackButtonHidden()
         Spacer()

@@ -11,6 +11,7 @@ import SwiftUI
 
 struct LogInView: View {
     @StateObject var formViewModal = FormViewModal()
+    @StateObject var firebaseValidation = FirebaseValidation()
     var body: some View {
         VStack{
             LogInFields()
@@ -19,6 +20,7 @@ struct LogInView: View {
                
         }
         .environmentObject(formViewModal)
+        .environmentObject(firebaseValidation)
 //MARK: ENVIRONMENT OBJECT TO KEEP TRACK OF CHANGE OF DATA PRESENT INSIDE OUR DATA MODAL
        
     }

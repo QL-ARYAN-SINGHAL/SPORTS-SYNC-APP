@@ -6,9 +6,8 @@
 //
 import SwiftUI
 
-struct SignUpDataModel{
+struct SignUpDataModel:Codable{
     
-     var value: Int = 0
      var signUpEmail: String = ""
      var signUpPassword: String = ""
      var confirmPassword: String = ""

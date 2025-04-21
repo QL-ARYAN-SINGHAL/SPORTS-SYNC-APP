@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @StateObject var formViewModal = FormViewModal()
+    @StateObject var firebaseValidation = FirebaseValidation()
     var body: some View {
         
         ScrollView{
@@ -34,6 +35,7 @@ struct SignUpView: View {
             
         }
         .environmentObject(formViewModal)
+        .environmentObject(firebaseValidation)
     }
 }
 

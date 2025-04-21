@@ -73,6 +73,9 @@ class FormViewModal: ObservableObject {
         }
         return signUpData.progress
         }
+    
+    
+   
         
     
  
