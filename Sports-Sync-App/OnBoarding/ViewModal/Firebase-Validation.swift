@@ -21,7 +21,7 @@ class FirebaseValidation: ObservableObject {
     init() {
         self.userSession = Auth.auth().currentUser
         Task{
-           await  fetchUser()
+           await fetchUser()
         }
     }
     
@@ -103,9 +103,6 @@ class FirebaseValidation: ObservableObject {
         }
     }
 
-    
-    // Explicitly check and assign the phone number only if it’s valid (e.g. 10 digits)
-    
     //function to reset password
     
     func resetPassword(email: String){

@@ -51,7 +51,7 @@ struct LogInButton: View {
                     case .withPhoneNumber:
                         Task {
                             do{
-                                try await firebaseValidation.sendOTP(
+                               firebaseValidation.sendOTP(
                                     phoneNumber: formViewModal.logInData.phoneNumber
                                 )
                                 navigateToOTP = firebaseValidation.isAuthenticated
@@ -59,10 +59,7 @@ struct LogInButton: View {
                                     formViewModal.showAlert = true
                                 }
                             }
-                            catch{
-                                print("Login failed with phone number: \(error.localizedDescription)")
-                                formViewModal.showAlert = true
-                            }
+                           
                         }
                     }
                 }
@@ -78,7 +75,7 @@ struct LogInButton: View {
 
                 // Navigation after login
                 NavigationLink(
-                    destination: WelcomingScreen(),
+                    destination: SuccessSplashView(),
                     isActive: $shouldNavigate,
                     label: { EmptyView() }
                 )

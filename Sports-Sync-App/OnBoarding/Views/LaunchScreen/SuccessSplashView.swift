@@ -39,6 +39,7 @@ struct SuccessSplashView: View {
                 .offset(y: showText ? 0 : 30)
                 .animation(.easeOut(duration: 1.0).delay(0.8), value: showText)
             }
+            .navigationBarBackButtonHidden()
             .padding(.top, 50)
             .onAppear {
                 
@@ -50,8 +51,9 @@ struct SuccessSplashView: View {
                     }
                 }
             }}
+            
         else{
-            ForgetPasswordView()
+            HomeView()
         }
     }
 }

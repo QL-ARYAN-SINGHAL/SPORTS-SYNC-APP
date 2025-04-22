@@ -11,6 +11,8 @@
 //  Created by ARYAN SINGHAL on 13/04/25.
 
 
+//Sunday Program - Make the user 
+
 import SwiftUI
 
 struct SignUpButton: View {
@@ -66,7 +68,7 @@ struct SignUpButton: View {
                         Task {
                             do {
                                  await firebaseValidation.register(
-                                    withEmail: "aryan123@gmail.com",
+                                    withEmail: "Guest@gmail.com",
                                     password: formViewModal.signUpData.signUpPassword,
                                     firstName: formViewModal.signUpData.firstName,
                                     lastName: formViewModal.signUpData.lastName,
@@ -74,6 +76,7 @@ struct SignUpButton: View {
                                     gender: formViewModal.signUpData.selectedGender?.rawValue ?? "",
                                     phoneNumber: formViewModal.signUpData.phoneNumber
                                 )
+                                formViewModal.showAlert = false
                                 shouldNavigate = true
                             }
                         }
