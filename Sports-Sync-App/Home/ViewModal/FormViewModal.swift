@@ -13,6 +13,7 @@ class FormViewModal: ObservableObject {
     @Published var showAlert = false
     @Published var logInData = LoginDataModal()
     @Published var signUpData = SignUpDataModel()
+   
 
     
     //MARK: BUILDER LOGIC FOR EMAIL VALIDATIOON , PASSWORD VALIDATION AND PROGRESS VIEW TRACKING

@@ -15,6 +15,7 @@ class FirebaseValidation: ObservableObject {
     @Published var userSession: FirebaseAuth.User?
     @Published var currentUser: SignUpDataModel?
     @Published var isAuthenticated: Bool = false
+    @Published var verificationCode : String = ""
     
     init() {
         self.userSession = Auth.auth().currentUser
@@ -31,9 +32,12 @@ class FirebaseValidation: ObservableObject {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
             self.userSession = result.user
             await fetchUser()
+            isAuthenticated = true
         }
         catch{
             print("Error in signing in the user \(error.localizedDescription)")
+            throw error
+            
         }
     }
     
@@ -100,4 +104,18 @@ class FirebaseValidation: ObservableObject {
               print("success")
           }
       }
+    
+    
+    //function to send otp on phone number
+    func sendOTP(phoneNumber : String )async {
+        do {
+            let result = try await PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil)
+            DispatchQueue.main.async{
+                self.verificationCode = result
+            }
+            print("OTP sent successfully : \(result)")
+        } catch  {
+            print("Error in sending the otp : \(error.localizedDescription)")
+        }
+    }
 }

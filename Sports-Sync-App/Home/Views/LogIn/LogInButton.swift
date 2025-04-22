@@ -10,6 +10,7 @@ import SwiftUI
 struct LogInButton: View {
    
     @State private var shouldNavigate = false
+    @State private var navigateToOTP = false
     @EnvironmentObject var formViewModal: FormViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
     
@@ -28,25 +29,36 @@ struct LogInButton: View {
 
                 // Login Button
                 ActivatedButton(buttonText: .logInText) {
-                    Task {
-                        do {
-                            try await firebaseValidation.signIn(
-                                withEmail: formViewModal.logInData.loginEmail,
-                                withPassword: formViewModal.logInData.loginPassword
-                            )
-                            
-                            // Check if user is now authenticated
-                            if firebaseValidation.isAuthenticated {
-                                shouldNavigate = true
-                            } else {
+                    switch formViewModal.logInData.loginWith {
+                    case .withEmail:
+                        Task {
+                            do {
+                                try await firebaseValidation.signIn(
+                                    withEmail: formViewModal.logInData.loginEmail,
+                                    withPassword: formViewModal.logInData.loginPassword
+                                )
+                                shouldNavigate = firebaseValidation.isAuthenticated
+                                if !shouldNavigate {
+                                    formViewModal.showAlert = true
+                                }
+                            }
+                            catch {
+                                print("Login failed: \(error.localizedDescription)")
                                 formViewModal.showAlert = true
                             }
-                        } catch {
-                           print("Error found to match user credentials: \(error.localizedDescription)")
-                            formViewModal.showAlert = true
+                        }
+
+                    case .withPhoneNumber:
+                        Task {
+                            await firebaseValidation.sendOTP(
+                                phoneNumber: formViewModal.logInData.phoneNumber
+                            )
+                            navigateToOTP = true
                         }
                     }
                 }
+
+                
                 .alert(isPresented: $formViewModal.showAlert) {
                     Alert(
                         title: Text(verbatim: .logInAlertTitle),
@@ -59,6 +71,11 @@ struct LogInButton: View {
                 NavigationLink(
                     destination: WelcomingScreen(),
                     isActive: $shouldNavigate,
+                    label: { EmptyView() }
+                )
+                NavigationLink(
+                    destination: OTPView(),
+                    isActive: $navigateToOTP,
                     label: { EmptyView() }
                 )
             }

@@ -24,7 +24,7 @@ struct SignUpProgressBar: View {
             
             HStack{
                 
-                Text("\(formViewModal.calculateProgress(from: formViewModal.signUpData ))%")
+                Text("\(formViewModal.calculateProgress(from: formViewModal.signUpData))%")
                     .bold()
                 ProgressView(value: Double(Int(formViewModal.calculateProgress(from: formViewModal.signUpData))), total: 100)
                     .tint(.appTint)

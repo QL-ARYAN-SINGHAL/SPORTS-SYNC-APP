@@ -1,17 +1,29 @@
 import SwiftUI
 
 struct LogInFields: View {
-    
-    //MARK: ENVIRONMENT OBJECT THAT CHECKS THE CHANGE IN OUR ENVIRONMENT THAT CONFORM TO OBSERVALEOBJECT
-    
-    @EnvironmentObject var formViewModal : FormViewModal
+    @EnvironmentObject var formViewModal: FormViewModal
     
     var body: some View {
         VStack(spacing: 17) {
-           
-            FormTextfields(textField: $formViewModal.logInData.loginEmail, placeholder: .emailPlaceholder)
-          
-            ReusableSecureField(text:$formViewModal.logInData.loginPassword, placeholder: .passwordPlaceholder)
+            
+            switch formViewModal.logInData.loginWith{
+                case .withEmail:
+                    FormTextfields(
+                        textField: $formViewModal.logInData.loginEmail,
+                        placeholder: .emailPlaceholder
+                    )
+                case .withPhoneNumber:
+                    FormTextfields(
+                        textField: $formViewModal.logInData.phoneNumber,
+                        placeholder: .emailPlaceholder
+                    )
+                }
+            
+            
+            ReusableSecureField(
+                text: $formViewModal.logInData.loginPassword,
+                placeholder: .passwordPlaceholder
+            )
         }
         .padding()
     }

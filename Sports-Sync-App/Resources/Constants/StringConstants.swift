@@ -7,7 +7,7 @@ extension String {
     static let welcomeSubtitle = "Every game,every fan,one app"
     static let logInText = "Login"
     static let signUpText = "Signup"
-    static let emailPlaceholder = "Email address"
+    static let emailPlaceholder = "Email address / Phone Number"
     static let passwordPlaceholder = "Your password"
     static let forgotPassword = "Forgot Password?"
     static let firstNamePlaceholder = "First Name"
