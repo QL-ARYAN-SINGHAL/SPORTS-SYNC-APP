@@ -19,8 +19,9 @@ struct SignUpDataModel:Codable{
      var ageLabel: String {
         "Age: \(Int(ageValue))"
     }
+    var phoneNumber:String = ""
      var progress: Int = 0
-    
+    var signUpWith : LoginWith = .withPhoneNumber
 }
 
 

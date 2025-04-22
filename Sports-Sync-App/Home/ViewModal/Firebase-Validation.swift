@@ -17,6 +17,7 @@ class FirebaseValidation: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var verificationCode : String = ""
     
+    
     init() {
         self.userSession = Auth.auth().currentUser
         Task{
@@ -63,35 +64,47 @@ class FirebaseValidation: ObservableObject {
         guard let uid = self.userSession?.uid else { return }
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else{return}
         self.currentUser = try? snapshot.data(as: SignUpDataModel.self)
-        print("Current user is \(self.currentUser)")
+       
         }
     
     
 //function to register user data in our database
     
-    func register(withEmail email: String, password: String,firstName: String, lastName: String, age: Double, gender: String) async throws {
+    func register(withEmail email: String?, password: String, firstName: String, lastName: String, age: Double, gender: String, phoneNumber: String? = nil) async{
         do {
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            let result = try await Auth.auth().createUser(withEmail: email!, password: password)
             self.userSession = result.user
-            
-            let user = SignUpDataModel(
-                id: result.user.uid, signUpEmail: email,
+
+            var user = SignUpDataModel(
+                id: result.user.uid,
+                signUpEmail: email ?? "aryan123" ,
                 signUpPassword: password,
                 firstName: firstName,
                 lastName: lastName,
                 selectedGender: Gender(rawValue: gender),
-                ageValue: age
-                
+                ageValue: age,
+                phoneNumber: phoneNumber ?? ""
             )
-            
+//conditions to identify what will be selected .withEmail or .withPhoneNumber
+            if email?.contains("@") == true {
+                user.signUpEmail = email ?? ""
+                user.signUpWith = .withEmail
+            } else if let phone = phoneNumber, phone.count == 10 {
+                user.phoneNumber = phone
+                user.signUpWith = .withPhoneNumber
+            }
+
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
             await fetchUser()
+            isAuthenticated = true
         } catch {
             print("Failed to create user: \(error.localizedDescription)")
         }
     }
+
     
+    // Explicitly check and assign the phone number only if it’s valid (e.g. 10 digits)
     
     //function to reset password
     
@@ -107,15 +120,14 @@ class FirebaseValidation: ObservableObject {
     
     
     //function to send otp on phone number
-    func sendOTP(phoneNumber : String )async {
-        do {
-            let result = try await PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil)
-            DispatchQueue.main.async{
-                self.verificationCode = result
+    func sendOTP(phoneNumber : String ){
+        let credential = PhoneAuthProvider.provider().credential(withVerificationID: "", verificationCode: "")
+        Auth.auth().signIn(with: credential as! FederatedAuthProvider, uiDelegate: nil) { user, error in
+            if let error = error {
+                print("OTP error : \(error.localizedDescription)")
+                return
             }
-            print("OTP sent successfully : \(result)")
-        } catch  {
-            print("Error in sending the otp : \(error.localizedDescription)")
+            print("success")
         }
     }
 }

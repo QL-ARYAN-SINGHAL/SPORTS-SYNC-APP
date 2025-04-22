@@ -43,17 +43,26 @@ struct LogInButton: View {
                                 }
                             }
                             catch {
-                                print("Login failed: \(error.localizedDescription)")
+                                print("Login failed with email: \(error.localizedDescription)")
                                 formViewModal.showAlert = true
                             }
                         }
 
                     case .withPhoneNumber:
                         Task {
-                            await firebaseValidation.sendOTP(
-                                phoneNumber: formViewModal.logInData.phoneNumber
-                            )
-                            navigateToOTP = true
+                            do{
+                                try await firebaseValidation.sendOTP(
+                                    phoneNumber: formViewModal.logInData.phoneNumber
+                                )
+                                navigateToOTP = firebaseValidation.isAuthenticated
+                                if !navigateToOTP {
+                                    formViewModal.showAlert = true
+                                }
+                            }
+                            catch{
+                                print("Login failed with phone number: \(error.localizedDescription)")
+                                formViewModal.showAlert = true
+                            }
                         }
                     }
                 }

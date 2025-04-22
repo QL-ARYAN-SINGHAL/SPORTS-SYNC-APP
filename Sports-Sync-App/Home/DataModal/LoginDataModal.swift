@@ -15,8 +15,3 @@ struct LoginDataModal:Codable {
     var phoneNumber:String = ""
     var loginWith : LoginWith = .withEmail
 }
-
-
-//extension LoginDataModal {
-//    static var currentUser = LoginDataModal(id : NSUUID().uuidString,loginEmail: "aryan@gmail.com",loginPassword: "Aryan@2684")
-//}

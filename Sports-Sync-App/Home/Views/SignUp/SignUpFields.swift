@@ -8,9 +8,19 @@ struct SignUpFields: View {
     var body: some View {
         VStack(spacing: 15) {
             
-            FormTextfields(textField: $formViewModal.signUpData.signUpEmail, placeholder: .emailPlaceholder)
+            
+            switch formViewModal.signUpData.signUpWith {
+           
+                case .withEmail:
                 
+                FormTextfields(textField: $formViewModal.signUpData.signUpEmail, placeholder: .emailPlaceholder)
+              
+            case .withPhoneNumber:
                 
+                FormTextfields(textField: $formViewModal.signUpData.phoneNumber, placeholder: .emailPlaceholder)
+               
+            }
+            
 
             FormTextfields(textField: $formViewModal.signUpData.firstName, placeholder: .firstNamePlaceholder)
                 
