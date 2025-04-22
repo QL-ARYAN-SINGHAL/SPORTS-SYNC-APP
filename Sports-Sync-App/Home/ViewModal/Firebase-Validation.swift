@@ -91,15 +91,13 @@ class FirebaseValidation: ObservableObject {
     
     //function to reset password
     
-    func resetPassword(by email: String , resetCompletion: @escaping (Result<Bool,Error>) -> Void)  {
-       
-        Auth.auth().sendPasswordReset(withEmail: email,completion: {
-            (error) in
-            if let error = error{
-                resetCompletion(.failure(error))
-            }else{
-                resetCompletion(.success(true))
-            }
-        })   
-    }
+    func resetPassword(email: String){
+          Auth.auth().sendPasswordReset(withEmail: email){ error in
+              if error != nil {
+                  print("Reset Password error : \(error?.localizedDescription)")
+                  return
+              }
+              print("success")
+          }
+      }
 }

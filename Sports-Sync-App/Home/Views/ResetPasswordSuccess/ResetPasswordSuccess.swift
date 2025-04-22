@@ -62,6 +62,7 @@ struct ResetPasswordSuccess: View {
         .padding()
         .background(Color(.systemGroupedBackground))
         .ignoresSafeArea(edges: .bottom)
+        .navigationBarBackButtonHidden()
     }
 }
 
