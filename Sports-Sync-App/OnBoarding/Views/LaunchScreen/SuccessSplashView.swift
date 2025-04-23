@@ -53,7 +53,7 @@ struct SuccessSplashView: View {
             }}
             
         else{
-            HomeView()
+            ToolBarView()
         }
     }
 }

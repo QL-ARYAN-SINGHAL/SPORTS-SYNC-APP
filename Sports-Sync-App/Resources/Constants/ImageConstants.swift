@@ -14,4 +14,11 @@ struct ImageConstants{
     var welcomeBikeImage = Image("welcomeBikeImage")
     var successImage = Image("Success")
     var navigationBackImage = Image("NavigationBackImage")
+    var homeTabImage = Image("home")
+    var userTabImage = Image("user-2")
+    var calenderTabImage = Image("calendar")
+    var verticalSliderTabImage = Image("slider-vertical")
+    var notificationToolBarImage = Image("Notification")
+    var locationToolBarImage = Image("location")
+    var emptyBoxImage = Image("emptyBox")
 }

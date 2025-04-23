@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct HomeView: View {
+struct UserFeedView: View {
     var body: some View {
         VStack{
-            Text("This is my Home Page")
+            Text("This is my USER FEED")
         }
         .navigationBarBackButtonHidden()
     }

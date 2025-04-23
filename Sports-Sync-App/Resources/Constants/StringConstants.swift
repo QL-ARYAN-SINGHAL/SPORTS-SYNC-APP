@@ -33,4 +33,11 @@ extension String {
     static let signUpSuccessString = "Sign up successful"
     static let signUpSuccessMessage = "You will be redirected to the main page in a few moments"
     static let fontJakartaBold = "PlusJakartaSans-Bold"
+    static let homeTabName = "Home"
+    static let profileTabName = "Profile"
+    static let myEventTabName = "My Events"
+    static let feedsTabName = "Feeds"
+    static let currentlocationString = "Current location"
+    static let createPlanString = "Create plan"
+    static let eventViewMessage = "Looks like you don’t have any upcoming plans. You can start from here.."
 }

@@ -98,7 +98,7 @@ struct SignUpButton: View {
         }
 
         NavigationLink(
-            destination: WelcomingScreen(),
+            destination: SuccessSplashView(),
             isActive: $shouldNavigate,
             label: { EmptyView() }
         )
