@@ -5,8 +5,21 @@
 //  Created by ARYAN SINGHAL on 23/04/25.
 //
 
-import SwiftUI
+import Foundation
 
 class HomeViewModal : ObservableObject{
+    
     @Published var homeDataModal = HomeViewDataModal()
+    
 }
+
+
+
+
+
+
+
+
+
+
+

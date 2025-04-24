@@ -13,10 +13,10 @@ struct HomeView: View {
     var body: some View {
         
             VStack{
-                HomeSearchBar()
-                HomeSportsListView()
+                HomeTopSearchAndList()
             
                    
+                
             }
             .environmentObject(homeViewModel)
        
