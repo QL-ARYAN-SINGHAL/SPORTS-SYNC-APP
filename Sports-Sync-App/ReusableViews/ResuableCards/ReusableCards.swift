@@ -9,27 +9,57 @@ import SwiftUI
 
 struct ReusableCards: View {
     let homeCardsData : HomeCardsDataModal
+
     var body: some View {
-        VStack{
+        VStack(alignment: .leading) {
+            
             Image(homeCardsData.imageName)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 150)
-                .cornerRadius(10)
+                .frame(width: 156, height: 82)
+                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+
+               
             
-            Text(homeCardsData.sportsName)
-                .font(Font.custom(.fontJakarta, size: 12))
-                .frame(width: 102, height: 16, alignment: .leading)
-            HStack{
-                Image(homeCardsData.locationImage)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 12 , height: 12)
+            VStack {
+                HStack {
+                    Text(homeCardsData.sportsName)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .frame(width: 102, height: 16)
+                        .padding(.trailing, 10)
+
+                    Image(homeCardsData.starImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+
+                    Text(homeCardsData.starRating)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .padding(.leading, -7)
+                }
+
+                HStack(spacing: -2) {
+                    Image(homeCardsData.locationImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 18, height: 18)
+
+                    Text(homeCardsData.locationname)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .frame(width: 78, height: 20)
+                        .foregroundStyle(.font)
+                }
+                .frame(width: 156, alignment: .leading)
             }
         }
+        .padding(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(.disabledButton.opacity(0.4) , lineWidth: 1)
+        )
     }
 }
 
 #Preview {
-    ReusableCards(homeCardsData: HomeCardsDataModal(imageName: "CardsFootball", sportsName: "Formula F1 Racing", locationImage: "CardsPin", locationname: "Delhi / 35km", starImage: "Cardsrating", starRating: "4.1" ))
+    ReusableCards(homeCardsData: HomeCardsDataModal(imageName: "CardsFootball", sportsName: "Formula F1 Racing", locationImage: "CardsPin", locationname: "Delhi / 35km", starImage: "Cardsrating", starRating: "4.1"))
 }
