@@ -19,7 +19,7 @@ struct Sports_Sync_AppApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            ReusableCards(homeCardsData: HomeCardsDataModal(imageName: "CardsFootball", sportsName: "Formula F1 Racing", locationImage: "CardsPin", locationname: "Delhi / 35km", starImage: "Cardsrating", starRating: "4.1" ))
+            ToolBarView()
                 .environmentObject(firebaseValidation)
             
         }

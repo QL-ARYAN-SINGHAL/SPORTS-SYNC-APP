@@ -16,14 +16,14 @@ struct ReusableListButtons: View {
         Button(action: action) {
             Text(buttonText)
                 .font(Font.custom(.fontJakarta, size: 14))
-                .foregroundColor(Color.black)
-                .frame(width: 62, height: 40)
+                .foregroundColor(.disabledFont)
+                .frame(width: 82, height: 35)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.black, lineWidth: 1)
+                        .stroke(.disabledFont, lineWidth: 1)
                 )
         }
-//        .padding()
+          
     }
 }
 

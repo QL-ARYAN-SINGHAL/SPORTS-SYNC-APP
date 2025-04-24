@@ -14,8 +14,13 @@ struct HomeView: View {
         
             VStack{
                 HomeSearchBar()
-                    .environmentObject(homeViewModel)
+                HomeSportsListView()
+            
+                   
             }
+            .environmentObject(homeViewModel)
+       
+           
     }
 }
 
