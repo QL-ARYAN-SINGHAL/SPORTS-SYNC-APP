@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject var viewModel = HomeViewModal()
+    @StateObject var homeViewModel = HomeViewModal()
     
     var body: some View {
         
             VStack{
                 HomeSearchBar()
-                    .environmentObject(viewModel)
+                    .environmentObject(homeViewModel)
             }
     }
 }

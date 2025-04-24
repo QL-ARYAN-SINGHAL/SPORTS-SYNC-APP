@@ -15,6 +15,8 @@
 import SwiftUI
 
 struct EventButton: View {
+    
+    
     var body: some View {
         Button(action: {
           
@@ -33,6 +35,3 @@ struct EventButton: View {
 }
 
 
-#Preview {
-    EventButton()
-}

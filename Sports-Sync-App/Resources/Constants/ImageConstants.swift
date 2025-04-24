@@ -21,4 +21,5 @@ struct ImageConstants{
     var notificationToolBarImage = Image("Notification")
     var locationToolBarImage = Image("location")
     var emptyBoxImage = Image("emptyBox")
+    var calendarMonthImage = Image("calendarMonth")
 }

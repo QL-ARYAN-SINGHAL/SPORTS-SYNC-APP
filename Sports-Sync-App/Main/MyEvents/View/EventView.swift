@@ -8,28 +8,27 @@
 import SwiftUI
 
 struct EventView: View {
+  
     private var imageConstants = ImageConstants()
+    @StateObject private var eventViewModal = EventViewModal()
+    
     var body: some View {
-        
-        //image and text of event view
-        VStack(spacing : 24){
-            VStack(spacing : 15){
-                imageConstants.emptyBoxImage
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 106, height: 67)
-                
-                Text(verbatim: .eventViewMessage)
-                    .font(Font.custom(.fontJakarta, size: 14))
-                    .multilineTextAlignment(.center)
-                    .foregroundStyle(.shadowtext)
-                    .frame(width: 300)
-                
-            }
+        VStack(spacing: 0) {
+            EventListView()
             
-            //button view
-            EventButton()
+            Spacer()
+            if !eventViewModal.eventDataModal.isViewHidden{
+                VStack(spacing: 20) {
+                    EventTextView()
+                    
+                    EventButton()
+                }
+            }
+            Spacer()
         }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .padding()
+        .environmentObject(eventViewModal)
     }
 }
 
