@@ -33,7 +33,7 @@ struct ReusableCards: View {
                         .scaledToFit()
                         .frame(width: 15, height: 15)
 
-                    Text(homeCardsData.starRating)
+                    Text(homeCardsData.rating)
                         .font(Font.custom(.fontJakarta, size: 12))
                         .padding(.leading, -7)
                 }
@@ -44,7 +44,7 @@ struct ReusableCards: View {
                         .scaledToFit()
                         .frame(width: 18, height: 18)
 
-                    Text(homeCardsData.locationname)
+                    Text(homeCardsData.location)
                         .font(Font.custom(.fontJakarta, size: 12))
                         .frame(width: 78, height: 20)
                         .foregroundStyle(.font)
@@ -61,5 +61,5 @@ struct ReusableCards: View {
 }
 
 #Preview {
-    ReusableCards(homeCardsData: HomeCardsDataModal(imageName: "CardsFootball", sportsName: "Formula F1 Racing", locationImage: "CardsPin", locationname: "Delhi / 35km", starImage: "Cardsrating", starRating: "4.1"))
+    ReusableCards(homeCardsData: HomeCardsDataModal(imageName: "CardsFootball", sportsName: "Formula F1 Racing", locationImage: "CardsPin", location: "Delhi / 35km", starImage: "Cardsrating", rating: "4.1"))
 }

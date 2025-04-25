@@ -13,8 +13,8 @@ struct HomeCardsDataModal:Identifiable {
     var imageName : String
     var sportsName : String
     var locationImage : String
-    var locationname : String
+    var location : String
     var starImage : String
-    var starRating : String
+    var rating : String
    
 }

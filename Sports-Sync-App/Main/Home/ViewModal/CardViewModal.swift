@@ -9,9 +9,9 @@ import SwiftUI
 
 class CardViewModal : ObservableObject {
     @Published var cardsHomeData : [HomeCardsDataModal] = [
-        HomeCardsDataModal(imageName: "CardsFootball", sportsName: "Formula F1 Racing", locationImage: "CardsPin", locationname: "Delhi / 35km", starImage: "Cardsrating", starRating: "4.1" ),
+        HomeCardsDataModal(imageName: "CardsFootball", sportsName: "FormulaF1Racing", locationImage: "CardsPin", location: "Delhi / 35km", starImage: "Cardsrating", rating: "4.1" ),
         
-        HomeCardsDataModal(imageName: "CardsMotoRacing", sportsName: "Inter football Cup", locationImage: "CardsPin", locationname:"Delhi / 38km", starImage: "Cardsrating", starRating:"3.8" )
+        HomeCardsDataModal(imageName: "CardsMotoRacing", sportsName: "Inter football Cup", locationImage: "CardsPin", location:"Delhi / 38km", starImage: "Cardsrating", rating:"3.8" )
     ]
 }
 

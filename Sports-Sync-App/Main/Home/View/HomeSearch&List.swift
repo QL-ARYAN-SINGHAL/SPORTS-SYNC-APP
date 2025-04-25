@@ -5,27 +5,6 @@
 //  Created by ARYAN SINGHAL on 23/04/25.
 //
 
-//
-//  HomeSearchBar.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 23/04/25.
-//
-
-//
-//  HomeSearchBar.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 23/04/25.
-//
-
-//
-//  HomeTopSearchAndList.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 24/04/25.
-//
-
 import SwiftUI
 
 struct HomeTopSearchAndList: View {
