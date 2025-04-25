@@ -4,14 +4,26 @@
 //
 //  Created by ARYAN SINGHAL on 24/04/25.
 //
+import Foundation
+import FirebaseFirestore
 
-import SwiftUI
+class CardViewModal: ObservableObject {
+    
+    private var db = Firestore.firestore()
+    
+    @Published var cardsHomeData : [HomeCardsDataModal] = []
+    
+    func fetchCards(for category: String) async {
+      
+        let docRef = db.collection("cards").document("nearby")
 
-class CardViewModal : ObservableObject {
-    @Published var cardsHomeData : [HomeCardsDataModal] = [
-        HomeCardsDataModal(imageName: "CardsFootball", sportsName: "FormulaF1Racing", locationImage: "CardsPin", location: "Delhi / 35km", starImage: "Cardsrating", rating: "4.1" ),
-        
-        HomeCardsDataModal(imageName: "CardsMotoRacing", sportsName: "Inter football Cup", locationImage: "CardsPin", location:"Delhi / 38km", starImage: "Cardsrating", rating:"3.8" )
-    ]
-}
+        do {
+          let city = try await docRef.getDocument(as: HomeCardsDataModal.self)
+          print("Sports: \(city)")
+        } catch {
+          print("Error decoding sports: \(error)")
+        }
 
+            }
+        }
+   

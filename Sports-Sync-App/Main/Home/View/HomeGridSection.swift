@@ -4,6 +4,7 @@
 //
 //  Created by ARYAN SINGHAL on 25/04/25.
 //
+//Responsiiblities : Creating a view where we have vertical scrolling for section category and horizontal scroll for cards
 
 import SwiftUI
 
@@ -14,44 +15,30 @@ struct HomeGridSection: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+    
+    let sectionTitles = ["Nearby", "Trending","Recommended"]
 
     var body: some View {
-        List{
-            
-            Text("Nearby")
-                .font(Font.custom(.fontJakarta, size: 20))
-                .frame(width: 320 , height: 40 , alignment: .leading)
-            ScrollView(Axis.Set.horizontal, showsIndicators: false){
-                LazyVGrid(columns: columns, spacing: 16) {
-                    
-                    ForEach(cardViewModel.cardsHomeData, id: \.id) { card in
-                        
-                        ReusableCards(homeCardsData: card)
-                        
+        List {
+            ForEach(sectionTitles, id: \.self) { title in
+                Section {
+                    Text(title)
+                        .font(Font.custom(.fontJakartaBold, size: 20))
+                        .frame(width: 300, height: 40, alignment: .leading)
+                        .listRowSeparator(.hidden)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyVGrid(columns: columns, spacing: 12) {
+                            ForEach(cardViewModel.cardsHomeData, id: \.self) { card in
+//                                ReusableCards( category: "nearby")
+                            }
+                        }
                     }
-                    
-                    
+                    .listRowSeparator(.hidden)
                 }
-                .padding(.leading, 20)
-            }
-            
-            Text("Trending ")
-                .font(Font.custom(.fontJakarta, size: 20))
-                .frame(width: 320 , height: 40 , alignment: .leading)
-            ScrollView(Axis.Set.horizontal, showsIndicators: false){
-                LazyVGrid(columns: columns, spacing: 16) {
-                    
-                    ForEach(cardViewModel.cardsHomeData, id: \.id) { card in
-                        
-                        ReusableCards(homeCardsData: card)
-                        
-                    }
-                    
-                    
-                }
-                .padding(.leading, 20)
             }
         }
+        .listStyle(.plain)
     }
 }
 
