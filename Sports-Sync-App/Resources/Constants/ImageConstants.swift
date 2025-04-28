@@ -22,4 +22,16 @@ struct ImageConstants{
     var locationToolBarImage = Image("location")
     var emptyBoxImage = Image("emptyBox")
     var calendarMonthImage = Image("calendarMonth")
+    let sportImageNames: [String: String] = [
+           "Team Sports": "baseball",
+           "Individual Sports": "IndivisualSports",
+           "Combat Sports": "Boxing",
+           "Endurance Sports": "EnduranceSports",
+           "Racquet Sports": "RacquetSports",
+           "Water Sports": "WaterSports",
+           "Winter Sports": "WinterSports",
+           "Adventure Sports": "AdventureSports",
+           "Motor Sports": "MotorSports",
+           "Gymnastic": "Gymnastic"
+       ]
 }

@@ -40,4 +40,5 @@ extension String {
     static let currentlocationString = "Current location"
     static let createPlanString = "Create plan"
     static let eventViewMessage = "Looks like you don’t have any upcoming plans. You can start from here.."
+    static let selectSportString = "Select Sport"
 }
