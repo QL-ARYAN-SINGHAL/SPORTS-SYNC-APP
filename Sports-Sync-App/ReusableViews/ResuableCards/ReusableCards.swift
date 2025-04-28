@@ -9,61 +9,83 @@ import SwiftUI
 
 struct ReusableCards: View {
     
-    @State var cardData: HomeCardsDataModal?
-    @StateObject var viewModel = CardViewModal()
+    var cardData: HomeCardsDataModal
     
     var body: some View {
-        
-            VStack(alignment: .leading) {
-                Image(cardData?.imageName ?? "")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 156, height: 82)
-                    .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
-                
-                VStack {
-                    HStack {
-                        Text(cardData?.sportsName ?? "")
-                            .font(Font.custom(.fontJakarta, size: 12))
-                            .frame(width: 102, height: 16)
-                            .padding(.trailing, 10)
-                            
-                        
-                        Image(cardData?.starImage ?? "")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 15, height: 15)
-                        
-                        Text(cardData?.rating ?? "")
-                            .font(Font.custom(.fontJakarta, size: 12))
-                            .padding(.leading, -7)
-                    }
-                    
-                    HStack(spacing: -2) {
-                        Image(cardData?.locationImage ?? "")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 18, height: 18)
-                        
-                        Text(cardData?.location ?? "")
-                            .font(Font.custom(.fontJakarta, size: 12))
-                            .frame(width: 78, height: 20)
-                            .foregroundStyle(.font)
-                    }
-                    .frame(width: 156, alignment: .leading)
+        VStack(alignment: .leading) {
+            AsyncImage(url: URL(string: cardData.imageName)) { phase in
+                switch phase {
+                case .empty:
+                    ProgressView()
+                        .frame(width: 156, height: 82)
+                        .background(Color.gray.opacity(0.2))
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                case .success(let image):
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 156, height: 82)
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                case .failure(_):
+                    Image(systemName: "photo")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 156, height: 82)
+                        .background(Color.gray.opacity(0.2))
+                        .clipShape(RoundedRectangle(cornerRadius: 7))
+                @unknown default:
+                    EmptyView()
                 }
             }
-            .padding(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(.disabledButton.opacity(0.4) , lineWidth: 1)
-            )
-            .task {
-                await viewModel.fetchCards(for: "nearby")
+            
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    Text(cardData.sportsName)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .frame(width: 102, height: 16)
+                    
+                    // Optional: Replace starImage with SF Symbol or static star icon
+                    Image(systemName: "star.fill")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                        .foregroundColor(.yellow)
+                    
+                    Text(cardData.rating)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .padding(.leading, -7)
+                }
+                
+                HStack {
+                    Image(systemName: "location.fill") // Optional: use system location icon
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 14, height: 14)
+                    
+                    Text(cardData.location)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .frame(width: 78, height: 20)
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 156, alignment: .leading)
             }
         }
+        .padding(8)
+        .background(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+        )
     }
+}
 
 #Preview {
-    ReusableCards(cardData: HomeCardsDataModal(imageName: "fgndfk", sportsName: "fghf", locationImage: "ghfj", location: "gjf", starImage: "fghf", rating: "fghg", description: "fbf"))
+    ReusableCards(cardData: HomeCardsDataModal(
+        imageName: "https://cdn.pixabay.com/photo/2023/03/12/08/34/racecar-8185136_960_720.png",
+        sportsName: "Formula 1 Racing",
+        locationImage: "", // Now handled via system image
+        location: "Delhi / 15km",
+        starImage: "",
+        rating: "4.5",
+        description: "Sample Description"
+    ))
 }

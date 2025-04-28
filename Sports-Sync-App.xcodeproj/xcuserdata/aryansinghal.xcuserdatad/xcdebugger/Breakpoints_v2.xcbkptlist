@@ -103,79 +103,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CEA3B51D-28B7-4A7D-A4C8-76BD102DD821"
+            uuid = "979F51D4-E47A-4FE7-8575-B3C62F7CE7CA"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Sports-Sync-App/Main/Home/ViewModal/CardViewModal.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "22"
-            endingLineNumber = "22"
-            landmarkName = "fetchCards(for:)"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "fetchCards(from:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "651F3B46-0704-4820-B4C2-FA83755C40B4"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Sports-Sync-App/Main/Home/ViewModal/CardViewModal.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "24"
-            endingLineNumber = "24"
-            landmarkName = "fetchCards(for:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "05916C32-6CE0-4613-A34B-C2906ED2D2B7"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Sports-Sync-App/Main/Home/ViewModal/CardViewModal.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "25"
-            endingLineNumber = "25"
-            landmarkName = "fetchCards(for:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "05916C32-6CE0-4613-A34B-C2906ED2D2B7 - b44c6ad1606145f9"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(3) suspend resume partial function for Sports_Sync_App.CardViewModal.fetchCards(for: Swift.String) async -&gt; ()"
-                  moduleName = "Sports-Sync-App.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aryansinghal/Documents/Training/Module4/Sports-Sync-App/Sports-Sync-App/Main/Home/ViewModal/CardViewModal.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27">
-               </Location>
-               <Location
-                  uuid = "05916C32-6CE0-4613-A34B-C2906ED2D2B7 - db19157d9c7d7be6"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "(4) suspend resume partial function for Sports_Sync_App.CardViewModal.fetchCards(for: Swift.String) async -&gt; ()"
-                  moduleName = "Sports-Sync-App.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aryansinghal/Documents/Training/Module4/Sports-Sync-App/Sports-Sync-App/Main/Home/ViewModal/CardViewModal.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
