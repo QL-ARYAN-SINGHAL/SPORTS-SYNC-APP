@@ -15,7 +15,8 @@ struct HomeView: View {
             VStack{
                 HomeTopSearchAndList()
             
-                   
+                HomeGridSection()
+                
                 
             }
             .environmentObject(homeViewModel)

@@ -14,12 +14,11 @@ struct HomeTopSearchAndList: View {
     let sportsNames = ["Cricket", "Badminton", "Football", "Tennis", "Volleyball", "Hockey", "Basketball", "Swimming"]
     
     var body: some View {
-     
-            NavigationStack {
-                
-                VStack(alignment: .leading, spacing: 10) {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
                     
-                    
+                  
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
                             Button(action: {
@@ -36,16 +35,14 @@ struct HomeTopSearchAndList: View {
                             
                             ForEach(sportsNames, id: \.self) { sport in
                                 ReusableListButtons(buttonText: sport) {
-                                    
+                                    homeViewModal.homeDataModal.searchText = sport
                                 }
                                 .frame(width: 100, height: 40)
                             }
                         }
                         .padding(.horizontal)
                     }
-                    .padding(.top, 5)
-                    
-                    Spacer()
+                  
                 }
                 
             }
@@ -55,8 +52,10 @@ struct HomeTopSearchAndList: View {
                 prompt: "Search sports..."
             )
         }
+        .frame( height: UIScreen.main.bounds.height*0.17)
+       
     }
-
+}
 
 #Preview {
     HomeTopSearchAndList()

@@ -42,9 +42,9 @@ struct ReusableCards: View {
                 HStack {
                     Text(cardData.sportsName)
                         .font(Font.custom(.fontJakarta, size: 12))
-                        .frame(width: 102, height: 16)
-                    
-                    // Optional: Replace starImage with SF Symbol or static star icon
+                        .frame(width: 102, height: 16,alignment: .leading)
+                        
+                 
                     Image(systemName: "star.fill")
                         .resizable()
                         .scaledToFit()
@@ -57,7 +57,7 @@ struct ReusableCards: View {
                 }
                 
                 HStack {
-                    Image(systemName: "location.fill") // Optional: use system location icon
+                    Image(systemName: "location.fill")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 14, height: 14)
@@ -80,7 +80,7 @@ struct ReusableCards: View {
 
 #Preview {
     ReusableCards(cardData: HomeCardsDataModal(
-        imageName: "https://cdn.pixabay.com/photo/2023/03/12/08/34/racecar-8185136_960_720.png",
+        imageName: "https://cdn.pixabay.com/photo/2023/08/12/08/46/ai-generated-8185136_960_720.png",
         sportsName: "Formula 1 Racing",
         locationImage: "", // Now handled via system image
         location: "Delhi / 15km",

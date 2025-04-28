@@ -1,19 +1,10 @@
-//
-//  TabView.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 23/04/25.
-//MARK: Responsibility: This would help to travel accross screen as per the user request. It will have tabbar items that will be having 4 views to present
-
 import SwiftUI
 
 struct MainTabView: View {
     private var imageConstants = ImageConstants()
     
     var body: some View {
-        // TabView is a normal stack-like View
-        
-        VStack{
+        VStack {
             TabView {
                 HomeView()
                     .tabItem {
@@ -51,16 +42,18 @@ struct MainTabView: View {
                         Text(verbatim: .profileTabName)
                     }
             }
-            .background(.black)
             .accentColor(.appTint)
+            .onAppear {
+                let appearance = UITabBarAppearance()
+                appearance.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+                UITabBar.appearance().standardAppearance = appearance
+                UITabBar.appearance().scrollEdgeAppearance = appearance
+            }
             .navigationBarBackButtonHidden()
-
         }
-        
     }
 }
 
 #Preview {
     MainTabView()
 }
-
