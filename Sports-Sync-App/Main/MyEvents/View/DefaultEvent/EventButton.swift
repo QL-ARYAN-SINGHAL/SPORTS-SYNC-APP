@@ -15,11 +15,11 @@
 import SwiftUI
 
 struct EventButton: View {
-    
+    @State private var makeNavigation: Bool = false
     
     var body: some View {
         Button(action: {
-          
+            makeNavigation = true
         }) {
             Text(verbatim: .createPlanString)
                 .font(Font.custom(.fontJakartaBold, size: 12))
@@ -31,6 +31,16 @@ struct EventButton: View {
                         .fill(Color.appTint)
                 )
         }
+      
+        .navigationDestination(isPresented: $makeNavigation) {
+            CreatePlanView()
+        }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        EventButton()
     }
 }
 

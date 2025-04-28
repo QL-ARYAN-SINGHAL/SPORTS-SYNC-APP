@@ -53,8 +53,11 @@ struct CreatePlanView: View {
                 }
                 .padding()
             }
-            ActivatedButton(buttonText: .continueText, action: {})
-        }
+            ActivatedButton(buttonText: .continueText, action: {
+                //navigate to next page
+            })
+            .navigationBarBackButtonHidden()
+    }
         
 }
 
