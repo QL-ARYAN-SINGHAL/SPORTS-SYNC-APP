@@ -5,12 +5,6 @@
 //  Created by ARYAN SINGHAL on 29/04/25.
 //
 
-//
-//  PlanDescriptionView.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 29/04/25.
-//
 
 import SwiftUI
 
@@ -27,14 +21,17 @@ struct PlanDescriptionView: View {
                     AsyncImage(url: URL(string: selectedCard.imageName)) { image in
                         image
                             .resizable()
-                            .scaledToFill()
+                            .aspectRatio(contentMode: .fill)
                     } placeholder: {
-                        Color.gray.opacity(0.3)
-                        ProgressView()
+                        ZStack {
+                            Color.gray.opacity(0.3)
+                            ProgressView()
+                        }
                     }
                     .frame(height: 226)
-                    .ignoresSafeArea(edges: .horizontal)
+                    .frame(maxWidth: .infinity)
                     .clipped()
+
 
                     Button(action: { dismiss() }) {
                         imageConstants.navigationBackImage

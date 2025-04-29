@@ -5,7 +5,7 @@
 
 import SwiftUI
 
-struct CreatePlanView: View {
+struct SportSelection: View {
     
     @Environment(\.dismiss) private var dismiss
     private let imageConstants = ImageConstants()
@@ -65,6 +65,6 @@ struct CreatePlanView: View {
 
 #Preview {
     NavigationStack {
-        CreatePlanView()
+        SportSelection()
     }
 }

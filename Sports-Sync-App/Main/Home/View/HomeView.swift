@@ -17,8 +17,8 @@ struct HomeView: View {
             
                 HomeGridSection()
                 
-                
             }
+            
             .environmentObject(homeViewModel)
        
            

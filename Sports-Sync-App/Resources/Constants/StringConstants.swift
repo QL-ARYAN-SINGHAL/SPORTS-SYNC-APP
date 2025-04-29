@@ -41,4 +41,11 @@ extension String {
     static let createPlanString = "Create plan"
     static let eventViewMessage = "Looks like you don’t have any upcoming plans. You can start from here.."
     static let selectSportString = "Select Sport"
+    static let createEventString = "Create your event"
+    static let otherDetailString = "Other Details"
+    static let eventNameString = "Event Name"
+    static let sportsNameString = "Sports Name"
+    static let eventDateString = "Event Date"
+    static let eventTimeString = "Event Time"
+    static let eventSearchString = "Select basket ball court..."
 }

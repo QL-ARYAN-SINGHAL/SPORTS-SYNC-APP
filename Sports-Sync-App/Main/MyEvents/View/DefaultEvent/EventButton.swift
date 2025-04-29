@@ -27,7 +27,7 @@ struct EventButton: View {
         }
       
         .navigationDestination(isPresented: $makeNavigation) {
-            CreatePlanView()
+            SportSelection()
         }
     }
 }
