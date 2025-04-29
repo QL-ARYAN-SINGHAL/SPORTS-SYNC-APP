@@ -4,6 +4,8 @@
 //
 //  Created by ARYAN SINGHAL on 25/04/25.
 //
+
+
 //Responsiiblities : Creating a view where we have vertical scrolling for section category and horizontal scroll for cards
 
 
@@ -13,7 +15,7 @@ struct HomeGridSection: View {
     @StateObject var cardViewModal = CardViewModel()
     @State private var selectedCategory = "trending"
     
-    @State private var selectedCard: HomeCardsDataModal?
+   
     @State private var isNavigating = false
     
     let sectionTitles = ["Nearby", "Recommended", "Trending"]
@@ -33,9 +35,10 @@ struct HomeGridSection: View {
                             LazyHStack(spacing: 12) {
                                 ForEach(cardViewModal.cardsHomeData, id: \.self) { card in
                                     ReusableCards(cardData: card) {
-                                        selectedCard = card
+                                        cardViewModal.selectCard(card)
                                         isNavigating = true
                                     }
+
                                 }
                             }
                         }
@@ -48,10 +51,9 @@ struct HomeGridSection: View {
             }
             .listStyle(.plain)
             .navigationDestination(isPresented: $isNavigating) {
-                if selectedCard != nil {
-                    PlanDescriptionView(cardViewModel: CardViewModel())
-                }
+                PlanDescriptionView(cardViewModel: cardViewModal)
             }
+
         }
     }
 }

@@ -20,6 +20,12 @@ class CardViewModel: ObservableObject {
     private var db = Firestore.firestore()
     
     @Published var cardsHomeData: [HomeCardsDataModal] = []
+    @Published var selectedCard: HomeCardsDataModal?
+
+    func selectCard(_ card: HomeCardsDataModal) {
+        selectedCard = card
+    }
+
     
     func fetchCards(from category: String) {
         let docRef = db.collection("cards").document(category)

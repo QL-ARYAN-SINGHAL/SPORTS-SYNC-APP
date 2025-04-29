@@ -19,7 +19,7 @@ struct Sports_Sync_AppApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            CreatePlanView()
+            ToolBarView()
                 .environmentObject(firebaseValidation)
             
         }
