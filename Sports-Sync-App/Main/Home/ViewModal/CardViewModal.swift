@@ -48,7 +48,10 @@ class CardViewModel: ObservableObject {
                     let sportsName = cardInfo["sportsName"] as? String,
                     let location = cardInfo["location"] as? String,
                     let rating = cardInfo["rating"] as? String,
-                    let description = cardInfo["description"] as? String
+                    let description = cardInfo["description"] as? String,
+                    let stadiumName = cardInfo["stadiumName"] as? String,
+                    let eventDate = cardInfo["eventDate"] as? String,
+                    let eventTime = cardInfo["eventTime"] as? String
                 else {
                     print("Missing one of the required fields in card")
                     continue
@@ -57,11 +60,14 @@ class CardViewModel: ObservableObject {
                 let card = HomeCardsDataModal(
                     imageName: imageName,
                     sportsName: sportsName,
-                    locationImage: "", // If you have no locationImage, leave empty
+                    
                     location: location,
-                    starImage: "",     // Same for starImage
+                  
                     rating: rating,
-                    description: description
+                    description: description,
+                    stadiumName:stadiumName,
+                    eventDate:eventDate,
+                    eventTime:eventTime
                 )
                 fetchedCards.append(card)
             }

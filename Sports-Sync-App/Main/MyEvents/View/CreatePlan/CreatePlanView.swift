@@ -1,64 +1,66 @@
+
+
+
+//Responsibility : Here we are fetching the selected sports ards and data to be selected
+
 import SwiftUI
 
 struct CreatePlanView: View {
+    
     @Environment(\.dismiss) private var dismiss
     private let imageConstants = ImageConstants()
+    @StateObject var selectSportsViewModal = SelectSportsViewModal()
     
-    private let sportsNames = [
-        "Team Sports",
-        "Individual Sports",
-        "Combat Sports",
-        "Endurance Sports",
-        "Racquet Sports",
-        "Water Sports",
-        "Winter Sports",
-        "Adventure Sports",
-        "Motor Sports",
-        "Gymnastic"
-    ]
-   
+    @State private var selectedSport: SelectSportDataModal? = nil
+    
     private let adaptiveColumn = [
         GridItem(.adaptive(minimum: 150))
     ]
     
     var body: some View {
-       
-            VStack(alignment: .leading, spacing: 16) {
-                
-                
-                HStack(spacing: 12) {
-                    Button(action: { dismiss() }) {
-                        imageConstants.navigationBackImage
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 30, height: 24)
-                    }
-                    
-                    Text(verbatim: .selectSportString)
-                        .font(Font.custom(.fontJakarta, size: 20))
-                        .foregroundColor(.primary)
-                    
-                    Spacer()
+        
+        VStack(alignment: .leading, spacing: 16) {
+            
+            HStack(spacing: 12) {
+                Button(action: { dismiss() }) {
+                    imageConstants.navigationBackImage
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 24)
                 }
-                .padding(.horizontal)
-                .padding(.top)
                 
+                Text(verbatim: .selectSportString)
+                    .font(Font.custom(.fontJakarta, size: 20))
+                    .foregroundColor(.primary)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+            .padding(.top)
+            ScrollView{
                 LazyVGrid(columns: adaptiveColumn, spacing: 20) {
-                    ForEach(sportsNames, id: \.self) { sport in
+                    ForEach(selectSportsViewModal.selectSportsData, id: \.self) { sport in
                         ReusableCreatePlanCards(
-                            imageName: imageConstants.sportImageNames[sport] ?? "DefaultSport",
-                            cardText: sport
+                            selectSportData: sport,
+                            selectedSport: $selectedSport
                         )
                     }
                 }
+                
                 .padding()
             }
+          
+            
             ActivatedButton(buttonText: .continueText, action: {
-                //navigate to next page
+                // Handle continue action here
             })
-            .navigationBarBackButtonHidden()
+            .frame(height: 60,alignment: .center)
+        }
+        .onAppear {
+            selectSportsViewModal.fetchSelectSports()
+        }
+        .navigationBarBackButtonHidden()
     }
-        
 }
 
 #Preview {

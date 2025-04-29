@@ -12,38 +12,50 @@ import SwiftUI
 struct HomeGridSection: View {
     @StateObject var cardViewModal = CardViewModel()
     @State private var selectedCategory = "trending"
-
+    
+    @State private var selectedCard: HomeCardsDataModal?
+    @State private var isNavigating = false
+    
     let sectionTitles = ["Nearby", "Recommended", "Trending"]
-
+    
     var body: some View {
-        List {
-            ForEach(sectionTitles, id: \.self) { title in
-                Section {
-                    Text(title)
-                        .font(Font.custom(.fontJakartaBold, size: 20))
-                        .frame(width: 300,height : 30, alignment: .leading)
-                        .listRowSeparator(.hidden)
-                        .padding(.top,10)
-
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        LazyHStack(spacing: 12) {
-                            ForEach(cardViewModal.cardsHomeData, id: \.self) { card in
-                                ReusableCards(cardData: card)
-                                   
+        NavigationStack {
+            List {
+                ForEach(sectionTitles, id: \.self) { title in
+                    Section {
+                        Text(title)
+                            .font(Font.custom(.fontJakartaBold, size: 20))
+                            .frame(width: 300, height: 30, alignment: .leading)
+                            .listRowSeparator(.hidden)
+                            .padding(.top, 10)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            LazyHStack(spacing: 12) {
+                                ForEach(cardViewModal.cardsHomeData, id: \.self) { card in
+                                    ReusableCards(cardData: card) {
+                                        selectedCard = card
+                                        isNavigating = true
+                                    }
+                                }
                             }
                         }
-                        
+                        .listRowSeparator(.hidden)
                     }
-                    .listRowSeparator(.hidden)
+                    .onAppear {
+                        cardViewModal.fetchCards(from: selectedCategory)
+                    }
                 }
-                .onAppear {
-                    cardViewModal.fetchCards(from: selectedCategory)
+            }
+            .listStyle(.plain)
+            .navigationDestination(isPresented: $isNavigating) {
+                if selectedCard != nil {
+                    PlanDescriptionView(cardViewModel: CardViewModel())
                 }
             }
         }
-        .listStyle(.plain)
     }
 }
+
 
 #Preview {
     HomeGridSection()

@@ -13,10 +13,10 @@ struct HomeCardsDataModal:Codable,Hashable {
 
     var imageName : String
     var sportsName : String
-    var locationImage : String
     var location : String
-    var starImage : String
     var rating : String
     var description : String 
-   
+    var stadiumName : String
+    var eventDate : String
+    var eventTime : String
 }
