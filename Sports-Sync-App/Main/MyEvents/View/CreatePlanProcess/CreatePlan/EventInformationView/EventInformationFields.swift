@@ -22,8 +22,7 @@ struct EventInformationFields: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"
         return formatter.string(from: currentMonth)
-    }
-    
+    }    
     var body: some View {
         VStack(spacing: 24) {
             Text(verbatim: .otherDetailString)
@@ -110,9 +109,7 @@ struct EventInformationFields: View {
                     }
                 }
             }
-            Spacer()
-            
-            ActivatedButton(buttonText: .continueText, action: {})
+          
         }
     }
 }

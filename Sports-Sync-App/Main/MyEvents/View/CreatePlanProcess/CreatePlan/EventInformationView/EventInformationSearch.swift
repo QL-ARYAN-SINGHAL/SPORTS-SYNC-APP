@@ -8,16 +8,30 @@
 import SwiftUI
 
 struct EventInformationSearch: View {
-    
-    var text = .
-    
     var body: some View {
-        VStack{
-            
-        }.searchable(text: "Select basket ball court...")
+        VStack(alignment: .leading, spacing: 16) {
+            Button(action: {
+                print("Select Location on Map tapped")
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "paperplane.fill")
+                        .frame(width: 13 , height: 13)
+                    
+                    Text("Select Location on Map")
+                        .font(Font.custom(.fontJakarta, size: 14))
+                        .frame(width: 161, height: 23, alignment: .center)
+                }
+                .frame(width: 351, height: 23, alignment: .leading)
+            }
+
+            Spacer()
+        }
+        .padding(.top, 8)
     }
 }
 
 #Preview {
-    EventInformationSearch()
+    NavigationView {
+        EventInformationSearch()
+    }
 }

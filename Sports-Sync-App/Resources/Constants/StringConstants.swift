@@ -38,7 +38,7 @@ extension String {
     static let myEventTabName = "My Events"
     static let feedsTabName = "Feeds"
     static let currentlocationString = "Current location"
-    static let createPlanString = "Create plan"
+    static let createPlanString = "Create Plan"
     static let eventViewMessage = "Looks like you don’t have any upcoming plans. You can start from here.."
     static let selectSportString = "Select Sport"
     static let createEventString = "Create your event"
@@ -48,4 +48,7 @@ extension String {
     static let eventDateString = "Event Date"
     static let eventTimeString = "Event Time"
     static let eventSearchString = "Select basket ball court..."
+    static let editPlanString = "Edit Plan"
+    static let sharePlanString = "Share Plan"
+    
 }

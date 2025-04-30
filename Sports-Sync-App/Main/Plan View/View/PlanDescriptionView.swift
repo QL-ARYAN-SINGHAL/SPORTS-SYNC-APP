@@ -31,8 +31,8 @@ struct PlanDescriptionView: View {
                     .frame(height: 226)
                     .frame(maxWidth: .infinity)
                     .clipped()
-
-
+                    
+                    
                     Button(action: { dismiss() }) {
                         imageConstants.navigationBackImage
                             .resizable()
@@ -42,13 +42,13 @@ struct PlanDescriptionView: View {
                             .padding(.leading, 16)
                     }
                 }
-
+                
                 VStack(alignment: .leading, spacing: 25) {
                     HStack {
                         VStack(alignment: .leading, spacing: 7) {
                             Text(selectedCard.stadiumName)
                                 .font(Font.custom(.fontJakartaBold, size: 16))
-
+                            
                             HStack(spacing: 6) {
                                 Image(systemName: "location.circle")
                                 Text(selectedCard.location)
@@ -56,12 +56,12 @@ struct PlanDescriptionView: View {
                             .foregroundStyle(.disabledFont)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
-
+                        
                         HStack {
                             Text(selectedCard.rating)
                                 .font(Font.custom(.fontJakartaBold, size: 16))
                                 .foregroundStyle(.black)
-
+                            
                             Image(systemName: "star.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -71,7 +71,7 @@ struct PlanDescriptionView: View {
                         .background(Color.gray.opacity(0.3))
                         .cornerRadius(4)
                     }
-
+                    
                     ReusableSportDescription(eventHeading: "Event Date", eventInfo: selectedCard.eventDate)
                     ReusableSportDescription(eventHeading: "Event Time", eventInfo: selectedCard.eventTime)
                 }
@@ -84,6 +84,16 @@ struct PlanDescriptionView: View {
         }
         .frame(maxHeight: UIScreen.main.bounds.height * 0.9, alignment: .top)
         .navigationBarBackButtonHidden()
+        
+        HStack(spacing: 20){
+            ReusableShareFuncButton(text: .sharePlanString, action: {})
+            
+            
+            ReusableEditFuncButtons(text: .editPlanString, action: {})
+            
+        }
+        .frame(width: 375,height: 65)
+        
     }
 }
 
