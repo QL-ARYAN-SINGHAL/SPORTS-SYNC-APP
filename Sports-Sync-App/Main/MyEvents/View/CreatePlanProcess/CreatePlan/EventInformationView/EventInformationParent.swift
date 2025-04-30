@@ -8,27 +8,26 @@
 import SwiftUI
 
 struct EventInformationParent: View {
-    @State private var searchText: String = ""
+   
+    @StateObject var eventInformationViewModel = EventInformationViewModal()
 
     var body: some View {
-       
-            VStack {
-                
-                EventInformation()
-                NavigationStack {
-                ScrollView {
-                    EventInformationSearch()
-                    
-                    EventInformationFields()
+        NavigationStack {
+            ScrollView {
+                EventInformationTitle()
 
+                    VStack(spacing: 16) {
+                        EventInformationSearch()
+                        EventInformationFields()
+                    }
                     
                 }
-                .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
-            }
-         
-        }
-        ActivatedButton(buttonText: .createPlanString, action: {})
           
+            .navigationBarBackButtonHidden(true)
+            .searchable(text: $eventInformationViewModel.eventInfoData.searchText, placement: .navigationBarDrawer(displayMode: .always))
+        }
+        .environmentObject(eventInformationViewModel)
+        
     }
 }
 

@@ -9,9 +9,8 @@ import SwiftUI
 
 struct EventInformationFields: View {
     
-    @StateObject var eventInformationViewModel = EventInformationViewModal()
+    @EnvironmentObject var eventInformationViewModel : EventInformationViewModal
     
-    // States for selecting date and time
     @State private var currentMonth = Date.now
     @State private var showDatePicker = false
     @State private var showTimePicker = false
@@ -22,7 +21,8 @@ struct EventInformationFields: View {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"
         return formatter.string(from: currentMonth)
-    }    
+    }
+    
     var body: some View {
         VStack(spacing: 24) {
             Text(verbatim: .otherDetailString)
@@ -31,10 +31,8 @@ struct EventInformationFields: View {
             
             VStack(spacing: 16) {
                 FormTextfields(textField: $eventInformationViewModel.eventInfoData.eventName, placeholder: .eventNameString)
-                
                 FormTextfields(textField: $eventInformationViewModel.eventInfoData.sportsName, placeholder: .sportsNameString)
                 
-                // Date Field with Calendar Icon
                 ZStack(alignment: .trailing) {
                     FormTextfields(textField: $eventInformationViewModel.eventInfoData.eventDate, placeholder: .eventDateString)
                         .disabled(true)
@@ -77,13 +75,11 @@ struct EventInformationFields: View {
                     FormTextfields(textField: $eventInformationViewModel.eventInfoData.eventTime, placeholder: .eventTimeString)
                         .disabled(true)
                         .onTapGesture {
-                                showTimePicker.toggle()
+                            showTimePicker.toggle()
                         }
                     
                     Button(action: {
-                        
-                            showTimePicker.toggle()
-                        
+                        showTimePicker.toggle()
                     }) {
                         Image(systemName: "clock")
                             .resizable()
@@ -102,18 +98,42 @@ struct EventInformationFields: View {
                     )
                     .datePickerStyle(.wheel)
                     .labelsHidden()
-                    .onChange(of: selectedTime) { newTime in
+                    .onChange(of: selectedTime) {
+                        newTime in
+                        
                         let formatter = DateFormatter()
+                        
                         formatter.timeStyle = .short
-                        eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)
+                        
+                    eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)
                     }
                 }
             }
-          
+
+            Spacer()
+
+            ActivatedButton(buttonText: .createPlanString) {
+                eventInformationViewModel.eventInformationStoreDB(
+                    eventName: eventInformationViewModel.eventInfoData.eventName,
+                    sportsName: eventInformationViewModel.eventInfoData.sportsName,
+                    eventDate: eventInformationViewModel.eventInfoData.eventDate,
+                    eventTime: eventInformationViewModel.eventInfoData.eventTime,
+                    state: eventInformationViewModel.eventInfoData.searchText
+                )
+                
+                //function call to reset fields after the information is stored in db
+                eventInformationViewModel.resetFields()
+                
+                selectedDate = Date()
+                selectedTime = Date()
+                showDatePicker = false
+                showTimePicker = false
+            }
         }
     }
 }
 
 #Preview {
     EventInformationFields()
+        .environmentObject(EventInformationViewModal())
 }

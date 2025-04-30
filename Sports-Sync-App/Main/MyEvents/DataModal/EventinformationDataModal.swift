@@ -8,10 +8,10 @@
 import Foundation
 
 struct EventInformationDataModal : Codable{
-    
-    var eventName = ""
-    var eventDate = ""
-    var sportsName = ""
-    var eventTime = ""
+    var searchText : String = ""
+    var eventName : String = ""
+    var eventDate : String = ""
+    var sportsName : String = ""
+    var eventTime : String = ""
     
 }

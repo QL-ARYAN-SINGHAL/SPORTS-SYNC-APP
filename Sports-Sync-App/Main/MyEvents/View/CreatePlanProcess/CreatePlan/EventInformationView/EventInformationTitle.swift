@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct EventInformation: View {
+struct EventInformationTitle: View {
     
     //Propertywrappers
     @Environment(\.dismiss) private var dismiss
@@ -39,5 +39,5 @@ struct EventInformation: View {
 }
 
 #Preview {
-    EventInformation()
+    EventInformationTitle()
 }
