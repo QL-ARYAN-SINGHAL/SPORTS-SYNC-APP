@@ -45,8 +45,9 @@ struct HomeGridSection: View {
                         .listRowSeparator(.hidden)
                     }
                     .onAppear {
-                        cardViewModal.fetchCards(from: selectedCategory)
+                        cardViewModal.fetchAllCards()
                     }
+
                 }
             }
             .listStyle(.plain)

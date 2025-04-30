@@ -50,5 +50,5 @@ extension String {
     static let eventSearchString = "Select basket ball court..."
     static let editPlanString = "Edit Plan"
     static let sharePlanString = "Share Plan"
-    
+    static let popularCourtsString = "Popular Courts"
 }

@@ -24,7 +24,6 @@ struct EventInformationParent: View {
                 }
           
             .navigationBarBackButtonHidden(true)
-            .searchable(text: $eventInformationViewModel.eventInfoData.searchText, placement: .navigationBarDrawer(displayMode: .always))
         }
         .environmentObject(eventInformationViewModel)
         
