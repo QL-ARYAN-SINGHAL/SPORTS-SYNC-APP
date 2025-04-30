@@ -9,14 +9,18 @@ import SwiftUI
 
 struct StadiumListSheet: View {
     @ObservedObject var cardViewModel: CardViewModel
+    
     @State private var searchtext = ""
+    
     @State var isSelected: Bool = false
 
+    
     //MARK: array that takes stadiums names from the function
     var filteredStadiums: [String] {
         let allStadiums = cardViewModel.cardsHomeData.map { $0.stadiumName }
         let uniqueStadiums = Array(Set(allStadiums)).sorted()
 
+        //to filter the stadiums as we write we have use .filter and caseSesitive
         if searchtext.isEmpty {
             return uniqueStadiums
         } else {
@@ -36,7 +40,7 @@ struct StadiumListSheet: View {
                     ForEach(filteredStadiums, id: \.self) { stadium in
                         Button(action : {}){
                             Text(stadium)
-                                .font(Font.custom(.fontJakarta, size: 12))
+                                .font(Font.custom(.fontJakarta, size: 15))
                                 .frame(height: 50, alignment: .leading)
                         }
                            
@@ -49,7 +53,7 @@ struct StadiumListSheet: View {
             }
 
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchtext, prompt: "Select a stadium for your match")
+            .searchable(text: $searchtext, prompt: "Select stadium ...")
         }
         
     }
