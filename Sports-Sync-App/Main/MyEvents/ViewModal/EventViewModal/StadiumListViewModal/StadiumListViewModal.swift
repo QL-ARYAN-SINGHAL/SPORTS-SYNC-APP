@@ -9,6 +9,8 @@ import FirebaseFirestore
 
 class StadiumListViewModel: ObservableObject {
     @Published var stadiumListData: [StadiumListDataModal] = []
+    @Published var selectedStadium = StadiumListDataModal()
+    
     let db = Firestore.firestore()
 
     func fetchStadiumList() {

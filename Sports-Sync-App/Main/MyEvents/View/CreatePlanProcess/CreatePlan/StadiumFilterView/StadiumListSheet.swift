@@ -4,29 +4,30 @@
 //
 //  Created by ARYAN SINGHAL on 30/04/25.
 //
-
 import SwiftUI
 
 struct StadiumListSheet: View {
+    //PropertyWrappers
     @ObservedObject var cardViewModel: CardViewModel
-    
-    @State private var searchtext = ""
-    
-    @State var isSelected: Bool = false
-
-    
-    //MARK: array that takes stadiums names from the function
+    @StateObject var stadiumListViewModel = StadiumListViewModel()
+   
+   
+    //variables to filter the stadiums or track th etadiums
     var filteredStadiums: [String] {
-        let allStadiums = cardViewModel.cardsHomeData.map { $0.stadiumName }
+        let allStadiums = cardViewModel.cardsHomeData.map
+                          { $0.stadiumName }
+        
         let uniqueStadiums = Array(Set(allStadiums)).sorted()
 
-        //to filter the stadiums as we write we have use .filter and caseSesitive
-        if searchtext.isEmpty {
-            return uniqueStadiums
-        } else {
-            return uniqueStadiums.filter { $0.localizedCaseInsensitiveContains(searchtext) }
+        if  stadiumListViewModel.selectedStadium.searchtext.isEmpty {return uniqueStadiums}
+        
+        else {
+            return uniqueStadiums.filter
+            { $0.localizedCaseInsensitiveContains( stadiumListViewModel.selectedStadium.searchtext) }
         }
     }
+    
+    
 
     var body: some View {
         NavigationStack {
@@ -37,27 +38,44 @@ struct StadiumListSheet: View {
                     .padding(.horizontal)
 
                 List {
-                    ForEach(filteredStadiums, id: \.self) { stadium in
-                        Button(action : {}){
-                            Text(stadium)
-                                .font(Font.custom(.fontJakarta, size: 15))
-                                .frame(height: 50, alignment: .leading)
+                    ForEach(filteredStadiums, id: \.self) {
+                        
+                        stadium in
+                        
+                        Button(
+                            action: {stadiumListViewModel.selectedStadium.selectedStadium = stadium}
+                        )
+                        {
+                            HStack {
+                                Text(stadium)
+                                    .font(Font.custom(.fontJakarta, size: 15))
+                                    .frame(height: 50, alignment: .leading)
+                                
+                                Spacer()
+                                
+                                if stadiumListViewModel.selectedStadium.selectedStadium == stadium {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundStyle(.green)
+                                }
+                            }
                         }
-                           
                     }
                 }
                 .listStyle(.plain)
             }
             .onAppear {
+                
                 cardViewModel.fetchAllCards()
             }
-
+            
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $searchtext, prompt: "Select stadium ...")
+            .searchable(text:  $stadiumListViewModel.selectedStadium.searchtext, prompt: "Select stadium ...")
         }
-        
+        .environmentObject(stadiumListViewModel)
     }
+   
 }
+
 
 #Preview {
     StadiumListSheet(cardViewModel: CardViewModel())

@@ -8,5 +8,7 @@
 import Foundation
 
 struct StadiumListDataModal : Codable {
+    var searchtext = ""
+    var selectedStadium: String? = nil
     var stadium = ""
 }

@@ -19,4 +19,5 @@ struct HomeCardsDataModal:Codable,Hashable {
     var stadiumName : String
     var eventDate : String
     var eventTime : String
+   
 }

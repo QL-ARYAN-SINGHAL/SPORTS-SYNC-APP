@@ -14,4 +14,5 @@ struct EventInformationDataModal : Codable{
     var sportsName : String = ""
     var eventTime : String = ""
     
+    
 }
