@@ -52,4 +52,5 @@ extension String {
     static let sharePlanString = "Share Plan"
     static let popularCourtsString = "Popular Courts"
     static let searchPopularStadiumString = "Search Popular Courts ..."
+    static let selectLocationString = "Find my current location"
 }

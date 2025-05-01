@@ -12,7 +12,6 @@ struct EventInformationSearch: View {
     
     //Property Wrappers
     @EnvironmentObject var eventInformationViewModel: EventInformationViewModal
-    
     @StateObject var cardViewModal = CardViewModel()
 
     //States
@@ -63,18 +62,12 @@ struct EventInformationSearch: View {
                             Image(systemName: "paperplane.fill")
                                 .frame(width: 13, height: 13)
 
-                            Text("Select location on map")
+                            
+                            Text(verbatim: .selectLocationString)
                                 .font(Font.custom(.fontJakarta, size: 14))
                                 .foregroundColor(.blue)
                         }
                         .frame(height: 23)
-                    }
-
-                    if !fetchedLocation.isEmpty {
-                        Text(fetchedLocation)
-                            .font(Font.custom(.fontJakartaBold, size: 15))
-                            .foregroundColor(.black)
-                            .lineLimit(1)
                     }
                 }
                 .frame(width: 351, alignment: .leading)
@@ -134,7 +127,7 @@ struct EventInformationSearch: View {
 
 #Preview {
     NavigationView {
-        EventInformationSearch()
+        EventInformationSearch(cardViewModal: CardViewModel())
             .environmentObject(EventInformationViewModal())
           
     }

@@ -4,9 +4,12 @@
 //
 //  Created by ARYAN SINGHAL on 30/04/25.
 //
+
+//MARK: Responsibility: Show user some popular courts where he can filter using searchbar and select the satdium
 import SwiftUI
 
 struct StadiumListSheet: View {
+    
     //Property wrapper
     
     @ObservedObject var cardViewModel: CardViewModel

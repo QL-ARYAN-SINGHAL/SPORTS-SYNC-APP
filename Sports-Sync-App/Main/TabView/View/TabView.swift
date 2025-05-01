@@ -7,6 +7,9 @@ import SwiftUI
 struct MainTabView: View {
     @StateObject var tabRouter = TabRouter()
     private var imageConstants = ImageConstants()
+    let locationManager = LocationManager()
+    
+    @State private var currentLocation: String = "Fetching..."
 
     var body: some View {
         NavigationStack {
@@ -32,7 +35,6 @@ struct MainTabView: View {
                         Text(verbatim: .myEventTabName)
                     }
                     .tag(1)
-                
                 
                 UserFeedView()
                     .tabItem {
@@ -67,12 +69,14 @@ struct MainTabView: View {
                             imageConstants.locationToolBarImage
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 16, height: 16)
+                                .frame(width: 16, height: 16,alignment:.center)
                             
-                            Text("Delhi")
+                            Text(currentLocation)
                                 .font(Font.custom(.fontJakartaBold, size: 16))
+                                .lineLimit(1)
+                              
                         }
-                        .padding(.leading, -20)
+                       
                     }
                     .frame(width: 375, height: 72, alignment: .leading)
                     .padding(.leading, 50)
@@ -94,6 +98,11 @@ struct MainTabView: View {
                 appearance.backgroundColor = UIColor.white.withAlphaComponent(0.9)
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
+                
+                
+                locationManager.requestState { state in
+                    currentLocation = state ?? "Unknown"
+                }
             }
             .navigationBarBackButtonHidden()
         }
