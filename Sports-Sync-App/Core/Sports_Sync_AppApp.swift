@@ -14,6 +14,7 @@ import FirebaseCore
 @main
 struct Sports_Sync_AppApp: App {
     @StateObject var firebaseValidation = FirebaseValidation()
+    
     init(){
         FirebaseApp.configure()
     }

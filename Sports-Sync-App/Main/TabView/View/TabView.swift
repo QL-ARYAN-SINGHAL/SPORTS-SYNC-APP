@@ -2,50 +2,59 @@
 //MARK: Responsibilty : Navigate among different sections of our application using tabbar
 //To show curent location and notification we use toolbar
 
-
 import SwiftUI
 
 struct MainTabView: View {
+    @StateObject var tabRouter = TabRouter()
     private var imageConstants = ImageConstants()
-    
+
     var body: some View {
         NavigationStack {
-            TabView {
+            TabView(selection: $tabRouter.tabDataModal.selectedTab) {
                 HomeView()
                     .tabItem {
-                        imageConstants.homeTabImage.renderingMode(.template)
+                        imageConstants.homeTabImage
+                            .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
                         Text(verbatim: .homeTabName)
                     }
+                    .tag(0)
                 
                 EventView()
                     .tabItem {
-                        imageConstants.calenderTabImage.renderingMode(.template)
+                        imageConstants.calenderTabImage
+                            .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
                         Text(verbatim: .myEventTabName)
                     }
+                    .tag(1)
+                
                 
                 UserFeedView()
                     .tabItem {
-                        imageConstants.verticalSliderTabImage.renderingMode(.template)
+                        imageConstants.verticalSliderTabImage
+                            .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
                         Text(verbatim: .feedsTabName)
                     }
+                    .tag(2)
                 
                 ProfileView()
                     .tabItem {
-                        imageConstants.userTabImage.renderingMode(.template)
+                        imageConstants.userTabImage
+                            .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 20, height: 20)
                         Text(verbatim: .profileTabName)
                     }
+                    .tag(3)
             }
             .accentColor(.appTint)
             .toolbar {
@@ -62,37 +71,35 @@ struct MainTabView: View {
                             
                             Text("Delhi")
                                 .font(Font.custom(.fontJakartaBold, size: 16))
-                                
                         }
                         .padding(.leading, -20)
                     }
-                    .frame(width: 375, height: 72,alignment:.leading)
-                    .padding(.leading,50)
-                  
-                    
+                    .frame(width: 375, height: 72, alignment: .leading)
+                    .padding(.leading, 50)
                 }
-                
+
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        //Notification Page entry
-                    }, label: {
+                        // Notification page logic
+                    }) {
                         imageConstants.notificationToolBarImage
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
-                    })
+                    }
                 }
             }
-            
             .onAppear {
                 let appearance = UITabBarAppearance()
                 appearance.backgroundColor = UIColor.white.withAlphaComponent(0.9)
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
             }
+            .navigationBarBackButtonHidden()
         }
     }
 }
+
 
 #Preview {
     MainTabView()

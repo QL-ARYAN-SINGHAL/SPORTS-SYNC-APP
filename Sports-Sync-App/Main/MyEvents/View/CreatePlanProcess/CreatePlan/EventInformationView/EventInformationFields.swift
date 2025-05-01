@@ -9,14 +9,18 @@ import SwiftUI
 
 struct EventInformationFields: View {
     
-    @EnvironmentObject var eventInformationViewModel : EventInformationViewModal
+    @EnvironmentObject var eventInformationViewModel: EventInformationViewModal
+    @EnvironmentObject var tabRouter: TabRouter
     
     @State private var currentMonth = Date.now
     @State private var showDatePicker = false
     @State private var showTimePicker = false
     @State private var selectedDate = Date()
     @State private var selectedTime = Date()
-
+    @State private var showAlert = false
+    
+    @State private var navigateToRoot = false
+    
     var selectedMonth: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"
@@ -27,7 +31,8 @@ struct EventInformationFields: View {
         VStack(spacing: 24) {
             Text(verbatim: .otherDetailString)
                 .font(Font.custom(.fontJakartaBold, size: 18))
-                .frame(width: 343, height: 20, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.leading, 17)
             
             VStack(spacing: 16) {
                 FormTextfields(textField: $eventInformationViewModel.eventInfoData.eventName, placeholder: .eventNameString)
@@ -37,40 +42,31 @@ struct EventInformationFields: View {
                     FormTextfields(textField: $eventInformationViewModel.eventInfoData.eventDate, placeholder: .eventDateString)
                         .disabled(true)
                         .onTapGesture {
-                            withAnimation {
-                                showDatePicker.toggle()
-                            }
+                            withAnimation { showDatePicker.toggle() }
                         }
                     
                     Button(action: {
-                        withAnimation {
-                            showDatePicker.toggle()
-                        }
+                        withAnimation { showDatePicker.toggle() }
                     }) {
                         Image(systemName: "calendar")
                             .resizable()
-                            .scaledToFit()
                             .frame(width: 20, height: 20)
-                            .padding(.trailing, 12)
                             .foregroundColor(.appTint)
+                            .padding(.trailing, 8)
                     }
                 }
                 
                 if showDatePicker {
-                    DatePicker(
-                        "",
-                        selection: $selectedDate,
-                        displayedComponents: .date
-                    )
-                    .datePickerStyle(.graphical)
-                    .labelsHidden()
-                    .onChange(of: selectedDate) { newDate in
-                        let formatter = DateFormatter()
-                        formatter.dateStyle = .medium
-                        eventInformationViewModel.eventInfoData.eventDate = formatter.string(from: newDate)
-                    }
+                    DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                        .labelsHidden()
+                        .onChange(of: selectedDate) { newDate in
+                            let formatter = DateFormatter()
+                            formatter.dateStyle = .medium
+                            eventInformationViewModel.eventInfoData.eventDate = formatter.string(from: newDate)
+                        }
                 }
-
+                
                 ZStack(alignment: .trailing) {
                     FormTextfields(textField: $eventInformationViewModel.eventInfoData.eventTime, placeholder: .eventTimeString)
                         .disabled(true)
@@ -83,60 +79,74 @@ struct EventInformationFields: View {
                     }) {
                         Image(systemName: "clock")
                             .resizable()
-                            .scaledToFit()
                             .frame(width: 20, height: 20)
-                            .padding(.trailing, 12)
                             .foregroundColor(.appTint)
+                            .padding(.trailing, 8)
                     }
                 }
-
+                
                 if showTimePicker {
-                    DatePicker(
-                        "",
-                        selection: $selectedTime,
-                        displayedComponents: .hourAndMinute
-                    )
-                    .datePickerStyle(.wheel)
-                    .labelsHidden()
-                    .onChange(of: selectedTime) {
-                        newTime in
-                        
-                        let formatter = DateFormatter()
-                        
-                        formatter.timeStyle = .short
-                        
-                    eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)
-                    }
+                    DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                        .datePickerStyle(.wheel)
+                        .labelsHidden()
+                        .onChange(of: selectedTime) { newTime in
+                            let formatter = DateFormatter()
+                            formatter.timeStyle = .short
+                            eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)
+                        }
                 }
             }
-
+            
             Spacer()
-
+            
             ActivatedButton(buttonText: .createPlanString) {
-                eventInformationViewModel.eventInformationStoreDB(
-                    eventName: eventInformationViewModel.eventInfoData.eventName,
-                    sportsName: eventInformationViewModel.eventInfoData.sportsName,
-                    eventDate: eventInformationViewModel.eventInfoData.eventDate,
-                    eventTime: eventInformationViewModel.eventInfoData.eventTime,
-                    state: eventInformationViewModel.eventInfoData.searchText,
-                    selectedStadium: eventInformationViewModel.eventInfoData.selectedStadium ?? "Failed to get stadium name !"
+                if eventInformationViewModel.checkValidation() {
+                    eventInformationViewModel.eventInformationStoreDB(
+                        eventName: eventInformationViewModel.eventInfoData.eventName,
+                        sportsName: eventInformationViewModel.eventInfoData.sportsName,
+                        eventDate: eventInformationViewModel.eventInfoData.eventDate,
+                        eventTime: eventInformationViewModel.eventInfoData.eventTime,
+                        state: eventInformationViewModel.eventInfoData.searchText,
+                        selectedStadium: eventInformationViewModel.eventInfoData.selectedStadium ?? "Failed to get stadium name!"
+                    )
+                    if eventInformationViewModel.didSubmitSuccessfully {
+                        tabRouter.tabDataModal.selectedTab = 1
+                        navigateToRoot = true
+                    }
+                    eventInformationViewModel.resetFields()
+                    selectedDate = Date()
+                    selectedTime = Date()
+                    showDatePicker = false
+                    showTimePicker = false
+                    eventInformationViewModel.eventInfoData.selectedStadium = nil
                     
-                )
+                }
+               
+                else {
+                    showAlert = true
+                }
                 
-                //function call to reset fields after the information is stored in db
-                eventInformationViewModel.resetFields()
-                
-                selectedDate = Date()
-                selectedTime = Date()
-                showDatePicker = false
-                showTimePicker = false
-                
+              
             }
         }
+        .padding(.horizontal)
+        .navigationDestination(isPresented: $navigateToRoot) {
+            MainTabView()
+                .onAppear {
+                    tabRouter.tabDataModal.selectedTab = 2
+                }
+        }
+        .alert("Please fill out all the fields.", isPresented: $showAlert) {
+            Button("OK", role: .cancel) { }
+        }
     }
-}
+       
 
+}
 #Preview {
     EventInformationFields()
         .environmentObject(EventInformationViewModal())
+        .environmentObject(TabRouter())
 }
+
+

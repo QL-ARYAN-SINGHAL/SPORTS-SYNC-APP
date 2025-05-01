@@ -27,23 +27,24 @@ struct EventInformationSearch: View {
             // Text when Taped to select stadium
             HStack {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.black.opacity(0.4))
                 
-                Text("Select a basketball court")
+                Text(verbatim: .searchPopularStadiumString)
                     .font(Font.custom(.fontJakarta, size: 14))
-                    .frame(width: 300)
+                    .frame(width: 300,alignment: .leading)
                     .onTapGesture {
                         sheetNavigate.toggle()
                     }
+                    .foregroundStyle(.black.opacity(0.3))
             }
             .padding(16)
-            .background(Color(.systemGray6))
+            .background(.gray.opacity(0.4))
             .cornerRadius(6)
             .frame(width: 351)
-
+           
             //logic to toggle between location and StadiumCard
             
-            if !showStadiumDetail {
+            if !eventInformationViewModel.eventInfoData.showStadiumDetail {
                 // Location is selected here
                 HStack(spacing: 12) {
                     
@@ -100,7 +101,7 @@ struct EventInformationSearch: View {
             
             if newValue != nil {
                 
-                showStadiumDetail = true
+                eventInformationViewModel.eventInfoData.showStadiumDetail = true
                 sheetNavigate = false
             }
         }

@@ -13,22 +13,25 @@ struct EventView: View {
     @StateObject private var eventViewModal = EventViewModal()
     
     var body: some View {
-        VStack(spacing: 0) {
-            EventListView()
-            
-            Spacer()
-            if !eventViewModal.eventDataModal.isViewHidden{
-                VStack(spacing: 20) {
-                    EventTextView()
-                    
-                    EventButton()
+       
+            VStack(spacing: 0) {
+                EventListView()
+                
+                Spacer()
+                if !eventViewModal.eventDataModal.isViewHidden{
+                    VStack(spacing: 20) {
+                        EventTextView()
+                        
+                        EventButton()
+                    }
                 }
+                Spacer()
             }
-            Spacer()
-        }
-        .frame(maxHeight: .infinity, alignment: .top)
-        .padding()
-        .environmentObject(eventViewModal)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding()
+            .environmentObject(eventViewModal)
+            
+        
     }
 }
 

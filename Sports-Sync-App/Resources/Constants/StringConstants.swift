@@ -51,4 +51,5 @@ extension String {
     static let editPlanString = "Edit Plan"
     static let sharePlanString = "Share Plan"
     static let popularCourtsString = "Popular Courts"
+    static let searchPopularStadiumString = "Search Popular Courts ..."
 }

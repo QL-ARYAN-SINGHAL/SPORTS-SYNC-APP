@@ -11,6 +11,7 @@ import FirebaseFirestore
 class EventInformationViewModal: ObservableObject {
     
     @Published var eventInfoData = EventInformationDataModal()
+    @Published var didSubmitSuccessfully = false
     
     let db = Firestore.firestore()
     //Function to store the create event information
@@ -30,10 +31,15 @@ class EventInformationViewModal: ObservableObject {
             
             ]
         )
+        didSubmitSuccessfully = true
     }
     
     func resetFields() {
            eventInfoData = EventInformationDataModal()
        }
+    
+    func checkValidation() -> Bool {
+        return !eventInfoData.eventName.isEmpty && !eventInfoData.sportsName.isEmpty && !eventInfoData.eventDate.isEmpty && !eventInfoData.eventTime.isEmpty && eventInfoData.selectedStadium != nil
+    }
     
 }

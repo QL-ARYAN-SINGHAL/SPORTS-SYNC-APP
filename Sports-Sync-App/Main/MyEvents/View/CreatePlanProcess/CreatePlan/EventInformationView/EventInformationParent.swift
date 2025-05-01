@@ -10,6 +10,7 @@ import SwiftUI
 struct EventInformationParent: View {
    
     @StateObject var eventInformationViewModel = EventInformationViewModal()
+    @StateObject var tabRouter = TabRouter()
    
 
     var body: some View {
@@ -27,6 +28,7 @@ struct EventInformationParent: View {
             .navigationBarBackButtonHidden(true)
         }
         .environmentObject(eventInformationViewModel)
+        .environmentObject(tabRouter)
         
         
     }
