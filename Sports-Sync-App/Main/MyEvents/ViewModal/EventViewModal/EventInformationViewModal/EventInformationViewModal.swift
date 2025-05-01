@@ -4,10 +4,7 @@
 //
 //  Created by ARYAN SINGHAL on 29/04/25.
 ////
-//var eventName = ""
-//var eventDate = ""
-//var sportsName = ""
-//var eventTime = ""
+
 import SwiftUI
 import FirebaseFirestore
 
@@ -18,7 +15,7 @@ class EventInformationViewModal: ObservableObject {
     let db = Firestore.firestore()
     //Function to store the create event information
     
-    func eventInformationStoreDB(eventName : String , sportsName : String , eventDate : String, eventTime : String,state:String){
+    func eventInformationStoreDB(eventName : String , sportsName : String , eventDate : String, eventTime : String,state:String,selectedStadium : String){
         
         db.collection("User Event").addDocument(data:
             
@@ -28,7 +25,8 @@ class EventInformationViewModal: ObservableObject {
                 "Sports Name " : sportsName,
                 "Event Date " : eventDate,
                 "Event Time " : eventTime,
-                "State" : state
+                "State" : state,
+                "Selected Stadium" : selectedStadium
             
             ]
         )

@@ -13,6 +13,8 @@ struct EventInformationDataModal : Codable{
     var eventDate : String = ""
     var sportsName : String = ""
     var eventTime : String = ""
-    
+    var selectedStadium: String? = nil
+    var stadium = ""
+    var showStadiumDetails : Bool = false
     
 }

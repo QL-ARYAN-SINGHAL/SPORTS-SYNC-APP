@@ -13,9 +13,7 @@ import SwiftUI
 
 struct HomeGridSection: View {
     @StateObject var cardViewModal = CardViewModel()
-    @State private var selectedCategory = "trending"
-    
-   
+
     @State private var isNavigating = false
     
     let sectionTitles = ["Nearby", "Recommended", "Trending"]

@@ -7,53 +7,73 @@
 import SwiftUI
 
 struct StadiumListSheet: View {
-    //PropertyWrappers
+    //Property wrapper
+    
     @ObservedObject var cardViewModel: CardViewModel
-    @StateObject var stadiumListViewModel = StadiumListViewModel()
-   
-   
-    //variables to filter the stadiums or track th etadiums
-    var filteredStadiums: [String] {
-        let allStadiums = cardViewModel.cardsHomeData.map
-                          { $0.stadiumName }
-        
-        let uniqueStadiums = Array(Set(allStadiums)).sorted()
+    @ObservedObject var eventInformationViewModal: EventInformationViewModal
 
-        if  stadiumListViewModel.selectedStadium.searchtext.isEmpty {return uniqueStadiums}
+  //MARK:  variable to filter our stadiums as per alphabetic order
+    var filteredStadiums: [String] {
         
-        else {
-            return uniqueStadiums.filter
-            { $0.localizedCaseInsensitiveContains( stadiumListViewModel.selectedStadium.searchtext) }
+        let allStadiums = cardViewModel.cardsHomeData.map { $0.stadiumName }
+        //allstadiums maps all the data present in our db
+        let uniqueStadiums = Array(Set(allStadiums)).sorted()
+        //unique stadium sorts the fetched stadium names in alphabetical order
+
+        if eventInformationViewModal.eventInfoData.searchText.isEmpty {
+            return uniqueStadiums
+        } else {
+            return uniqueStadiums.filter {
+                $0.localizedCaseInsensitiveContains(eventInformationViewModal.eventInfoData.searchText)
+            }
         }
     }
-    
-    
 
     var body: some View {
+        
         NavigationStack {
+            
             VStack(alignment: .leading, spacing: 8) {
+                
                 Text(verbatim: .popularCourtsString)
+                
                     .font(Font.custom(.fontJakartaBold, size: 18))
                     .frame(height: 20, alignment: .leading)
                     .padding(.horizontal)
 
                 List {
+                    
                     ForEach(filteredStadiums, id: \.self) {
                         
                         stadium in
                         
-                        Button(
-                            action: {stadiumListViewModel.selectedStadium.selectedStadium = stadium}
-                        )
+                        Button(action: {
+                            
+                            eventInformationViewModal.eventInfoData.selectedStadium = stadium
+
+                            //matches the first occurence of similar stadium in array where we fetched
+                            if let matchingCard = cardViewModel.cardsHomeData.first(where: {
+                                $0.stadiumName == stadium
+                            })
+                            {
+                                //here it shows the card of that macthed stadium
+                                cardViewModel.selectCard(matchingCard)
+                            }
+
+                        })
                         {
                             HStack {
+                                
                                 Text(stadium)
+                                
                                     .font(Font.custom(.fontJakarta, size: 15))
                                     .frame(height: 50, alignment: .leading)
-                                
+
                                 Spacer()
-                                
-                                if stadiumListViewModel.selectedStadium.selectedStadium == stadium {
+
+                                if eventInformationViewModal.eventInfoData.selectedStadium == stadium
+                               
+                                {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundStyle(.green)
                                 }
@@ -64,19 +84,14 @@ struct StadiumListSheet: View {
                 .listStyle(.plain)
             }
             .onAppear {
-                
                 cardViewModel.fetchAllCards()
             }
-            
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text:  $stadiumListViewModel.selectedStadium.searchtext, prompt: "Select stadium ...")
+            .searchable(text: $eventInformationViewModal.eventInfoData.searchText, prompt: "Select stadium ...")
         }
-        .environmentObject(stadiumListViewModel)
     }
-   
 }
 
-
 #Preview {
-    StadiumListSheet(cardViewModel: CardViewModel())
+    StadiumListSheet(cardViewModel: CardViewModel(), eventInformationViewModal: EventInformationViewModal())
 }

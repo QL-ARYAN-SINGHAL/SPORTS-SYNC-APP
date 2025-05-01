@@ -79,5 +79,9 @@ class CardViewModel: ObservableObject {
             }
         }
     }
+    
+    func selectedCard(_ card: HomeCardsDataModal) {
+            self.selectedCard = card
+        }
 
 }

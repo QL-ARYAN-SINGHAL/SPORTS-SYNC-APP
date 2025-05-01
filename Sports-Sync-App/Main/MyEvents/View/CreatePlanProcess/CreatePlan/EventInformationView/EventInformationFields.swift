@@ -118,7 +118,9 @@ struct EventInformationFields: View {
                     sportsName: eventInformationViewModel.eventInfoData.sportsName,
                     eventDate: eventInformationViewModel.eventInfoData.eventDate,
                     eventTime: eventInformationViewModel.eventInfoData.eventTime,
-                    state: eventInformationViewModel.eventInfoData.searchText
+                    state: eventInformationViewModel.eventInfoData.searchText,
+                    selectedStadium: eventInformationViewModel.eventInfoData.selectedStadium ?? "Failed to get stadium name !"
+                    
                 )
                 
                 //function call to reset fields after the information is stored in db
@@ -128,6 +130,7 @@ struct EventInformationFields: View {
                 selectedTime = Date()
                 showDatePicker = false
                 showTimePicker = false
+                
             }
         }
     }
