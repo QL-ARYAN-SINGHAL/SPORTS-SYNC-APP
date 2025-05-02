@@ -21,7 +21,7 @@ class EventInformationViewModal: ObservableObject {
     // This function can be used to add an event to Firestore
     func eventInformationStoreDB(eventName: String, sportsName: String, eventDate: String, eventTime: String, state: String, selectedStadium: String) {
         let eventData = EventInformationDataModal(
-            searchText: state,
+            searchText: "",
             eventName: eventName,
             eventDate: eventDate,
             sportsName: sportsName,
