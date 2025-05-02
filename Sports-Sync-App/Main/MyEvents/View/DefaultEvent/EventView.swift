@@ -4,34 +4,37 @@
 //
 //  Created by ARYAN SINGHAL on 23/04/25.
 //
-
 import SwiftUI
 
 struct EventView: View {
-  
-    private var imageConstants = ImageConstants()
-    @StateObject private var eventViewModal = EventViewModal()
-    
+    @StateObject private var eventViewModal = EventInformationViewModal()
+
     var body: some View {
-       
-            VStack(spacing: 0) {
-                EventListView()
-                
-                Spacer()
-                if !eventViewModal.eventDataModal.isViewHidden{
-                    VStack(spacing: 20) {
-                        EventTextView()
+        VStack(spacing: 0) {
+            if !eventViewModal.userCreatedEvents.isEmpty {
+                ScrollView {
+                    VStack(spacing: 16) {
                         
+                        ForEach(eventViewModal.userCreatedEvents, id: \.self) { event in
+                            UserCreatedEventView()
+                        }
                         EventButton()
                     }
                 }
-                Spacer()
+            } else {
+                Text("No events created yet.")
+                    .foregroundColor(.gray)
+                    .padding()
             }
-            .frame(maxHeight: .infinity, alignment: .top)
-            .padding()
-            .environmentObject(eventViewModal)
-            
-        
+
+            Spacer()
+        }
+        .padding()
+        .task {
+                 await eventViewModal.getUserCreatedEvent()
+           
+        }
+        .environmentObject(eventViewModal)
     }
 }
 

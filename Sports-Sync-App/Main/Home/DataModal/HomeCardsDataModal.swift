@@ -11,13 +11,13 @@ import Foundation
 struct HomeCardsDataModal:Codable,Hashable {
     
 
-    var imageName : String
-    var sportsName : String
-    var location : String
-    var rating : String
-    var description : String 
-    var stadiumName : String
-    var eventDate : String
-    var eventTime : String
+    var imageName : String = ""
+    var sportsName : String = ""
+    var location : String = ""
+    var rating : String = ""
+    var description : String  = ""
+    var stadiumName : String = ""
+    var eventDate : String = ""
+    var eventTime : String = ""
    
 }

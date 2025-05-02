@@ -10,4 +10,9 @@ import Foundation
 struct EventDataModal:Codable {
      
     var isViewHidden : Bool = false
+    var userEventDate : String = ""
+    var userEventName : String = ""
+    var userEventTime : String = ""
+    var userSportsName : String = ""
+    var userSelectedStadium : String  = ""
 }

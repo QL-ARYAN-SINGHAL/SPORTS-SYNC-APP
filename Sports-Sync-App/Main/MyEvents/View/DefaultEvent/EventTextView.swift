@@ -16,6 +16,7 @@ struct EventTextView: View {
            
                 imageConstants.emptyBoxImage
                     .resizable()
+            
                     .scaledToFit()
                     .frame(width: 106, height: 67)
                 

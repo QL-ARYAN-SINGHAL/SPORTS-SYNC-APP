@@ -8,7 +8,6 @@
 
 //MARK: RESPONSIBILITY : PUBLISHING THE CHANGES MADE IN DATA MODAL AND FETCH DETAILS FROM DATABASE TO BE STORED IN DATA MODAL
 import SwiftUI
-import FirebaseAuth
 import FirebaseFirestore
 
 class SelectSportsViewModal: ObservableObject {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct EventInformationDataModal : Codable{
+struct EventInformationDataModal : Codable,Hashable{
     var searchText : String = ""
     var eventName : String = ""
     var eventDate : String = ""

@@ -5,26 +5,13 @@
 //  Created by ARYAN SINGHAL on 23/04/25.
 //
 
-//
-//  EventListView.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 23/04/25.
-//
-
-//
-//  EventListView.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 23/04/25.
-//
 
 import SwiftUI
 
 struct EventListView: View {
     @State private var currentMonth = Date.now
     @State private var showDatePicker = false
-    @EnvironmentObject var eventViewModal : EventViewModal
+    @EnvironmentObject var eventViewModal : EventInformationViewModal
    
     
     let weeks = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7"]

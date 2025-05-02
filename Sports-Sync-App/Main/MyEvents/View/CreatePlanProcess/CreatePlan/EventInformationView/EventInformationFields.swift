@@ -1,10 +1,3 @@
-//
-//  EventInformationFields.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 29/04/25.
-//
-
 import SwiftUI
 
 struct EventInformationFields: View {
@@ -18,7 +11,6 @@ struct EventInformationFields: View {
     @State private var selectedDate = Date()
     @State private var selectedTime = Date()
     @State private var showAlert = false
-    
     @State private var navigateToRoot = false
     
     var selectedMonth: String {
@@ -109,27 +101,27 @@ struct EventInformationFields: View {
                         state: eventInformationViewModel.eventInfoData.searchText,
                         selectedStadium: eventInformationViewModel.eventInfoData.selectedStadium ?? "Failed to get stadium name!"
                     )
-                    if eventInformationViewModel.didSubmitSuccessfully {
-                        tabRouter.tabDataModal.selectedTab = 1
-                        navigateToRoot = true
-                    }
-                    eventInformationViewModel.resetFields()
-                    selectedDate = Date()
-                    selectedTime = Date()
-                    showDatePicker = false
-                    showTimePicker = false
-                    eventInformationViewModel.eventInfoData.selectedStadium = nil
                     
-                }
-               
-                else {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                        if eventInformationViewModel.didSubmitSuccessfully {
+                            tabRouter.tabDataModal.selectedTab = 1
+                            navigateToRoot = true
+                        }
+                        eventInformationViewModel.resetFields()
+                        selectedDate = Date()
+                        selectedTime = Date()
+                        showDatePicker = false
+                        showTimePicker = false
+                        eventInformationViewModel.eventInfoData.selectedStadium = nil
+                    }
+                } else {
                     showAlert = true
                 }
-                
-              
             }
         }
         .padding(.horizontal)
+        .blur(radius: eventInformationViewModel.isSubmitting ? 3 : 0)
+        .disabled(eventInformationViewModel.isSubmitting)
         .navigationDestination(isPresented: $navigateToRoot) {
             MainTabView()
                 .onAppear {
@@ -140,13 +132,10 @@ struct EventInformationFields: View {
             Button("OK", role: .cancel) { }
         }
     }
-       
-
 }
+
 #Preview {
     EventInformationFields()
         .environmentObject(EventInformationViewModal())
         .environmentObject(TabRouter())
 }
-
-

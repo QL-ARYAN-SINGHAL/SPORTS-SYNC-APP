@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct EventInformationSearch: View {
+    
     let userLocation = LocationManager()
     
     //Property Wrappers
     @EnvironmentObject var eventInformationViewModel: EventInformationViewModal
     @StateObject var cardViewModal = CardViewModel()
+    
 
     //States
-    
     @State private var fetchedLocation: String = ""
     @State private var sheetNavigate: Bool = false
     @State private var showStadiumDetail: Bool = false
@@ -37,7 +38,10 @@ struct EventInformationSearch: View {
                     .foregroundStyle(.black.opacity(0.3))
             }
             .padding(16)
-            .background(.gray.opacity(0.4))
+            .overlay(
+                RoundedRectangle(cornerRadius: 6)
+                    .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+            )
             .cornerRadius(6)
             .frame(width: 351)
            
