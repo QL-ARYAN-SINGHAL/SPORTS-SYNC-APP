@@ -47,7 +47,7 @@ struct MainTabView: View {
                     }
                     .tag(2)
                 
-                ProfileView()
+                UserProfileViewParent()
                     .tabItem {
                         imageConstants.userTabImage
                             .renderingMode(.template)

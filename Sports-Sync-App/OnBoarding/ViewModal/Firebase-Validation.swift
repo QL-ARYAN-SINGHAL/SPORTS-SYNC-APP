@@ -127,4 +127,31 @@ class FirebaseValidation: ObservableObject {
             print("success")
         }
     }
+    
+    //Saves user data in UserDefault
+    func saveUserData( ) async {
+        
+        UserDefaults.standard.set(signUpData.firstName, forKey: "FirstName")
+        
+        UserDefaults.standard.set(signUpData.lastName, forKey: "LastName")
+        
+        UserDefaults.standard.set(signUpData.ageValue , forKey: "AgeValue")
+        
+        UserDefaults.standard.set(signUpData.selectedGender , forKey: "SelectedGender")
+        
+        UserDefaults.standard.set(signUpData.signUpEmail  , forKey: "SignUpEmail")
+        
+        
+        
+    }
+    
+    func getUserData(){
+        
+        UserDefaults.standard.string(forKey: "FirstName")
+        UserDefaults.standard.string(forKey: "LastName")
+        UserDefaults.standard.integer(forKey: "AgeValue")
+        UserDefaults.standard.string(forKey: "SelectedGender")
+        UserDefaults.standard.string(forKey: "SignUpEmail")
+        
+    }
 }

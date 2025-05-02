@@ -12,7 +12,7 @@ struct ReusableTexts: View {
     
     var body: some View {
         Text(textString)
-            .font(.system(size: 30, weight: .bold, design: .default))
+            .font(Font.custom(.fontJakartaBold, size: 30))
             .frame(width: UIScreen.main.bounds.width, height: 100)
             .multilineTextAlignment(.center)
     }

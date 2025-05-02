@@ -47,6 +47,8 @@ struct SignUpButton: View {
                                     gender: formViewModal.signUpData.selectedGender?.rawValue ?? ""
                                     
                                 )
+                                //saves user data in userDefault
+                              await  firebaseValidation.saveUserData()
                                 shouldNavigate = true
                             }
                         }
