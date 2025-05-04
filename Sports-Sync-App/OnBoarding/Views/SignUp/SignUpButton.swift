@@ -70,7 +70,7 @@ struct SignUpButton: View {
                         Task {
                             do {
                                  await firebaseValidation.register(
-                                    withEmail: "Guest@gmail.com",
+                                    withEmail: "Diksha@gmail.com",
                                     password: formViewModal.signUpData.signUpPassword,
                                     firstName: formViewModal.signUpData.firstName,
                                     lastName: formViewModal.signUpData.lastName,
@@ -78,6 +78,7 @@ struct SignUpButton: View {
                                     gender: formViewModal.signUpData.selectedGender?.rawValue ?? "",
                                     phoneNumber: formViewModal.signUpData.phoneNumber
                                 )
+                                await  firebaseValidation.saveUserData()
                                 formViewModal.showAlert = false
                                 shouldNavigate = true
                             }

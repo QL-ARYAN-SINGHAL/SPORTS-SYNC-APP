@@ -16,6 +16,7 @@ class FirebaseValidation: ObservableObject {
     @Published var currentUser: SignUpDataModel?
     @Published var isAuthenticated: Bool = false
     @Published var verificationCode : String = ""
+    @Published var storedUser: SignUpDataModel?
     
     
     init() {
@@ -96,8 +97,12 @@ class FirebaseValidation: ObservableObject {
 
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            print("Saving user to Firestore with ID: \(user.id)")
+
             await fetchUser()
             isAuthenticated = true
+            print("Saving user to Firestore with ID: \(user.id)")
+
         } catch {
             print("Failed to create user: \(error.localizedDescription)")
         }
@@ -129,29 +134,53 @@ class FirebaseValidation: ObservableObject {
     }
     
     //Saves user data in UserDefault
-    func saveUserData( ) async {
+    func saveUserData() async {
+        guard let currentUser = currentUser else {
+            print("No current user to save in UserDefaults")
+            return
+        }
+
+        UserDefaults.standard.set(currentUser.firstName, forKey: "FirstName")
+        UserDefaults.standard.set(currentUser.lastName, forKey: "LastName")
+        UserDefaults.standard.set(currentUser.ageValue, forKey: "AgeValue")
+
+        if let gender = currentUser.selectedGender?.rawValue {
+            UserDefaults.standard.set(gender, forKey: "SelectedGender")
+        }
+
+        UserDefaults.standard.set(currentUser.signUpEmail, forKey: "SignUpEmail")
         
-        UserDefaults.standard.set(signUpData.firstName, forKey: "FirstName")
-        
-        UserDefaults.standard.set(signUpData.lastName, forKey: "LastName")
-        
-        UserDefaults.standard.set(signUpData.ageValue , forKey: "AgeValue")
-        
-        UserDefaults.standard.set(signUpData.selectedGender , forKey: "SelectedGender")
-        
-        UserDefaults.standard.set(signUpData.signUpEmail  , forKey: "SignUpEmail")
-        
-        
-        
+        if !currentUser.phoneNumber.isEmpty {
+            UserDefaults.standard.set(currentUser.phoneNumber, forKey: "PhoneNumber")
+        }
     }
+
     
-    func getUserData(){
-        
-        UserDefaults.standard.string(forKey: "FirstName")
-        UserDefaults.standard.string(forKey: "LastName")
-        UserDefaults.standard.integer(forKey: "AgeValue")
-        UserDefaults.standard.string(forKey: "SelectedGender")
-        UserDefaults.standard.string(forKey: "SignUpEmail")
-        
+    func getUserData() -> SignUpDataModel {
+        let firstName = UserDefaults.standard.string(forKey: "FirstName") ?? ""
+        let lastName = UserDefaults.standard.string(forKey: "LastName") ?? ""
+        let ageValue = UserDefaults.standard.double(forKey: "AgeValue")
+        let genderRaw = UserDefaults.standard.string(forKey: "SelectedGender") ?? ""
+        let email = UserDefaults.standard.string(forKey: "SignUpEmail") ?? ""
+        print("getUser default data is --->\(firstName)")
+        print("getUser default data is --->\(lastName)")
+        print("getUser default data is --->\(ageValue)")
+        print("getUser default data is --->\(genderRaw)")
+        print("getUser default data is --->\(email)")
+
+     return SignUpDataModel(
+            signUpEmail: email,
+            firstName: firstName,
+            lastName: lastName,
+            selectedGender: Gender(rawValue: genderRaw),
+            ageValue: ageValue
+        )
+       
+    }
+
+    
+    
+    func loadStoredUserData() {
+        storedUser = getUserData()
     }
 }

@@ -39,12 +39,12 @@ struct LogInButton: View {
                                 )
                                 shouldNavigate = firebaseValidation.isAuthenticated
                                 if !shouldNavigate {
-                                    formViewModal.showAlert = true
+                                    formViewModal.showAlert.toggle()
                                 }
                             }
                             catch {
                                 print("Login failed with email: \(error.localizedDescription)")
-                                formViewModal.showAlert = true
+                                
                             }
                         }
 
@@ -56,7 +56,7 @@ struct LogInButton: View {
                                 )
                                 navigateToOTP = firebaseValidation.isAuthenticated
                                 if !navigateToOTP {
-                                    formViewModal.showAlert = true
+                                    formViewModal.showAlert.toggle()
                                 }
                             }
                            

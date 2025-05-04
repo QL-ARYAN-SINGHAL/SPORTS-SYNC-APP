@@ -23,12 +23,19 @@ struct UserProfileViewParent: View {
             }
             .frame(height: 600, alignment: .top)
             .navigationDestination(for: String.self) { destination in
+                
                 switch destination {
+                    
                 case "PrivacyPolicy":
+                    
                     PrivacyPolicy()
+                    
                 case "TermsAndConditions":
+                    
                     TermsAndConditions()
+                    
                 default:
+                    
                     EmptyView()
                 }
             }
