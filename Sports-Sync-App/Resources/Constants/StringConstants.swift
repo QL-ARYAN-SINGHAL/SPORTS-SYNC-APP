@@ -61,5 +61,6 @@ extension String {
     static let introductionMessageString = "Welcome to Sports Sync!We are committed to protecting your privacy and ensuring you have a safe and personalized experience while using our app. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use Sports Sync, whether through our mobile application or any associated services. By using Sports Sync, you agree to the practices described in this policy.Our goal is to give you full transparency and control over your data. If you have any questions or concerns about this policy or our data practices, feel free to contact us."
     static let informationWeCollectMessageString = "We collect limited information to provide and improve your experience on Sports Sync:Account Information: Name, email, and profile photo (if provided).App Activity: Events you create or join, features you use, and your preferences.Device Information: Device type, operating system, and general location (if permission is granted).Third-Party Logins: Basic profile info (name and email) if you sign in with Apple or Google."
     static let termsConditionString = "Terms & Condition"
+    static let logOutString = "Log Out"
 
 }

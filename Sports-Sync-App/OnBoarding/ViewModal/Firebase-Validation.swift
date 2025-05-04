@@ -51,8 +51,6 @@ class FirebaseValidation: ObservableObject {
             try Auth.auth().signOut()
             self.userSession = nil
             self.currentUser = nil
-            
-            //we will add signout button later in the profile page
         }
         catch{
             print("Faile to sign out user   ")

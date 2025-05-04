@@ -2,7 +2,7 @@ import SwiftUI
 
 struct UserProfileViewParent: View {
     @State private var navigationDestination: String?
-
+    @StateObject var firebaseValidation = FirebaseValidation()
     
     var body: some View {
         NavigationStack {
@@ -20,7 +20,10 @@ struct UserProfileViewParent: View {
                 ReusableDetailButton(title: .termsConditionString, action: {
                     navigationDestination = "TermsAndConditions"
                 })
+                
+                UserLogOut()
             }
+            
             .frame(height: 600, alignment: .top)
             .navigationDestination(for: String.self) { destination in
                 
@@ -39,6 +42,7 @@ struct UserProfileViewParent: View {
                     EmptyView()
                 }
             }
+            .environmentObject(firebaseValidation)
         }
     }
 }

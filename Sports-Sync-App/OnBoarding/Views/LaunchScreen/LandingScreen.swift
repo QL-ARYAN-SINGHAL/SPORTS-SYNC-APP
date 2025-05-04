@@ -50,6 +50,7 @@ struct LandingScreen: View {
 //                SegmentController()
 //            }
         }
+        .navigationBarBackButtonHidden()
     }
 }
 
