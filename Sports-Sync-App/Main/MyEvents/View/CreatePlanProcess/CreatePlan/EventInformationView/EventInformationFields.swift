@@ -4,6 +4,8 @@ struct EventInformationFields: View {
     
     @EnvironmentObject var eventInformationViewModel: EventInformationViewModal
     @EnvironmentObject var tabRouter: TabRouter
+    @Environment(\.dismiss) private var dismiss
+    
     
     @State private var currentMonth = Date.now
     @State private var showDatePicker = false
@@ -11,7 +13,7 @@ struct EventInformationFields: View {
     @State private var selectedDate = Date()
     @State private var selectedTime = Date()
     @State private var showAlert = false
-    @State private var navigateToRoot = false
+    
     
     var selectedMonth: String {
         let formatter = DateFormatter()
@@ -104,8 +106,8 @@ struct EventInformationFields: View {
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         if eventInformationViewModel.didSubmitSuccessfully {
-                            tabRouter.tabDataModal.selectedTab = 1
-                            navigateToRoot = true
+                            tabRouter.tabDataModal.selectedTab = 2
+                            dismiss()
                         }
                         eventInformationViewModel.resetFields()
                         selectedDate = Date()
@@ -122,12 +124,6 @@ struct EventInformationFields: View {
         .padding(.horizontal)
         .blur(radius: eventInformationViewModel.isSubmitting ? 3 : 0)
         .disabled(eventInformationViewModel.isSubmitting)
-        .navigationDestination(isPresented: $navigateToRoot) {
-            MainTabView()
-                .onAppear {
-                    tabRouter.tabDataModal.selectedTab = 2
-                }
-        }
         .alert("Please fill out all the fields.", isPresented: $showAlert) {
             Button("OK", role: .cancel) { }
         }

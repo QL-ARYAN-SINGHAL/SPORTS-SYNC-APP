@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct UserCreatedEventView: View {
-    
+
     @EnvironmentObject var eventViewModal: EventInformationViewModal
     @EnvironmentObject var cardViewModal: CardViewModel
 
@@ -9,10 +9,11 @@ struct UserCreatedEventView: View {
         VStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    ForEach(eventViewModal.userCreatedEvents, id: \.self) { event in
-                        
-                        
-                        let matchingStadium = cardViewModal.cardsHomeData.first {
+                    ForEach(eventViewModal.userCreatedEvents, id: \.self) {
+                        event in
+
+                        let matchingStadium = cardViewModal.cardsHomeData.first
+                        {
                             $0.stadiumName == event.selectedStadium
                         }
 

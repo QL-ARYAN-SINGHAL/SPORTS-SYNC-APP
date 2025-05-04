@@ -5,8 +5,8 @@
 //  Created by ARYAN SINGHAL on 29/04/25.
 ////
 
-import SwiftUI
 import FirebaseFirestore
+import SwiftUI
 
 class EventInformationViewModal: ObservableObject {
     @Published var eventDataModal = EventDataModal()
@@ -17,9 +17,12 @@ class EventInformationViewModal: ObservableObject {
     @Published var userCreatedEvents: [EventInformationDataModal] = []
 
     let db = Firestore.firestore()
-    
+
     // This function can be used to add an event to Firestore
-    func eventInformationStoreDB(eventName: String, sportsName: String, eventDate: String, eventTime: String, state: String, selectedStadium: String) {
+    func eventInformationStoreDB(
+        eventName: String, sportsName: String, eventDate: String,
+        eventTime: String, state: String, selectedStadium: String
+    ) {
         let eventData = EventInformationDataModal(
             searchText: "",
             eventName: eventName,
@@ -30,16 +33,16 @@ class EventInformationViewModal: ObservableObject {
             stadium: "",
             showStadiumDetail: true
         )
-        
+
         let dataDict: [String: Any] = [
             "EventName": eventName,
             "SportsName": sportsName,
             "EventDate": eventDate,
             "EventTime": eventTime,
             "State": state,
-            "SelectedStadium": selectedStadium
+            "SelectedStadium": selectedStadium,
         ]
-        
+
         db.collection("User Event").addDocument(data: dataDict) { error in
             DispatchQueue.main.async {
                 if error == nil {
@@ -63,11 +66,21 @@ class EventInformationViewModal: ObservableObject {
             for document in snapshot.documents {
                 let data = document.data()
 
-                let eventName = data["Event Name"] as? String ?? data["EventName"] as? String ?? ""
-                let sportsName = data["Sports Name"] as? String ?? data["SportsName"] as? String ?? ""
-                let eventDate = data["Event Date"] as? String ?? data["EventDate"] as? String ?? ""
-                let eventTime = data["Event Time"] as? String ?? data["EventTime"] as? String ?? ""
-                let selectedStadium = data["Selected Stadium"] as? String ?? data["SelectedStadium"] as? String ?? ""
+                let eventName =
+                    data["Event Name"] as? String ?? data["EventName"]
+                    as? String ?? ""
+                let sportsName =
+                    data["Sports Name"] as? String ?? data["SportsName"]
+                    as? String ?? ""
+                let eventDate =
+                    data["Event Date"] as? String ?? data["EventDate"]
+                    as? String ?? ""
+                let eventTime =
+                    data["Event Time"] as? String ?? data["EventTime"]
+                    as? String ?? ""
+                let selectedStadium =
+                    data["Selected Stadium"] as? String ?? data[
+                        "SelectedStadium"] as? String ?? ""
                 let state = data["State"] as? String ?? ""
 
                 let event = EventInformationDataModal(
@@ -90,8 +103,10 @@ class EventInformationViewModal: ObservableObject {
                 print(self.userCreatedEvents)
             }
         } catch {
-            print("Error fetching userEvent collection: \(error.localizedDescription)")
-            return 
+            print(
+                "Error fetching userEvent collection: \(error.localizedDescription)"
+            )
+            return
         }
     }
 
@@ -100,10 +115,10 @@ class EventInformationViewModal: ObservableObject {
     }
 
     func checkValidation() -> Bool {
-        return !eventInfoData.eventName.isEmpty &&
-               !eventInfoData.sportsName.isEmpty &&
-               !eventInfoData.eventDate.isEmpty &&
-               !eventInfoData.eventTime.isEmpty &&
-               eventInfoData.selectedStadium != nil
+        return !eventInfoData.eventName.isEmpty
+            && !eventInfoData.sportsName.isEmpty
+            && !eventInfoData.eventDate.isEmpty
+            && !eventInfoData.eventTime.isEmpty
+            && eventInfoData.selectedStadium != nil
     }
 }

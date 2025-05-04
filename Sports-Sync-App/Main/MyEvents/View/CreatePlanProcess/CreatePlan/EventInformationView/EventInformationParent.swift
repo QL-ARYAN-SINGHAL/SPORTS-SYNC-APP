@@ -15,7 +15,7 @@ struct EventInformationParent: View {
     var body: some View {
         ZStack {
             NavigationStack {
-                ScrollView {
+                ScrollView {    
                     EventInformationTitle()
                     
                     VStack(spacing: 16) {
@@ -34,7 +34,7 @@ struct EventInformationParent: View {
                         .ignoresSafeArea()
                     
                     ProgressView("Creating Plan...")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                       .progressViewStyle(CircularProgressViewStyle(tint: .white))
                         .foregroundColor(.white)
                         .padding(24)
                         .background(Color.black.opacity(0.8))
