@@ -40,7 +40,7 @@ struct MainTabView: View {
                    
                     .tag(1)
                 
-                UserFeedView()
+                FeedView()
                     .tabItem {
                         imageConstants.verticalSliderTabImage
                             .renderingMode(.template)
@@ -97,10 +97,9 @@ struct MainTabView: View {
                     }
                 }
             }
-
             .onAppear {
                 let appearance = UITabBarAppearance()
-                appearance.backgroundColor = UIColor.white.withAlphaComponent(0.9)
+                appearance.backgroundColor = UIColor.white.withAlphaComponent(1)
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
                 

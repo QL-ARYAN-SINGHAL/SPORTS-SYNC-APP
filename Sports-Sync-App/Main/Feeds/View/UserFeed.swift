@@ -7,15 +7,20 @@
 
 import SwiftUI
 
-struct UserFeedView: View {
+struct FeedView: View {
+    @StateObject var feedViewModal = FeedViewModal()
     var body: some View {
-        VStack{
-            Text("This is my USER FEED")
+        VStack(spacing : 25){
+            
+            FeedTextView()
+            
+            FeedButton()
         }
         .navigationBarBackButtonHidden()
+        .environmentObject(feedViewModal)
     }
 }
 
 #Preview {
-    HomeView()
+    FeedView()
 }

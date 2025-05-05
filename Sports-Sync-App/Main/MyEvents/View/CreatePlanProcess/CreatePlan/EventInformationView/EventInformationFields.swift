@@ -125,7 +125,7 @@ struct EventInformationFields: View {
                             .selectedStadium ?? "Failed to get stadium name!"
                     )
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         if eventInformationViewModel.didSubmitSuccessfully {
                             tabRouter.tabDataModal.selectedTab = 2
                             dismiss()
@@ -144,7 +144,6 @@ struct EventInformationFields: View {
             }
         }
         .padding(.horizontal)
-        .blur(radius: eventInformationViewModel.isSubmitting ? 3 : 0)
         .disabled(eventInformationViewModel.isSubmitting)
         .alert("Please fill out all the fields.", isPresented: $showAlert) {
             Button("OK", role: .cancel) {}

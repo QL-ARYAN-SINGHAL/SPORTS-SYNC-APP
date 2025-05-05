@@ -11,25 +11,26 @@ struct EventView: View {
     @StateObject private var cardViewModal = CardViewModel()
 
     var body: some View {
-        
+
         VStack(spacing: 0) {
-            
+
             if !eventViewModal.userCreatedEvents.isEmpty {
-                
+
                 ScrollView {
-                    
+
                     VStack(spacing: 16) {
-                        
-                            UserCreatedEventView()
-                        
-                            EventButton()
-                          
+                        EventListView()
+
+                        UserCreatedEventView()
+
+                        EventButton()
+
                     }
                 }
             } else {
-                
+
                 Text("No events created yet.")
-                
+
                     .foregroundColor(.gray)
                     .padding()
             }
@@ -38,8 +39,8 @@ struct EventView: View {
         }
         .padding()
         .task {
-                 await eventViewModal.getUserCreatedEvent()
-           
+            await eventViewModal.getUserCreatedEvent()
+
         }
         .environmentObject(eventViewModal)
         .environmentObject(cardViewModal)

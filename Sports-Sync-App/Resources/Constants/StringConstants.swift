@@ -63,5 +63,7 @@ extension String {
     static let termsConditionString = "Terms & Condition"
     static let logOutString = "Log Out"
     static let profileheadingString = "Profile"
+    static let feedMessage = "Looks like you don’t have any feeds, so let’s create new post for your feeds"
+    static let feedButtonMessage = "Create new post"
 
 }

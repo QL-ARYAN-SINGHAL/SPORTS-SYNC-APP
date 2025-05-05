@@ -39,7 +39,6 @@ struct HomeGridSection: View {
                                 }
                             }
                         }
-
                         .listRowSeparator(.hidden)
                     }
                     .onAppear {
