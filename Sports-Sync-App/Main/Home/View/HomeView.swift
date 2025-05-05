@@ -18,7 +18,7 @@ struct HomeView: View {
                 HomeGridSection()
                 
             }
-            
+          
             .environmentObject(cardViewModal)
        
            

@@ -22,6 +22,8 @@ class CardViewModel: ObservableObject {
     @Published var cardsHomeData: [HomeCardsDataModal] = []
     @Published var selectedCard: HomeCardsDataModal?
     @Published var homeDataModal = HomeCardsDataModal()
+    @Published var filteredCards: [HomeCardsDataModal] = []
+
 
     func selectCard(_ card: HomeCardsDataModal) {
         selectedCard = card
@@ -77,12 +79,19 @@ class CardViewModel: ObservableObject {
 
             DispatchQueue.main.async {
                 self.cardsHomeData = fetchedCards
+                self.filteredCards = fetchedCards
             }
+
         }
     }
     
-    func selectedCard(_ card: HomeCardsDataModal) {
-            self.selectedCard = card
+    func filterCards(by sport: String?) {
+        if let sport = sport, !sport.isEmpty {
+            filteredCards = cardsHomeData.filter { $0.sportsName == sport }
+        } else {
+            filteredCards = cardsHomeData 
         }
+    }
+
 
 }

@@ -88,7 +88,9 @@ struct UserDetailsView: View {
                 {
                     if let image = UIImage(data: data) {
                         avatarImage = image
+                        await firebaseValidation.saveUserData(with: avatarImage)
                     }
+
                 }
                 photoPickerItem = nil
             }

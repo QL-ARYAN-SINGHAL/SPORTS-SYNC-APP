@@ -6,12 +6,15 @@ struct HomeTopSearchAndList: View {
     
     let sportsNames = ["Cricket", "Badminton", "Football", "Tennis", "Volleyball", "Hockey", "Basketball", "Swimming"]
     
+    @State private var selectedSport: String? = nil
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
                     Button(action: {
-                        cardViewModal.homeDataModal.searchText = ""
+                        selectedSport = nil
+                        cardViewModal.filterCards(by: nil)
                     }) {
                         Text("All")
                             .font(.custom(.fontJakarta, size: 14))
@@ -23,7 +26,8 @@ struct HomeTopSearchAndList: View {
                     
                     ForEach(sportsNames, id: \.self) { sport in
                         ReusableListButtons(buttonText: sport) {
-                            cardViewModal.homeDataModal.searchText = sport
+                            selectedSport = sport
+                            cardViewModal.filterCards(by: sport)
                         }
                         .frame(width: 100, height: 40)
                     }
@@ -31,12 +35,8 @@ struct HomeTopSearchAndList: View {
                 .padding(.horizontal, 16)
             }
         }
-        .searchable(
-            text: $cardViewModal.homeDataModal.searchText,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Search sports..."
-        )
-        .background(Color.white)
+        .frame(height: 50)
+        .searchable(text: $cardViewModal.homeDataModal.searchText, prompt: "Search Tournaments")
     }
 }
 

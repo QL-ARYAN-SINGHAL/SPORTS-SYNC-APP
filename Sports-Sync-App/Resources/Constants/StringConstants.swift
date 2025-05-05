@@ -62,5 +62,6 @@ extension String {
     static let informationWeCollectMessageString = "We collect limited information to provide and improve your experience on Sports Sync:Account Information: Name, email, and profile photo (if provided).App Activity: Events you create or join, features you use, and your preferences.Device Information: Device type, operating system, and general location (if permission is granted).Third-Party Logins: Basic profile info (name and email) if you sign in with Apple or Google."
     static let termsConditionString = "Terms & Condition"
     static let logOutString = "Log Out"
+    static let profileheadingString = "Profile"
 
 }

@@ -8,6 +8,8 @@ struct UserProfileViewParent: View {
         NavigationStack {
             VStack(spacing: 20) {
                 
+                ProfileHeading()
+                
                 //User Details View
                 UserDetailsView()
                 

@@ -34,4 +34,5 @@ struct ImageConstants{
            "Motor Sports": "MotorSports",
            "Gymnastic": "Gymnastic"
        ]
+    let feedDefaultImage = Image("feedDefaultImage")
 }

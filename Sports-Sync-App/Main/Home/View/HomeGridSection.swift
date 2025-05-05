@@ -12,7 +12,7 @@
 import SwiftUI
 
 struct HomeGridSection: View {
-    @StateObject var cardViewModal = CardViewModel()
+    @EnvironmentObject var cardViewModal : CardViewModel
 
     @State private var isNavigating = false
     
@@ -31,20 +31,23 @@ struct HomeGridSection: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 12) {
-                                ForEach(cardViewModal.cardsHomeData, id: \.self) { card in
+                                ForEach(cardViewModal.filteredCards, id: \.self) { card in
                                     ReusableCards(cardData: card) {
                                         cardViewModal.selectCard(card)
                                         isNavigating = true
                                     }
-
                                 }
                             }
                         }
+
                         .listRowSeparator(.hidden)
                     }
                     .onAppear {
-                        cardViewModal.fetchAllCards()
+                        if cardViewModal.cardsHomeData.isEmpty {
+                            cardViewModal.fetchAllCards()
+                        }
                     }
+
 
                 }
             }
@@ -52,7 +55,7 @@ struct HomeGridSection: View {
             .navigationDestination(isPresented: $isNavigating) {
                 PlanDescriptionView(cardViewModel: cardViewModal)
             }
-
+          
         }
     }
 }
@@ -60,4 +63,5 @@ struct HomeGridSection: View {
 
 #Preview {
     HomeGridSection()
+        .environmentObject(CardViewModel())
 }

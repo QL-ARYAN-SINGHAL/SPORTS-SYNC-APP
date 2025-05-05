@@ -9,4 +9,5 @@ import Foundation
 
 struct TabDataModal: Codable{
     var selectedTab : Int = 0
+    var searchText = ""
 }

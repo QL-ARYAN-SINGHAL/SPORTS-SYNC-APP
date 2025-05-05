@@ -28,7 +28,7 @@ struct EventInformationParent: View {
             .environmentObject(eventInformationViewModel)
             .environmentObject(tabRouter)
             
-            if eventInformationViewModel.isSubmitting {
+            if eventInformationViewModel.didSubmitSuccessfully {
                 ZStack {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()

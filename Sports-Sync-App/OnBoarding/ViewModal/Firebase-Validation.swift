@@ -17,7 +17,7 @@ class FirebaseValidation: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var verificationCode : String = ""
     @Published var storedUser: SignUpDataModel?
-    
+    var avatarImage: UIImage? = nil
     
     init() {
         self.userSession = Auth.auth().currentUser
@@ -132,7 +132,7 @@ class FirebaseValidation: ObservableObject {
     }
     
     //Saves user data in UserDefault
-    func saveUserData() async {
+    func saveUserData(with avatarImage: UIImage?) async {
         guard let currentUser = currentUser else {
             print("No current user to save in UserDefaults")
             return
@@ -148,6 +148,12 @@ class FirebaseValidation: ObservableObject {
 
         UserDefaults.standard.set(currentUser.signUpEmail, forKey: "SignUpEmail")
         
+        if let avatarImage = avatarImage,
+             let imageData = avatarImage.jpegData(compressionQuality: 0.8) {
+              UserDefaults.standard.set(imageData, forKey: "UserImage")
+          }
+
+        
         if !currentUser.phoneNumber.isEmpty {
             UserDefaults.standard.set(currentUser.phoneNumber, forKey: "PhoneNumber")
         }
@@ -160,11 +166,17 @@ class FirebaseValidation: ObservableObject {
         let ageValue = UserDefaults.standard.double(forKey: "AgeValue")
         let genderRaw = UserDefaults.standard.string(forKey: "SelectedGender") ?? ""
         let email = UserDefaults.standard.string(forKey: "SignUpEmail") ?? ""
+       
+        if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
+            avatarImage = UIImage(data: imageData)
+        }
+
         print("getUser default data is --->\(firstName)")
         print("getUser default data is --->\(lastName)")
         print("getUser default data is --->\(ageValue)")
         print("getUser default data is --->\(genderRaw)")
         print("getUser default data is --->\(email)")
+        print("getuserdefault data as image is --->\(avatarImage ?? UIImage())")
 
      return SignUpDataModel(
             signUpEmail: email,

@@ -48,7 +48,9 @@ struct SignUpButton: View {
                                     
                                 )
                                 //saves user data in userDefault
-                              await  firebaseValidation.saveUserData()
+                                let defaultImage = UIImage(systemName: "person.circle")!
+                                await firebaseValidation.saveUserData(with: defaultImage)
+
                                 shouldNavigate = true
                             }
                         }
@@ -78,7 +80,8 @@ struct SignUpButton: View {
                                     gender: formViewModal.signUpData.selectedGender?.rawValue ?? "",
                                     phoneNumber: formViewModal.signUpData.phoneNumber
                                 )
-                                await  firebaseValidation.saveUserData()
+                                let defaultImage = UIImage(systemName: "person.circle")!
+                                await firebaseValidation.saveUserData(with: defaultImage)
                                 formViewModal.showAlert = false
                                 shouldNavigate = true
                             }

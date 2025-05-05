@@ -19,7 +19,9 @@ struct Sports_Sync_AppApp: App {
         FirebaseApp.configure()
     }
     var body: some Scene {
+        
         WindowGroup {
+            
             MainTabView()
                 .environmentObject(firebaseValidation)
             
