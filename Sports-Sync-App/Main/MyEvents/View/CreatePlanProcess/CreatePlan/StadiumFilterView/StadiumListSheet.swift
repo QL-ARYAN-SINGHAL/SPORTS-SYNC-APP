@@ -68,20 +68,18 @@ struct StadiumListSheet: View {
                 .searchable(text: $eventInformationViewModal.eventInfoData.searchText, prompt: "Select stadium ...")
             }
 
-            // Floating Close Button
+            
             Button(action: {
                 isPresented = false
             }) {
+                // fix the floating circle
                 Image(systemName: "xmark")
                     .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.black)
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .shadow(radius: 3)
-                    
+                    .background{
+                        RoundedRectangle(cornerRadius: 15)
+                            .fill(.background)
+                    }
             }
-            .padding(.top, 8)
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)

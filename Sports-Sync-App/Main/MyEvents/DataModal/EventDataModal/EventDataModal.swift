@@ -15,4 +15,7 @@ struct EventDataModal:Codable {
     var userEventTime : String = ""
     var userSportsName : String = ""
     var userSelectedStadium : String  = ""
+    var selectedWeekIndex: Int? = nil
+   
+
 }

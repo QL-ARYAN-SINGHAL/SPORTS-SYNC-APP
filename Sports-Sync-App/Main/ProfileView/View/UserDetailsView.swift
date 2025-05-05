@@ -11,7 +11,7 @@ import SwiftUI
 struct UserDetailsView: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
     @State private var userData: SignUpDataModel? = nil
-    @State private var avatarImage: UIImage?
+
     @State var photoPickerItem: PhotosPickerItem?
 
     var body: some View {
@@ -25,7 +25,7 @@ struct UserDetailsView: View {
                         ) {
 
                             Image(
-                                uiImage: avatarImage ?? UIImage(
+                                uiImage: firebaseValidation.avatarImage ?? UIImage(
                                     systemName: "person.crop.circle.fill")!
                             )
                             .resizable()
@@ -78,23 +78,31 @@ struct UserDetailsView: View {
             }
         }
         .onAppear {
-            userData = firebaseValidation.getUserData()
-        }
-        .onChange(of: photoPickerItem) { _, _ in
-            Task {
-                if let photoPickerItem,
-                    let data = try? await photoPickerItem.loadTransferable(
-                        type: Data.self)
-                {
-                    if let image = UIImage(data: data) {
-                        avatarImage = image
-                        await firebaseValidation.saveUserData(with: avatarImage)
-                    }
-
-                }
-                photoPickerItem = nil
+            userData = firebaseValidation.currentUser ?? firebaseValidation.getUserData()
+            if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
+                firebaseValidation.avatarImage = UIImage(data: imageData)
             }
         }
+
+        .onChange(of: photoPickerItem) { newItem in
+            if let item = newItem {
+                Task {
+                    if let data = try? await item.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data),
+                       let compressedData = image.jpegData(compressionQuality: 0.6) {
+                        
+                        firebaseValidation.avatarImage = image
+                        UserDefaults.standard.set(compressedData, forKey: "UserImage")
+
+                       
+                        await firebaseValidation.saveUserData(with: image)
+                    }
+                }
+            }
+        }
+
+
+
 
     }
 }

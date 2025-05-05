@@ -19,6 +19,7 @@ struct SignUpButton: View {
     @EnvironmentObject var formViewModal: FormViewModal
     @EnvironmentObject var firebaseValidation : FirebaseValidation
     @State private var shouldNavigate = false
+    @State private var showAlert = false
 
     var body: some View {
         ActivatedButton(buttonText: .signUpText) {
@@ -52,13 +53,16 @@ struct SignUpButton: View {
                                 await firebaseValidation.saveUserData(with: defaultImage)
 
                                 shouldNavigate = true
+                               
                             }
                         }
                     } else {
                         shouldNavigate = false
+                        showAlert = true
                     }
                 } else {
                     shouldNavigate = false
+                    showAlert = true
                 }
                 
                
@@ -72,7 +76,7 @@ struct SignUpButton: View {
                         Task {
                             do {
                                  await firebaseValidation.register(
-                                    withEmail: "Diksha@gmail.com",
+                                    withEmail: "Aryan@Gmail.com",
                                     password: formViewModal.signUpData.signUpPassword,
                                     firstName: formViewModal.signUpData.firstName,
                                     lastName: formViewModal.signUpData.lastName,
@@ -82,20 +86,22 @@ struct SignUpButton: View {
                                 )
                                 let defaultImage = UIImage(systemName: "person.circle")!
                                 await firebaseValidation.saveUserData(with: defaultImage)
-                                formViewModal.showAlert = false
+                                
                                 shouldNavigate = true
                             }
                         }
                     } else {
                         shouldNavigate = false
+                        showAlert = true
                    }
                 } else {
                     shouldNavigate = false
+                    showAlert = true
                 }
             }
             }
 
-        .alert(isPresented: $formViewModal.showAlert) {
+        .alert(isPresented: $showAlert) {
             Alert(
                 title: Text(verbatim: .signUpAlertTitle),
                 message: Text(verbatim: .signUpAlertMessage),

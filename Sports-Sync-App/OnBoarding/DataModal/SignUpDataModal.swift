@@ -21,7 +21,8 @@ struct SignUpDataModel:Codable{
     }
     var phoneNumber:String = ""
      var progress: Int = 0
-    var signUpWith : LoginWith = .withPhoneNumber
+    var signUpWith : LoginWith = .withEmail
+    
     
 }
 

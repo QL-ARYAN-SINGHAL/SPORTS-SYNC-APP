@@ -5,13 +5,6 @@
 //  Created by ARYAN SINGHAL on 04/05/25.
 //
 
-//
-//  UserLogOut.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 04/05/25.
-//
-
 import SwiftUI
 
 struct UserLogOut: View {
@@ -21,10 +14,12 @@ struct UserLogOut: View {
     var body: some View {
         NavigationStack {
             VStack {
-                ActivatedButton(buttonText: .logOutString, action: {
-                    firebaseValidation.signOut()
-                    logOutNavigation = true
-                })
+                ActivatedButton(
+                    buttonText: .logOutString,
+                    action: {
+                        firebaseValidation.signOut()
+                        logOutNavigation = true
+                    })
             }
             .navigationDestination(isPresented: $logOutNavigation) {
                 LandingScreen()

@@ -11,6 +11,7 @@ struct LogInButton: View {
    
     @State private var shouldNavigate = false
     @State private var navigateToOTP = false
+    @State private var showAlert : Bool = false
     @EnvironmentObject var formViewModal: FormViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
     
@@ -38,9 +39,15 @@ struct LogInButton: View {
                                     withPassword: formViewModal.logInData.loginPassword
                                 )
                                 shouldNavigate = firebaseValidation.isAuthenticated
-                                if !shouldNavigate {
-                                    formViewModal.showAlert.toggle()
+
+                                if shouldNavigate {
+                                    let defaultImage = UIImage(systemName: "person.circle")!
+                                    await firebaseValidation.saveUserData(with: defaultImage)
+                                } else {
+                                    showAlert = true
                                 }
+
+                                
                             }
                             catch {
                                 print("Login failed with email: \(error.localizedDescription)")
@@ -56,7 +63,7 @@ struct LogInButton: View {
                                 )
                                 navigateToOTP = firebaseValidation.isAuthenticated
                                 if !navigateToOTP {
-                                    formViewModal.showAlert.toggle()
+                                   showAlert = false
                                 }
                             }
                            
@@ -65,7 +72,7 @@ struct LogInButton: View {
                 }
 
                 
-                .alert(isPresented: $formViewModal.showAlert) {
+                .alert(isPresented: $showAlert) {
                     Alert(
                         title: Text(verbatim: .logInAlertTitle),
                         message: Text(verbatim: .logInAlertMessage),

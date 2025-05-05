@@ -11,9 +11,4 @@ class UserProfileViewModal : ObservableObject{
     
     @Published var userProfileData = SignUpDataModel()
     
- 
-    
-
-    
-    
 }

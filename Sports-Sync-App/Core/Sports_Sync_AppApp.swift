@@ -22,7 +22,7 @@ struct Sports_Sync_AppApp: App {
         
         WindowGroup {
             
-            MainTabView()
+            LandingScreen()
                 .environmentObject(firebaseValidation)
             
         }
