@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 import SwiftUI
+import FirebaseAuth
 
 class EventInformationViewModal: ObservableObject {
     @Published var eventDataModal = EventDataModal()
@@ -15,11 +16,13 @@ class EventInformationViewModal: ObservableObject {
     @Published var isSubmitting = false
     @Published var submittedEventInfo: EventInformationDataModal?
     @Published var userCreatedEvents: [EventInformationDataModal] = []
+    
 
     let db = Firestore.firestore()
+    @StateObject var firebaseValidation = FirebaseValidation()  // Add the FirebaseValidation environment object
 
     // This function can be used to add an event to Firestore
-    func eventInformationStoreDB(
+    func eventInformationStoreDB(id : String,
         eventName: String, sportsName: String, eventDate: String,
         eventTime: String, state: String, selectedStadium: String
     ) {
@@ -31,7 +34,9 @@ class EventInformationViewModal: ObservableObject {
             eventTime: eventTime,
             selectedStadium: selectedStadium,
             stadium: "",
-            showStadiumDetail: true
+            showStadiumDetail: true,
+            id : id
+           
         )
 
         let dataDict: [String: Any] = [
@@ -41,6 +46,7 @@ class EventInformationViewModal: ObservableObject {
             "EventTime": eventTime,
             "State": state,
             "SelectedStadium": selectedStadium,
+            "id" : id
         ]
 
         db.collection("User Event").addDocument(data: dataDict) { error in
@@ -57,31 +63,35 @@ class EventInformationViewModal: ObservableObject {
     }
 
     // This function fetches events asynchronously using await/async
+  
     func getUserCreatedEvent() async {
+        guard let currentUserID = firebaseValidation.userSession?.uid else { // Access the currentUserID from FirebaseValidation
+            print("User not logged in")
+            return
+        }
+
         do {
-            let snapshot = try await db.collection("User Event").getDocuments()
+            let querySnapshot = try await db.collection("User Event")
+                .whereField("id", isEqualTo: currentUserID)
+                .getDocuments()
 
             var events: [EventInformationDataModal] = []
 
-            for document in snapshot.documents {
+            for document in querySnapshot.documents {
                 let data = document.data()
 
                 let eventName =
-                    data["Event Name"] as? String ?? data["EventName"]
-                    as? String ?? ""
+                    data["Event Name"] as? String ?? data["EventName"] as? String ?? ""
                 let sportsName =
-                    data["Sports Name"] as? String ?? data["SportsName"]
-                    as? String ?? ""
+                    data["Sports Name"] as? String ?? data["SportsName"] as? String ?? ""
                 let eventDate =
-                    data["Event Date"] as? String ?? data["EventDate"]
-                    as? String ?? ""
+                    data["Event Date"] as? String ?? data["EventDate"] as? String ?? ""
                 let eventTime =
-                    data["Event Time"] as? String ?? data["EventTime"]
-                    as? String ?? ""
+                    data["Event Time"] as? String ?? data["EventTime"] as? String ?? ""
                 let selectedStadium =
-                    data["Selected Stadium"] as? String ?? data[
-                        "SelectedStadium"] as? String ?? ""
+                    data["Selected Stadium"] as? String ?? data["SelectedStadium"] as? String ?? ""
                 let state = data["State"] as? String ?? ""
+                let id = data["id"] as? String ?? ""
 
                 let event = EventInformationDataModal(
                     searchText: state,
@@ -91,24 +101,22 @@ class EventInformationViewModal: ObservableObject {
                     eventTime: eventTime,
                     selectedStadium: selectedStadium,
                     stadium: "",
-                    showStadiumDetail: true
+                    showStadiumDetail: true,
+                    id: id
                 )
 
                 events.append(event)
             }
 
-            // Update the state on the main thread
             DispatchQueue.main.async {
                 self.userCreatedEvents = events
-                print(self.userCreatedEvents)
             }
+
         } catch {
-            print(
-                "Error fetching userEvent collection: \(error.localizedDescription)"
-            )
-            return
+            print("Error fetching user events: \(error.localizedDescription)")
         }
     }
+
 
     func resetFields() {
         eventInfoData = EventInformationDataModal()
@@ -122,3 +130,12 @@ class EventInformationViewModal: ObservableObject {
             && eventInfoData.selectedStadium != nil
     }
 }
+
+
+    
+    
+    
+
+    
+
+

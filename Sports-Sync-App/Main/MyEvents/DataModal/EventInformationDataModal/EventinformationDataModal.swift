@@ -16,5 +16,7 @@ struct EventInformationDataModal : Codable,Hashable{
     var selectedStadium: String? = nil
     var stadium = ""
     var showStadiumDetail : Bool = false
+    var id : String  = ""
+    
     
 }

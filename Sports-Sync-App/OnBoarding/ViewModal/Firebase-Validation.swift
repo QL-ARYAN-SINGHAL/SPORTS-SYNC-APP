@@ -10,6 +10,7 @@ import FirebaseFirestore
 import SwiftUI
 import FirebaseStorage
 
+@MainActor
 class FirebaseValidation: ObservableObject {
     @Published var signUpData = SignUpDataModel()
     @Published var userSession: FirebaseAuth.User?
@@ -18,6 +19,7 @@ class FirebaseValidation: ObservableObject {
     @Published var verificationCode: String = ""
     @Published var storedUser: SignUpDataModel?
     @Published var userData: SignUpDataModel? = nil
+    
     var avatarImage: UIImage? = nil
 
     init() {

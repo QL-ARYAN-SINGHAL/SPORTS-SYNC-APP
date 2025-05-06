@@ -8,16 +8,17 @@
 import SwiftUI
 
 struct EventInformationParent: View {
-   
+
     @StateObject var eventInformationViewModel = EventInformationViewModal()
     @StateObject var tabRouter = TabRouter()
-   
+    @StateObject var firebaseValidation = FirebaseValidation()
+
     var body: some View {
         ZStack {
             NavigationStack {
-                ScrollView {    
+                ScrollView {
                     EventInformationTitle()
-                    
+
                     VStack(spacing: 16) {
                         EventInformationSearch()
                         EventInformationFields()
@@ -27,14 +28,17 @@ struct EventInformationParent: View {
             }
             .environmentObject(eventInformationViewModel)
             .environmentObject(tabRouter)
-            
-            if eventInformationViewModel.didSubmitSuccessfully {
+            .environmentObject(firebaseValidation)
+
+            if eventInformationViewModel.isSubmitting {
                 ZStack {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
-                    
+
                     ProgressView("Creating Plan...")
-                       .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .progressViewStyle(
+                            CircularProgressViewStyle(tint: .white)
+                        )
                         .foregroundColor(.white)
                         .padding(24)
                         .background(Color.black.opacity(0.8))

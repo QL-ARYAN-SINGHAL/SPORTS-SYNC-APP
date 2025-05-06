@@ -4,46 +4,49 @@
 //
 //  Created by ARYAN SINGHAL on 23/04/25.
 //
+
+
 import SwiftUI
 
 struct EventView: View {
-    @StateObject private var eventViewModal = EventInformationViewModal()
-    @StateObject private var cardViewModal = CardViewModel()
+    @StateObject private var eventViewModel = EventInformationViewModal()
+    @StateObject private var cardViewModel = CardViewModel()
+    @StateObject private var firebaseValidation = FirebaseValidation()
+
+    private var shouldShowUserCreatedEvents: Bool {
+        eventViewModel.userCreatedEvents.contains { $0.id == firebaseValidation.currentUser?.id }
+    }
 
     var body: some View {
-
         VStack(spacing: 0) {
-
-            if !eventViewModal.userCreatedEvents.isEmpty {
-
+            if shouldShowUserCreatedEvents {
                 ScrollView {
-
                     VStack(spacing: 16) {
                         EventListView()
-
                         UserCreatedEventView()
-
                         EventButton()
-
                     }
                 }
             } else {
-
-                Text("No events created yet.")
-
-                    .foregroundColor(.gray)
-                    .padding()
+                VStack(spacing: 16) {
+                    EventListView()
+                    Spacer().frame(height: 100)
+                    EventTextView()
+                    EventButton()
+                }
             }
 
             Spacer()
         }
         .padding()
         .task {
-            await eventViewModal.getUserCreatedEvent()
-
+            await eventViewModel.getUserCreatedEvent()
+        
+            print("Event IDs:", eventViewModel.userCreatedEvents.map { $0.id })
+            print("Current User ID:", firebaseValidation.currentUser?.id ?? "nil")
         }
-        .environmentObject(eventViewModal)
-        .environmentObject(cardViewModal)
+        .environmentObject(eventViewModel)
+        .environmentObject(cardViewModel)
     }
 }
 
