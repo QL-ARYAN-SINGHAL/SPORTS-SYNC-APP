@@ -25,7 +25,7 @@ struct LogInButton: View {
                     Text(verbatim: .forgotPassword)
                         .font(Font.custom(.fontJakarta, size: 12))
                         .padding(.leading, 18)
-                        .foregroundStyle(.blueTint)
+                         .foregroundStyle(.blueTint)
                 }
                 
                 // MARK: - Login Button

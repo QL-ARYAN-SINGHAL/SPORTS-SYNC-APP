@@ -6,6 +6,9 @@ struct UserCreatedEventView: View {
     @EnvironmentObject var cardViewModal: CardViewModel
 
     @State private var shouldNavigate: Bool = false
+    @State private var selectedUserEvent: EventInformationDataModal? = nil
+   
+
 
     var body: some View {
         VStack {
@@ -23,9 +26,12 @@ struct UserCreatedEventView: View {
                             eventInfoDataModal: event,
                             stadiumData: matchingStadium,
                             action: {
+                                selectedUserEvent = event
                                 shouldNavigate = true
                             }
                         )
+
+                        
                     }
                 }
                 .padding()
@@ -38,8 +44,11 @@ struct UserCreatedEventView: View {
             }
         }
         .navigationDestination(isPresented: $shouldNavigate) {
-            PlanDescriptionView(cardViewModel: CardViewModel())
+            if let userEvent = selectedUserEvent {
+                PlanDescriptionView(cardViewModel: cardViewModal, userEvent: userEvent)
+            }
         }
+
     }
 }
 
