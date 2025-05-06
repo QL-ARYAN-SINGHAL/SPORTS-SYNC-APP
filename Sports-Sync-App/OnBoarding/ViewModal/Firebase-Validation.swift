@@ -1,9 +1,3 @@
-//
-//  Firebase-Validation.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 21/04/25.
-
 import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
@@ -26,9 +20,15 @@ class FirebaseValidation: ObservableObject {
 
     // MARK: - Initializer
     init() {
-        self.userSession = Auth.auth().currentUser
-        Task {
-            await fetchUser()
+        // Check if user is already authenticated and set user session
+        if let user = Auth.auth().currentUser {
+            self.userSession = user
+            self.isAuthenticated = true
+            Task {
+                await fetchUser()
+            }
+        } else {
+            self.isAuthenticated = false
         }
     }
 
@@ -50,13 +50,29 @@ class FirebaseValidation: ObservableObject {
     /// Signs out the current user
     func signOut() {
         do {
-            try Auth.auth().signOut()
+            // Sign out from Firebase
+            
+            
+            // Clear UserDefaults data
+            UserDefaults.standard.removeObject(forKey: "FirstName")
+            UserDefaults.standard.removeObject(forKey: "LastName")
+            UserDefaults.standard.removeObject(forKey: "AgeValue")
+            UserDefaults.standard.removeObject(forKey: "SignUpEmail")
+            UserDefaults.standard.removeObject(forKey: "SelectedGender")
+            UserDefaults.standard.removeObject(forKey: "PhoneNumber")
+            UserDefaults.standard.removeObject(forKey: "UserImage")
+            
+            // Reset session and current user data
             self.userSession = nil
             self.currentUser = nil
+            self.isAuthenticated = false
+            try Auth.auth().signOut()
+            
         } catch {
             print("Failed to sign out user")
         }
     }
+
 
     /// Sends an OTP to the given phone number
     func sendOTP(phoneNumber: String) {

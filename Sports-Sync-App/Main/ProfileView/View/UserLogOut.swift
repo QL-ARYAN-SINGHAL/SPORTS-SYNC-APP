@@ -4,7 +4,6 @@
 //
 //  Created by ARYAN SINGHAL on 04/05/25.
 //
-
 import SwiftUI
 
 struct UserLogOut: View {
@@ -22,7 +21,7 @@ struct UserLogOut: View {
                     })
             }
             .navigationDestination(isPresented: $logOutNavigation) {
-                LandingScreen()
+                LandingScreen() // Navigate to LandingScreen after logout
             }
         }
     }

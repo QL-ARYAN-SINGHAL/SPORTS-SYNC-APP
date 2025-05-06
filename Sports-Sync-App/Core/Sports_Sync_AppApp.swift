@@ -21,10 +21,13 @@ struct Sports_Sync_AppApp: App {
     var body: some Scene {
         
         WindowGroup {
-            
-            LandingScreen()
-                .environmentObject(firebaseValidation)
-            
+            if firebaseValidation.isAuthenticated{
+                MainTabView()
+            }
+            else{
+                LandingScreen()
+                    .environmentObject(firebaseValidation)
+            }
         }
     }
 }
