@@ -10,7 +10,7 @@ import SwiftUI
 
 class FormViewModal: ObservableObject {
     //MARK: Published to keep track of the data modal inside view modal
-    @Published var showAlert = false
+  
     @Published var logInData = LoginDataModal()
     @Published var signUpData = SignUpDataModel()
    
@@ -24,10 +24,6 @@ class FormViewModal: ObservableObject {
       
         let isValid = emailTest.evaluate(with: email)
 
-        if !isValid {
-            showAlert = true
-        }
-
         return isValid
     }
     
@@ -38,9 +34,7 @@ class FormViewModal: ObservableObject {
         let passwordRegex = #"(?=^.{7,15}$)(?=^.*[A-Z].*$)(?=^.*\d.*$).*"#
             let passwordPredicate = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
         let isPasswordValid =  passwordPredicate.evaluate(with: password)
-        if !isPasswordValid{
-            showAlert = true
-        }
+       
         return isPasswordValid
     }
     

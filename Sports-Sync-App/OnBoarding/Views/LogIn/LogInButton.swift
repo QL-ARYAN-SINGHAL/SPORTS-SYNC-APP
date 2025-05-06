@@ -3,12 +3,7 @@
 //  Sports-Sync-App
 //
 //  Created by ARYAN SINGHAL on 12/04/25.
-//
-//  LogInButton.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 12/04/25.
-//
+
 
 import SwiftUI
 

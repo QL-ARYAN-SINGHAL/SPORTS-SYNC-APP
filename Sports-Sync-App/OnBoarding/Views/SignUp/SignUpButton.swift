@@ -15,31 +15,25 @@ struct SignUpButton: View {
 
     // MARK: - State
     @State private var shouldNavigate = false
-    @State private var showAlert = false
+    @State private var credentialAlert = false
 
     // MARK: - Body
     var body: some View {
-        ActivatedButton(buttonText: .signUpText) {
-            
-            // MARK: - Form Validation Flags
-            ///2 to switch between user prefernce of login
-            let isEmailSignup = formViewModal.signUpData.signUpWith == .withEmail
-            let isPhoneSignup = formViewModal.signUpData.signUpWith == .withPhoneNumber
-
-            ///To check the validity through regex matching
-            let isEmailValid = formViewModal.isEmailValid(email: formViewModal.signUpData.signUpEmail)
-            let isPasswordValid = formViewModal.isPasswordValid(password: formViewModal.signUpData.signUpPassword)
-            
-            //To check the phone number regex , must be equal to 10
-            let isPhoneValid = formViewModal.signUpData.phoneNumber.count == 10
-            let isPasswordConfirmed = formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword
-            
-            let isGenderSelected = formViewModal.signUpData.selectedGender != nil
-            
-            // MARK: - Email Sign Up Logic
-            if isEmailSignup {
-                if isEmailValid && isPasswordValid {
-                    if isPasswordConfirmed && isGenderSelected {
+        VStack {
+            ActivatedButton(buttonText: .signUpText) {
+                
+                // MARK: - Form Validation Flags
+                let isEmailSignup = formViewModal.signUpData.signUpWith == .withEmail
+                let isPhoneSignup = formViewModal.signUpData.signUpWith == .withPhoneNumber
+                
+                let isEmailValid = formViewModal.isEmailValid(email: formViewModal.signUpData.signUpEmail)
+                let isPasswordValid = formViewModal.isPasswordValid(password: formViewModal.signUpData.signUpPassword)
+                let isPhoneValid = formViewModal.signUpData.phoneNumber.count == 10
+                let isPasswordConfirmed = formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword
+                let isGenderSelected = formViewModal.signUpData.selectedGender != nil
+                
+                if isEmailSignup {
+                    if isEmailValid && isPasswordValid && isPasswordConfirmed && isGenderSelected {
                         Task {
                             do {
                                 await firebaseValidation.register(
@@ -50,32 +44,21 @@ struct SignUpButton: View {
                                     age: formViewModal.signUpData.ageValue,
                                     gender: formViewModal.signUpData.selectedGender?.rawValue ?? ""
                                 )
-
                                 let defaultImage = UIImage(systemName: "person.circle")!
                                 await firebaseValidation.saveUserData(with: defaultImage)
                                 shouldNavigate = true
                             }
-                           
                         }
                     } else {
-                        shouldNavigate = false
-                        showAlert = true
+                        credentialAlert = true
                     }
-                } else {
-                    shouldNavigate = false
-                    showAlert = true
                 }
-            }
-
-            // MARK: - Phone Number Sign Up Logic
-            else if isPhoneSignup {
-                if isPhoneValid && isPasswordValid {
-                    if isPasswordConfirmed && isGenderSelected {
-                        print("Validation success for phone signup")
+                else if isPhoneSignup {
+                    if isPhoneValid && isPasswordValid && isPasswordConfirmed && isGenderSelected {
                         Task {
                             do {
                                 await firebaseValidation.register(
-                                    withEmail: "Aryan@Gmail.com", // Placeholder
+                                    withEmail: "Aryan@Gmail.com",
                                     password: formViewModal.signUpData.signUpPassword,
                                     firstName: formViewModal.signUpData.firstName,
                                     lastName: formViewModal.signUpData.lastName,
@@ -83,34 +66,30 @@ struct SignUpButton: View {
                                     gender: formViewModal.signUpData.selectedGender?.rawValue ?? "",
                                     phoneNumber: formViewModal.signUpData.phoneNumber
                                 )
-
                                 let defaultImage = UIImage(systemName: "person.circle")!
                                 await firebaseValidation.saveUserData(with: defaultImage)
                                 shouldNavigate = true
                             }
                         }
                     } else {
-                        shouldNavigate = false
-                        showAlert = true
+                        credentialAlert = true
                     }
-                } else {
-                    shouldNavigate = false
-                    showAlert = true
                 }
             }
         }
-
-        // MARK: - Alert
-        .alert(isPresented: $showAlert) {
-            Alert(
-                title: Text(verbatim: .signUpAlertTitle),
-                message: Text(verbatim: .signUpAlertMessage),
-                dismissButton: .default(Text("Okay"))
+        .alert(isPresented: $credentialAlert,content: {
+            Alert(title: Text("Alert:"),
+                message: Text("press OK to execute default action..."),
+                dismissButton: Alert.Button.default(
+                    Text("Press ok here"), action: {
+                        credentialAlert = false
+                    }
+                )
             )
-        }
+        })
 
-        // MARK: - Navigation
-        navigationDestination(isPresented:$shouldNavigate){
+
+        .navigationDestination(isPresented: $shouldNavigate) {
             SuccessSplashView()
         }
     }
@@ -118,7 +97,9 @@ struct SignUpButton: View {
 
 // MARK: - Preview
 #Preview {
-    SignUpButton()
-        .environmentObject(FormViewModal())
-        .environmentObject(FirebaseValidation())
+    NavigationStack {
+        SignUpButton()
+            .environmentObject(FormViewModal())
+            .environmentObject(FirebaseValidation())
+    }
 }
