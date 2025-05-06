@@ -7,6 +7,7 @@
 
 import Foundation
 struct LoginDataModal:Codable {
+    
     //MARK: data modal for login
    
     var loginEmail:String = ""

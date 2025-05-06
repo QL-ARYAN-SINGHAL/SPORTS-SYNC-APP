@@ -3,30 +3,35 @@
 //  Sports-Sync-App
 //
 //  Created by ARYAN SINGHAL on 12/04/25.
-//
 
 import SwiftUI
 
-//MARK: PARENT VIEW THAT HAS STATEOBJECT OF VIEW MODAL TO ACCESS BUILDER LOGIC AND DATA MODAL
+/// MARK: - Parent View that holds state objects for form logic and Firebase validation.
+/// It injects these as environment objects to its children views.
 
 struct LogInView: View {
+    
+    // MARK: - StateObjects
     @StateObject var formViewModal = FormViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
+    
+    // MARK: - Body
     var body: some View {
-        VStack{
+        VStack {
+            // MARK: - Login Input Fields
             LogInFields()
                 .padding()
+            
+            // MARK: - Login Button Handler
             LogInButton()
-               
         }
+        // MARK: - Dependency Injection via Environment Objects
         .environmentObject(formViewModal)
         .environmentObject(firebaseValidation)
-//MARK: ENVIRONMENT OBJECT TO KEEP TRACK OF CHANGE OF DATA PRESENT INSIDE OUR DATA MODAL
-       
     }
-      
 }
 
+// MARK: - Preview
 #Preview {
     LogInView()
 }
