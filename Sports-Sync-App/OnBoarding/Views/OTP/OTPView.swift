@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct OTPView: View {
-    private var imageConstants = ImageConstants()
+    
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         VStack{
@@ -24,7 +24,7 @@ struct OTPView: View {
         }
         .navigationBarCustombackButton(content:{
             Button(action : {dismiss() }, label: {
-                imageConstants.navigationBackImage
+                ImageConstants.navigationBackImage
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50 , height: 30)

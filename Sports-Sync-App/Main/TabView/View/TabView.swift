@@ -6,7 +6,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @StateObject var tabRouter = TabRouter()
-    private var imageConstants = ImageConstants()
+    
     let locationManager = LocationManager()
     
     @State private var currentLocation: String = "Fetching..."
@@ -17,7 +17,7 @@ struct MainTabView: View {
                 HomeView()
                    
                     .tabItem {
-                        imageConstants.homeTabImage
+                        ImageConstants.homeTabImage
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
@@ -30,7 +30,7 @@ struct MainTabView: View {
                 EventView()
                    
                     .tabItem {
-                        imageConstants.calenderTabImage
+                        ImageConstants.calenderTabImage
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
@@ -42,7 +42,7 @@ struct MainTabView: View {
                 
                 FeedView()
                     .tabItem {
-                        imageConstants.verticalSliderTabImage
+                        ImageConstants.verticalSliderTabImage
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
@@ -53,7 +53,7 @@ struct MainTabView: View {
                 
                 UserProfileViewParent()
                     .tabItem {
-                        imageConstants.userTabImage
+                        ImageConstants.userTabImage
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
@@ -71,7 +71,7 @@ struct MainTabView: View {
                                 .foregroundColor(.black.opacity(0.6))
                                 .font(Font.custom(.fontJakarta, size: 12))
                             HStack {
-                                imageConstants.locationToolBarImage
+                                ImageConstants.locationToolBarImage
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 16, height: 16)
@@ -89,7 +89,7 @@ struct MainTabView: View {
                         Button(action: {
                             // Notification logic
                         }) {
-                            imageConstants.notificationToolBarImage
+                            ImageConstants.notificationToolBarImage
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)

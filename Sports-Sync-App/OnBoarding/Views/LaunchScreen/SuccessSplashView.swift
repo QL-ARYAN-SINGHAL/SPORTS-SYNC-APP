@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SuccessSplashView: View {
-    private var imageConstants = ImageConstants()
+   
     @State private var showSplash = true
     @State private var showText = false
 
@@ -17,7 +17,7 @@ struct SuccessSplashView: View {
         if showSplash{
             VStack(spacing: 20) {
                 
-                imageConstants.successImage
+                ImageConstants.successImage
                     .frame(width: 92, height: 91)
                 
                

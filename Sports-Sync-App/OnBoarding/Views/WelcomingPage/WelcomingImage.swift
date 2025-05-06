@@ -9,9 +9,9 @@ import SwiftUI
 
 struct WelcomingImage: View {
        //MARK: INSTANCES
-    private var imageConstants = ImageConstants()
+   
     var body: some View {
-        imageConstants.welcomeBikeImage
+        ImageConstants.welcomeBikeImage
             .resizable()
             .scaledToFill()
             .ignoresSafeArea()

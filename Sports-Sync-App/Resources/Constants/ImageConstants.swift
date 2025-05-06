@@ -1,38 +1,38 @@
 //
-//  ImageConstants.swift
+//  ImageConstants 2.swift
 //  Sports-Sync-App
 //
-//  Created by ARYAN SINGHAL on 11/04/25.
+//  Created by ARYAN SINGHAL on 06/05/25.
 //
 
-import Foundation
+
 import SwiftUI
 
-struct ImageConstants{
-    
-    var appImage = Image("SportSync")
-    var welcomeBikeImage = Image("welcomeBikeImage")
-    var successImage = Image("Success")
-    var navigationBackImage = Image("NavigationBackImage")
-    var homeTabImage = Image("home")
-    var userTabImage = Image("user-2")
-    var calenderTabImage = Image("calendar")
-    var verticalSliderTabImage = Image("slider-vertical")
-    var notificationToolBarImage = Image("Notification")
-    var locationToolBarImage = Image("location")
-    var emptyBoxImage = Image("emptyBox")
-    var calendarMonthImage = Image("calendarMonth")
-    let sportImageNames: [String: String] = [
-           "Team Sports": "baseball",
-           "Individual Sports": "IndivisualSports",
-           "Combat Sports": "Boxing",
-           "Endurance Sports": "EnduranceSports",
-           "Racquet Sports": "RacquetSports",
-           "Water Sports": "WaterSports",
-           "Winter Sports": "WinterSports",
-           "Adventure Sports": "AdventureSports",
-           "Motor Sports": "MotorSports",
-           "Gymnastic": "Gymnastic"
-       ]
-    let feedDefaultImage = Image("feedDefaultImage")
+struct ImageConstants {
+    static let appImage = Image("SportSync")
+    static let welcomeBikeImage = Image("welcomeBikeImage")
+    static let successImage = Image("Success")
+    static let navigationBackImage = Image("NavigationBackImage")
+    static let homeTabImage = Image("home")
+    static let userTabImage = Image("user-2")
+    static let calenderTabImage = Image("calendar")
+    static let verticalSliderTabImage = Image("slider-vertical")
+    static let notificationToolBarImage = Image("Notification")
+    static let locationToolBarImage = Image("location")
+    static let emptyBoxImage = Image("emptyBox")
+    static let calendarMonthImage = Image("calendarMonth")
+    static let feedDefaultImage = Image("feedDefaultImage")
+
+    static let sportImageNames: [String: String] = [
+        "Team Sports": "baseball",
+        "Individual Sports": "IndivisualSports",
+        "Combat Sports": "Boxing",
+        "Endurance Sports": "EnduranceSports",
+        "Racquet Sports": "RacquetSports",
+        "Water Sports": "WaterSports",
+        "Winter Sports": "WinterSports",
+        "Adventure Sports": "AdventureSports",
+        "Motor Sports": "MotorSports",
+        "Gymnastic": "Gymnastic"
+    ]
 }

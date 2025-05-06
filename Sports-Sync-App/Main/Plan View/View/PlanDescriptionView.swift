@@ -9,7 +9,7 @@ import SwiftUI
 struct PlanDescriptionView: View {
 
     @Environment(\.dismiss) private var dismiss
-    private let imageConstants = ImageConstants()
+    
     @ObservedObject var cardViewModel: CardViewModel
 
     var body: some View {
@@ -32,7 +32,7 @@ struct PlanDescriptionView: View {
                     
                     
                     Button(action: { dismiss() }) {
-                        imageConstants.navigationBackImage
+                        ImageConstants.navigationBackImage
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)

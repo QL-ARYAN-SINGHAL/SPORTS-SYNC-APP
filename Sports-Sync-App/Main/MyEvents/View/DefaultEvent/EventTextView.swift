@@ -8,13 +8,11 @@
 import SwiftUI
 
 struct EventTextView: View {
-    private var imageConstants = ImageConstants()
    
-    
     var body: some View {
         VStack(spacing: 15) {
            
-                imageConstants.emptyBoxImage
+                ImageConstants.emptyBoxImage
                     .resizable()
             
                     .scaledToFit()

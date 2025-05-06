@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ForgetPasswordView: View {
-    private var imageConstants = ImageConstants()
+    
     @StateObject var formViewModal = FormViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
     @Environment(\.dismiss) private var dismiss
@@ -27,7 +27,7 @@ struct ForgetPasswordView: View {
         Spacer()
             .navigationBarCustombackButton(content:{
                 Button(action : {dismiss() }, label: {
-                    imageConstants.navigationBackImage
+                    ImageConstants.navigationBackImage
                         .resizable()
                         .scaledToFit()
                         .frame(width: 50 , height: 30)

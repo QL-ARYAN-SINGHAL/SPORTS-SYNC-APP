@@ -8,7 +8,7 @@ struct LandingScreen: View {
     @EnvironmentObject var firebaseValidation : FirebaseValidation
     
     //MARK: INSTANCES OF FILES
-    private var imageConstants = ImageConstants()
+   
     
     var body: some View {
         VStack {

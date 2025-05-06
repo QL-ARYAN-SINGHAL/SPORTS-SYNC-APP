@@ -15,13 +15,13 @@
 import SwiftUI
 
 struct FeedTextView: View {
-    private var imageConstants = ImageConstants()
+    
     @EnvironmentObject var feedViewModal : FeedViewModal
     
     var body: some View {
         VStack(spacing: 15) {
            
-            imageConstants.feedDefaultImage
+            ImageConstants.feedDefaultImage
                     .resizable()
             
                     .scaledToFit()

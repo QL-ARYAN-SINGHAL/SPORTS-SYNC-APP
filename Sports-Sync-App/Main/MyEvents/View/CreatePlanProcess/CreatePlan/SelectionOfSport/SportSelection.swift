@@ -8,7 +8,6 @@ import SwiftUI
 struct SportSelection: View {
     
     @Environment(\.dismiss) private var dismiss
-    private let imageConstants = ImageConstants()
     @StateObject var selectSportsViewModal = SelectSportsViewModal()
     
     @State private var selectedSport: SelectSportDataModal? = nil
@@ -24,7 +23,7 @@ struct SportSelection: View {
                 
                 HStack(spacing: 12) {
                     Button(action: { dismiss() }) {
-                        imageConstants.navigationBackImage
+                        ImageConstants.navigationBackImage
                             .resizable()
                             .scaledToFit()
                             .frame(width: 30, height: 24)

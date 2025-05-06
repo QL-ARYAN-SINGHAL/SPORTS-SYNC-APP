@@ -13,13 +13,13 @@ struct EventInformationTitle: View {
     //Propertywrappers
     @Environment(\.dismiss) private var dismiss
     
-    private let imageConstants = ImageConstants()
+   
     
     var body: some View {
         VStack {
             HStack(spacing: 12) {
                 Button(action: { dismiss() }) {
-                    imageConstants.navigationBackImage
+                    ImageConstants.navigationBackImage
                         .resizable()
                         .scaledToFit()
                         .frame(width: 30, height: 24)
