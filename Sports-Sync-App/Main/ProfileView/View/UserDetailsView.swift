@@ -10,23 +10,22 @@ import SwiftUI
 
 struct UserDetailsView: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
-    @State private var userData: SignUpDataModel? = nil
-
     @State var photoPickerItem: PhotosPickerItem?
 
     var body: some View {
         VStack {
-            if let user = userData {
+            if let user = firebaseValidation.userData {
 
                 Button(action: {}) {
                     HStack(spacing: 20) {
                         PhotosPicker(
                             selection: $photoPickerItem, matching: .images
                         ) {
-
+                            //uiImage is for rendering your image as in UIKit way
                             Image(
-                                uiImage: firebaseValidation.avatarImage ?? UIImage(
-                                    systemName: "person.crop.circle.fill")!
+                                uiImage: firebaseValidation.avatarImage
+                                    ?? UIImage(
+                                        systemName: "person.crop.circle.fill")!
                             )
                             .resizable()
                             .scaledToFill()
@@ -78,33 +77,34 @@ struct UserDetailsView: View {
             }
         }
         .onAppear {
-            userData = firebaseValidation.currentUser ?? firebaseValidation.getUserData()
+            firebaseValidation.userData = firebaseValidation.getUserData()
             if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
                 firebaseValidation.avatarImage = UIImage(data: imageData)
+
+                if let data = firebaseValidation.avatarImage?.pngData() {
+                    print(data, "Size")
+                }
             }
+
         }
 
         .onChange(of: photoPickerItem) { newItem in
             if let item = newItem {
                 Task {
-                    if let data = try? await item.loadTransferable(type: Data.self),
-                       let image = UIImage(data: data),
-                       let compressedData = image.jpegData(compressionQuality: 0.6) {
-                        
-                        firebaseValidation.avatarImage = image
-                        UserDefaults.standard.set(compressedData, forKey: "UserImage")
-
-                       
+                    if let data = try? await item.loadTransferable(
+                        type: Data.self),
+                        let image = UIImage(data: data)
+                    {
+                        await firebaseValidation
+                            .uploadProfileImageAndSaveToFirestore(image)
                         await firebaseValidation.saveUserData(with: image)
                     }
+
                 }
             }
         }
-
-
-
-
     }
+
 }
 
 #Preview {

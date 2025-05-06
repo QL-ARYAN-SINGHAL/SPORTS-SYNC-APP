@@ -41,8 +41,7 @@ struct LogInButton: View {
                                 shouldNavigate = firebaseValidation.isAuthenticated
 
                                 if shouldNavigate {
-                                    let defaultImage = UIImage(systemName: "person.circle")!
-                                    await firebaseValidation.saveUserData(with: defaultImage)
+                                    showAlert = false
                                 } else {
                                     showAlert = true
                                 }
@@ -58,7 +57,7 @@ struct LogInButton: View {
                     case .withPhoneNumber:
                         Task {
                             do{
-                               firebaseValidation.sendOTP(
+                                firebaseValidation.sendOTP(
                                     phoneNumber: formViewModal.logInData.phoneNumber
                                 )
                                 navigateToOTP = firebaseValidation.isAuthenticated

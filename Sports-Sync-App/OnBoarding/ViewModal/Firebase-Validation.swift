@@ -8,6 +8,7 @@
 import FirebaseAuth
 import FirebaseFirestore
 import SwiftUI
+import FirebaseStorage
 
 class FirebaseValidation: ObservableObject {
     @Published var signUpData = SignUpDataModel()
@@ -16,6 +17,7 @@ class FirebaseValidation: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var verificationCode: String = ""
     @Published var storedUser: SignUpDataModel?
+    @Published var userData: SignUpDataModel? = nil
     var avatarImage: UIImage? = nil
 
     init() {
@@ -111,6 +113,21 @@ class FirebaseValidation: ObservableObject {
         }
     }
 
+    func sendOTP(phoneNumber: String) {
+          PhoneAuthProvider.provider().verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: nil) { verificationID, error in
+              if let error = error {
+                  print("Failed to send OTP: \(error.localizedDescription)")
+                  return
+              }
+
+              if let verificationID = verificationID {
+                  print("OTP Sent. Verification ID: \(verificationID)")
+                  // Store verification ID in UserDefaults (or a @Published variable)
+                  UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+              }
+          }
+      }
+    
     // Function to reset password
     func resetPassword(email: String) {
         Auth.auth().sendPasswordReset(withEmail: email) { error in
@@ -130,35 +147,29 @@ class FirebaseValidation: ObservableObject {
             print("No current user to save in UserDefaults")
             return
         }
-
-        // Dispatching to the main thread for UI-related tasks
         DispatchQueue.main.async {
-            UserDefaults.standard.set(
-                currentUser.firstName, forKey: "FirstName")
+            UserDefaults.standard.set(currentUser.firstName, forKey: "FirstName")
             UserDefaults.standard.set(currentUser.lastName, forKey: "LastName")
             UserDefaults.standard.set(currentUser.ageValue, forKey: "AgeValue")
-            UserDefaults.standard.set(
-                currentUser.signUpEmail, forKey: "SignUpEmail")
+            UserDefaults.standard.set(currentUser.signUpEmail, forKey: "SignUpEmail")
 
             if let gender = currentUser.selectedGender?.rawValue {
                 UserDefaults.standard.set(gender, forKey: "SelectedGender")
             }
 
             if !currentUser.phoneNumber.isEmpty {
-                UserDefaults.standard.set(
-                    currentUser.phoneNumber, forKey: "PhoneNumber")
+                UserDefaults.standard.set(currentUser.phoneNumber, forKey: "PhoneNumber")
             }
 
             if let avatarImage = avatarImage,
-                let imageData = avatarImage.jpegData(compressionQuality: 0.8)
-            {
+               let imageData = avatarImage.jpegData(compressionQuality: 0.6) {
+                self.avatarImage = avatarImage
                 UserDefaults.standard.set(imageData, forKey: "UserImage")
-                print("User default image --> \(imageData)")
+                print("User image saved in UserDefaults with , \(imageData)")
             }
-            print("User default firstname --> \(currentUser.firstName)")
-            print("User default ageValue --> \(currentUser.ageValue)")
         }
     }
+
 
     // Load user data from UserDefaults
     func getUserData() -> SignUpDataModel {
@@ -188,6 +199,35 @@ class FirebaseValidation: ObservableObject {
     func loadStoredUserData() {
         DispatchQueue.main.async {
             self.storedUser = self.getUserData()
+        }
+    }
+
+    
+    func uploadProfileImageAndSaveToFirestore(_ image: UIImage) async {
+        guard let uid = userSession?.uid,
+              let imageData = image.jpegData(compressionQuality: 0.6) else { return }
+
+        let storageRef = Storage.storage().reference().child("profile_images/\(uid).jpg")
+
+        do {
+            let _ = try await storageRef.putDataAsync(imageData)
+            let downloadURL = try await storageRef.downloadURL()
+            print("Image uploaded successfully, URL: \(downloadURL)")
+
+            // Save to Firestore
+            try await Firestore.firestore().collection("users").document(uid).updateData([
+                "profileImageURL": downloadURL.absoluteString
+            ])
+
+            // Save locally too
+            UserDefaults.standard.set(imageData, forKey: "UserImage")
+            self.avatarImage = image
+
+            // Optional: update currentUser object
+            self.currentUser?.profileImageURL = downloadURL.absoluteString
+
+        } catch {
+            print("Error uploading image: \(error.localizedDescription)")
         }
     }
 

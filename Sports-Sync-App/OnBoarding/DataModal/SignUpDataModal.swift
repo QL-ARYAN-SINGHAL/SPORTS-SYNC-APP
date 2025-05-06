@@ -22,7 +22,8 @@ struct SignUpDataModel:Codable{
     var phoneNumber:String = ""
      var progress: Int = 0
     var signUpWith : LoginWith = .withEmail
-    
+    var profileImageURL: String? = nil
+
     
 }
 
