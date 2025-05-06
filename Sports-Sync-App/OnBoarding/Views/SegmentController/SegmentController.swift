@@ -4,71 +4,57 @@
 //
 //  Created by ARYAN SINGHAL on 12/04/25.
 //
-
 import SwiftUI
 
 struct SegmentController: View {
     @State private var currentView: Int = 0
-    
-   
+    @State private var isLoading: Bool = false  
     
     let options = ["LogIn", "SignUp"]
 
     var body: some View {
         VStack {
-            //MARK: CUSTOMISE YOUR SEGMENT CONTROLLER WITH SCROLLVIEW ADDING 2 BUTTON AND NAVIGATE TO LOGIN AND SIGNUP ON TAP
-            
+            // MARK: Segment Controller
             ScrollView(.horizontal, showsIndicators: false) {
-                ZStack{
-                    
-                    //MARK: Round Rectangle that switches between the viewcontrolelrs
-                    
-                    RoundedRectangle(cornerRadius: 10).fill(Color.appTint)
-                        .frame(width:90,height: 45,alignment: .leading)
-                        .padding(.leading,-90)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.appTint)
+                        .frame(width: 90, height: 45)
+                        .padding(.leading, -90)
                         .offset(x: CGFloat(currentView) * 90)
-                    
-                    //MARK: HStack having two options to switch to
-                
-                    HStack(spacing:0){
+
+                    HStack(spacing: 0) {
                         ForEach(0..<options.count, id: \.self) { index in
                             Text(options[index])
                                 .bold()
                                 .frame(width: 90, height: 45)
-                               
-                                .foregroundColor(currentView == index ? Color.white : Color.appTint)
-                                .cornerRadius(10)
-                            
-                            //onTap gesture for animation and to be on a currentview
+                                .foregroundColor(currentView == index ? .white : .appTint)
                                 .onTapGesture {
+                                    withAnimation {
                                         currentView = index
+                                    }
                                 }
-                            
-                        }}
-                   
-                        
-                    
+                        }
+                    }
                 }
-               
-                .frame(width: 210, height: 65, alignment: .center)
+                .frame(width: 210, height: 65)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                 )
                 .padding(.horizontal, 100)
-               
                 .gesture(
                     DragGesture()
                         .onChanged { value in
                             if value.translation.width > 45 {
                                 if currentView < options.count - 1 {
-                                    withAnimation{
+                                    withAnimation {
                                         currentView += 1
                                     }
                                 }
-                            } else if value.translation.width < 45 {
+                            } else if value.translation.width < -45 {
                                 if currentView > 0 {
-                                    withAnimation{
+                                    withAnimation {
                                         currentView -= 1
                                     }
                                 }
@@ -77,14 +63,12 @@ struct SegmentController: View {
                 )
             }
 
-           
+            // MARK: View Switching
             if currentView == 0 {
-                LogInView()
+                LogInView(isLoading: $isLoading)
             } else {
-                SignUpView()
+                SignUpView(isLoading: $isLoading)
             }
-            
-           
         }
         .navigationBarBackButtonHidden()
         Spacer()

@@ -1,13 +1,9 @@
-//
-//  LogInButton.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 12/04/25.
-
-
 import SwiftUI
 
 struct LogInButton: View {
+    
+    // MARK: - Binding
+    @Binding var isLoading: Bool
     
     // MARK: - State
     @State private var shouldNavigate = false
@@ -26,6 +22,7 @@ struct LogInButton: View {
                 
                 // MARK: - Login Button
                 ActivatedButton(buttonText: .logInText) {
+                    isLoading = true
                     switch formViewModal.logInData.loginWith {
                         
                     case .withEmail:
@@ -43,16 +40,17 @@ struct LogInButton: View {
                                     let defaultImage = UIImage(systemName: "person.circle")!
                                     await firebaseValidation.saveUserData(with: defaultImage)
                                 } else {
-                                    print(" Email login failed - Auth flag is false.")
+                                    print("Email login failed - Auth flag is false.")
                                     alertMessage = .logInAlertMessage
                                     showAlert = true
                                 }
 
                             } catch {
-                                print(" Email login error: \(error.localizedDescription)")
+                                print("Email login error: \(error.localizedDescription)")
                                 alertMessage = error.localizedDescription
                                 showAlert = true
                             }
+                            isLoading = false
                         }
 
                     case .withPhoneNumber:
@@ -61,23 +59,24 @@ struct LogInButton: View {
                             firebaseValidation.sendOTP(phoneNumber: formViewModal.logInData.phoneNumber)
 
                             if firebaseValidation.isAuthenticated {
-                                print(" OTP sent successfully.")
+                                print("OTP sent successfully.")
                                 navigateToOTP = true
                             } else {
-                                print(" OTP sending failed.")
+                                print("OTP sending failed.")
                                 alertMessage = "Failed to send OTP. Try again."
                                 showAlert = true
                             }
+                            isLoading = false
                         }
                     }
                 }
                 .alert(isPresented: $showAlert) {
-                                 Alert(
-                                     title: Text(verbatim: .logInAlertTitle),
-                                     message: Text(alertMessage),
-                                     dismissButton: .default(Text("OK"))
-                                 )
-                             }
+                    Alert(
+                        title: Text(verbatim: .logInAlertTitle),
+                        message: Text(alertMessage),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
 
                 // MARK: - Forgot Password Navigation
                 NavigationLink(destination: ForgetPasswordView()
@@ -94,14 +93,13 @@ struct LogInButton: View {
             .navigationDestination(isPresented: $navigateToOTP) {
                 OTPView()
             }
-            
         }
     }
 }
 
 // MARK: - Preview
 #Preview {
-    LogInButton()
+    LogInButton(isLoading: .constant(false))
         .environmentObject(FormViewModal())
         .environmentObject(FirebaseValidation())
 }
