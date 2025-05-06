@@ -19,6 +19,14 @@ struct LogInButton: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
+                // MARK: - Forgot Password Navigation
+                NavigationLink(destination: ForgetPasswordView()
+                    .environmentObject(firebaseValidation)) {
+                    Text(verbatim: .forgotPassword)
+                        .font(Font.custom(.fontJakarta, size: 12))
+                        .padding(.leading, 18)
+                        .foregroundStyle(.blueTint)
+                }
                 
                 // MARK: - Login Button
                 ActivatedButton(buttonText: .logInText) {
@@ -78,14 +86,7 @@ struct LogInButton: View {
                     )
                 }
 
-                // MARK: - Forgot Password Navigation
-                NavigationLink(destination: ForgetPasswordView()
-                    .environmentObject(firebaseValidation)) {
-                    Text(verbatim: .forgotPassword)
-                        .font(Font.custom(.fontJakarta, size: 12))
-                        .padding(.leading, 18)
-                        .foregroundStyle(.blueTint)
-                }
+               
             }
             .navigationDestination(isPresented: $shouldNavigate) {
                 MainTabView()

@@ -80,15 +80,14 @@ struct SignUpButton: View {
                 }
             }
         }
-        .alert(isPresented: $credentialAlert) {
-            Alert(
-                title: Text("Alert:"),
-                message: Text("press OK to execute default action..."),
-                dismissButton: .default(Text("Press ok here")) {
-                    credentialAlert = false
-                }
-            )
+        .alert("Alert", isPresented: $credentialAlert) {
+            Button("OK", role: .cancel) {
+            }
+        } message: {
+            Text(verbatim: .signUpAlertMessage)
         }
+
+
         .navigationDestination(isPresented: $shouldNavigate) {
             SuccessSplashView()
         }
