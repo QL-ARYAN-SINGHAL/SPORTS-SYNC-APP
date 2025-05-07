@@ -1,26 +1,23 @@
-
-
-
 //Responsibility : Here we are fetching the selected sports ards and data to be selected
 
 import SwiftUI
 
 struct SportSelection: View {
-    
+
     @Environment(\.dismiss) private var dismiss
     @StateObject var selectSportsViewModal = SelectSportsViewModal()
-    
+
     @State private var selectedSport: SelectSportDataModal? = nil
     @State private var shouldNavigate = false
-    
+
     private let adaptiveColumn = [
         GridItem(.adaptive(minimum: 150))
     ]
-    
+
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
-                
+
                 HStack(spacing: 12) {
                     Button(action: { dismiss() }) {
                         ImageConstants.navigationBackImage
@@ -28,19 +25,21 @@ struct SportSelection: View {
                             .scaledToFit()
                             .frame(width: 30, height: 24)
                     }
-                    
+
                     Text(verbatim: .selectSportString)
                         .font(Font.custom(.fontJakarta, size: 20))
                         .foregroundColor(.primary)
-                    
+
                     Spacer()
                 }
                 .padding(.horizontal)
                 .padding(.top)
-                
+
                 ScrollView {
                     LazyVGrid(columns: adaptiveColumn, spacing: 20) {
-                        ForEach(selectSportsViewModal.selectSportsData, id: \.self) { sport in
+                        ForEach(
+                            selectSportsViewModal.selectSportsData, id: \.self
+                        ) { sport in
                             ReusableCreatePlanCards(
                                 selectSportData: sport,
                                 selectedSport: $selectedSport
@@ -50,11 +49,14 @@ struct SportSelection: View {
                     .padding()
                 }
 
-                ActivatedButton(buttonText: .continueText, action: {
-                    if selectedSport != nil {
-                        shouldNavigate = true
+                ActivatedButton(
+                    buttonText: .continueText,
+                    action: {
+                        if selectedSport != nil {
+                            shouldNavigate = true
+                        }
                     }
-                })
+                )
                 .frame(height: 60, alignment: .center)
             }
             .onAppear {
@@ -68,11 +70,8 @@ struct SportSelection: View {
     }
 }
 
-
 #Preview {
     NavigationStack {
         SportSelection()
     }
 }
-
-

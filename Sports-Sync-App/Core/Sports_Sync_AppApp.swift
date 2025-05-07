@@ -25,7 +25,7 @@ struct Sports_Sync_AppApp: App {
                 MainTabView()
             }
             else{
-                LandingScreen()
+                CreatePostParent()
                     .environmentObject(firebaseValidation)
             }
         }

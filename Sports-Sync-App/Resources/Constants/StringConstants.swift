@@ -65,5 +65,9 @@ extension String {
     static let profileheadingString = "Profile"
     static let feedMessage = "Looks like you don’t have any feeds, so let’s create new post for your feeds"
     static let feedButtonMessage = "Create new post"
+    static let createPostHeading = "Create post"
+    static let postString = "Post"
+    static let cameraString = "Camera"
+    static let photoVideoString = "Photos/Videos"
 
 }

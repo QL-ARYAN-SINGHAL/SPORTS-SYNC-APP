@@ -27,7 +27,7 @@ struct FeedButton: View {
             }
           
             .navigationDestination(isPresented: $feedViewModal.feedData.makeNavigation) {
-                EmptyView()
+                CreatePostParent()
             }
         }
   
