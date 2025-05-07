@@ -3,31 +3,42 @@
 //  Sports-Sync-App
 //
 //  Created by ARYAN SINGHAL on 05/05/25.
-//
 import SwiftUI
 import PhotosUI
 
+
 struct PhotoVideoPickerFooter: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
+    @State private var navigateToCamera = false
 
     var body: some View {
-        Divider()
-        HStack {
-            // Open camera to select photo
-            PhotoVideoPickerButton(iconName: "camera.fill", labelText: .cameraString)
+        VStack {
+            Divider()
+            HStack {
+                // Camera button
+                ReusablePhotoVideoPicker(iconName: "camera.fill", labelText: .cameraString)
+                    .onTapGesture {
+                        navigateToCamera = true
+                    }
 
-            // Open gallery to select image or video
-            PhotosPicker(
-                selection: $feedViewModal.selectedDeviceImage,
-                matching: .any(of: [.images, .videos]),
-                photoLibrary: .shared()
-            ) {
-                PhotoVideoPickerButton(iconName: "photo.fill.on.rectangle.fill", labelText: .photoVideoString)
+                // Gallery button
+                PhotosPicker(
+                    selection: $feedViewModal.selectedDeviceImage,
+                    matching: .any(of: [.images, .videos]),
+                    photoLibrary: .shared()
+                ) {
+                    ReusablePhotoVideoPicker(iconName: "photo.fill.on.rectangle.fill", labelText: .photoVideoString)
+                }
             }
+            .frame(width: 343, height: 60, alignment: .leading)
+
+            // Hidden NavigationLink for camera navigation
+            NavigationLink(destination: CameraView(image: $feedViewModal.localImage), isActive: $navigateToCamera) {
+                EmptyView()
+            }
+            .hidden()
         }
-        .frame(width: 343, height: 60, alignment: .leading)
-        
-        //debug to check if image is gettting or not
+        // Debug log
         .onChange(of: feedViewModal.selectedDeviceImage) { newValue in
             if let newValue = newValue {
                 print("Selected item: \(newValue)")
@@ -37,7 +48,6 @@ struct PhotoVideoPickerFooter: View {
         }
     }
 }
-
 
 #Preview {
     PhotoVideoPickerFooter()

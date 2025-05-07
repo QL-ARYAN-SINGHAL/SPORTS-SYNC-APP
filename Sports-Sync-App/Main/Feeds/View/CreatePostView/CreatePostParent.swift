@@ -11,15 +11,13 @@ struct CreatePostParent: View {
     @StateObject  var feedViewModal = FeedViewModal()
     var body: some View {
         NavigationStack{
-            VStack{
+           
                 CreatePostHeading()
-                
-                PostSection()
                 
                 Spacer()
                 
                 PhotoVideoPickerFooter()
-            }
+            
             .navigationBarBackButtonHidden()
         }
             .environmentObject(feedViewModal)

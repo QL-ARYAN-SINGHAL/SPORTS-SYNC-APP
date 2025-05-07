@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PhotoVideoPickerButton: View {
+struct ReusablePhotoVideoPicker: View {
     let iconName: String
     let labelText: String
     
@@ -34,5 +34,5 @@ struct PhotoVideoPickerButton: View {
     }
 }
 #Preview {
-    PhotoVideoPickerButton(iconName : "camera.fill",labelText: "camera")
+    ReusablePhotoVideoPicker(iconName : "camera.fill",labelText: "camera")
 }
