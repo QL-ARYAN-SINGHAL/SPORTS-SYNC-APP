@@ -40,6 +40,7 @@ struct PostSection: View {
                         .overlay(
                             RoundedRectangle(cornerRadius: 10).stroke(
                                 Color.clear))
+                       
                 }
             }
             .padding(.vertical, 10)
