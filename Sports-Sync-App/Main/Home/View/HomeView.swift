@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject var cardViewModal = CardViewModel()
+    @StateObject var eventViewModal = EventInformationViewModal()
     
     var body: some View {
         
@@ -20,6 +21,7 @@ struct HomeView: View {
             }
           
             .environmentObject(cardViewModal)
+            .environmentObject(eventViewModal)
        
            
     }

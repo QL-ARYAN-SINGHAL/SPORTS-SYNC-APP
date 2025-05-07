@@ -45,7 +45,9 @@ struct UserCreatedEventView: View {
         }
         .navigationDestination(isPresented: $shouldNavigate) {
             if let userEvent = selectedUserEvent {
-                PlanDescriptionView(cardViewModel: cardViewModal, userEvent: userEvent)
+                PlanDescriptionView( userEvent: userEvent)
+                    .environmentObject(cardViewModal)
+                    .environmentObject(eventViewModal)
             }
         }
 

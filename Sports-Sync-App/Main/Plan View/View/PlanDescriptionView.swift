@@ -4,9 +4,10 @@ struct PlanDescriptionView: View {
 
     // MARK: - Environment and Observed Variables
     @Environment(\.dismiss) private var dismiss
-    @ObservedObject var cardViewModel: CardViewModel
-    var userEvent: EventInformationDataModal? = nil  // Optional input for user-created event data
+    @EnvironmentObject var cardViewModel: CardViewModel
+    var userEvent: EventInformationDataModal? = nil
     var stadiumData: HomeCardsDataModal?
+  
     
     var body: some View {
         VStack(spacing: 25) {
@@ -14,27 +15,23 @@ struct PlanDescriptionView: View {
             // MARK: - Event Display Logic (User-Created or Selected Card)
             
             if let userEvent = userEvent {
-                // Display user-created event with selectedCard image and location
                 ZStack(alignment: .topLeading) {
-                    
-                    // MARK: - Image Display for Event (from selectedCard)
-                    AsyncImage(url: URL(string: stadiumData?.imageName ?? "")) { image in
+                    AsyncImage(url: URL(string: cardViewModel.homeDataModal.imageName)) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                     } placeholder: {
                         ZStack {
                             Color.gray.opacity(0.3)
-                            ProgressView()  // Placeholder while the image loads
+                            ProgressView()
                         }
                     }
                     .frame(height: 226)
                     .frame(maxWidth: .infinity)
                     .clipped()
-                    
-                    // MARK: - Back Button
+
                     Button {
-                        dismiss()  // Dismiss the view when tapped
+                        dismiss()
                     } label: {
                         ImageConstants.navigationBackImage
                             .resizable()
@@ -42,55 +39,69 @@ struct PlanDescriptionView: View {
                             .frame(width: 24, height: 24)
                             .padding(16)
                     }
-                    .accessibilityLabel("Back")
                 }
 
-                // MARK: - Event Information (User Event Details)
                 VStack(alignment: .leading, spacing: 25) {
-                    
-                    // Event Stadium & Location
                     VStack(alignment: .leading, spacing: 7) {
-                        Text(userEvent.selectedStadium ?? "")  // Stadium Name
-                            .font(.title)
-                            .bold()
+                        HStack {
+                            Text(userEvent.selectedStadium ?? "")
+                                .font(Font.custom(.fontJakartaBold, size: 18))
+
+                            HStack {
+                                Image(systemName: "star.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 15, height: 15)
+
+                                Text(stadiumData?.rating ?? "0.0")
+                                    .font(.subheadline)
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color.gray.opacity(0.2))
+                            .cornerRadius(10)
+                        }
+
                         HStack(spacing: 6) {
                             Image(systemName: "location.circle")
-                            Text(cardViewModel.selectedCard?.location ?? "")  // Location (from selectedCard)
+                            Text(stadiumData?.location ?? "")
                         }
-                        .foregroundColor(.secondary)  // Secondary color for less emphasis
+                        .foregroundColor(.secondary)
                     }
 
-                    // Event Info Sections (Date, Time, Sport)
+                    // Date, Time, Sport
                     VStack(alignment: .leading, spacing: 7) {
                         Text("Date")
-                            .font(.headline)
+                            .font(Font.custom(.fontJakarta, size: 15))
                             .foregroundColor(.primary)
-                        Text(userEvent.eventDate)  // Event Date
+                        Text(userEvent.eventDate)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
-                    
+
                     VStack(alignment: .leading, spacing: 7) {
                         Text("Time")
-                            .font(.headline)
+                            .font(Font.custom(.fontJakarta, size: 15))
                             .foregroundColor(.primary)
-                        Text(userEvent.eventTime)  // Event Time
+                        Text(userEvent.eventTime)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
 
                     VStack(alignment: .leading, spacing: 7) {
                         Text("Sport")
-                            .font(.headline)
+                            .font(Font.custom(.fontJakarta, size: 15))
                             .foregroundColor(.primary)
-                        Text(userEvent.sportsName)  // Sport Name
+                        Text(userEvent.sportsName)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                 }
-                .padding(.horizontal)  // Padding for the whole section
+            }
 
-            } else if let selectedCard = cardViewModel.selectedCard {
+            else if let selectedCard = cardViewModel.selectedCard {
+                
+                
                 // MARK: - Display Selected Card Event (When userEvent is nil)
                 
                 ZStack(alignment: .topLeading) {
@@ -103,7 +114,7 @@ struct PlanDescriptionView: View {
                     } placeholder: {
                         ZStack {
                             Color.gray.opacity(0.3)
-                            ProgressView()  // Placeholder while the image loads
+                            ProgressView()
                         }
                     }
                     .frame(height: 226)
@@ -112,7 +123,7 @@ struct PlanDescriptionView: View {
                     
                     // MARK: - Back Button
                     Button {
-                        dismiss()  // Dismiss the view when tapped
+                        dismiss()
                     } label: {
                         ImageConstants.navigationBackImage
                             .resizable()
@@ -126,73 +137,78 @@ struct PlanDescriptionView: View {
                 // MARK: - Selected Card Information (Event Details)
                 VStack(alignment: .leading, spacing: 25) {
                     
-                    // Stadium Info and Location
+                   
                     VStack(alignment: .leading, spacing: 7) {
-                        Text(selectedCard.stadiumName)  // Stadium Name
-                            .font(Font.custom(.fontJakartaBold, size: 16))
+                        HStack{
+                            Text(selectedCard.stadiumName)
+                                .font(Font.custom(.fontJakartaBold, size: 16))
+                            
+                            HStack{
+                                HStack {
+                                    Image(systemName: "star.fill")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 15, height: 15)
+
+                                    Text(cardViewModel.selectedCard?.rating ?? "0.0")
+                                        .font(.subheadline)
+                                }
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(Color.gray.opacity(0.2))
+                                .cornerRadius(10)
+                            }
+                            
+                        }
                         HStack(spacing: 6) {
                             Image(systemName: "location.circle")
-                            Text(selectedCard.location)  // Location (from selectedCard)
+                            Text(selectedCard.location)
                         }
                         .foregroundColor(.secondary)
                     }
 
-                    // Rating Information
-                    HStack {
-                        Text(selectedCard.rating)  // Rating (from selectedCard)
-                            .font(Font.custom(.fontJakartaBold, size: 16))
-                            .foregroundColor(.black)
-
-                        Image(systemName: "star.fill")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 14, height: 14)
-                    }
-                    .frame(width: 59, height: 36)
-                    .background(Color.gray.opacity(0.3))
-                    .cornerRadius(4)
-
-                    // Event Date and Time Information
+                  
                     VStack(alignment: .leading, spacing: 7) {
                         Text("Event Date")
-                            .font(.headline)
+                            .font(Font.custom(.fontJakarta, size: 15))
                             .foregroundColor(.primary)
-                        Text(selectedCard.eventDate)  // Event Date
+                        Text(selectedCard.eventDate)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
 
                     VStack(alignment: .leading, spacing: 7) {
                         Text("Event Time")
-                            .font(.headline)
+                            .font(Font.custom(.fontJakarta, size: 15))
                             .foregroundColor(.primary)
-                        Text(selectedCard.eventTime)  // Event Time
+                        Text(selectedCard.eventTime)
                             .font(.subheadline)
                             .foregroundColor(.secondary)
                     }
                 }
-                .padding(.horizontal, 16)  // Padding for the whole section
+                .frame(width: 340 , alignment: .leading)
+                
             } else {
-                // No event selected, show a fallback message
+                
                 Text("No event selected.")
                     .foregroundColor(.gray)
                     .font(.headline)
             }
         }
-//        .onAppear {
-//            cardViewModal.fetchAllCards()
-//            Task {
-//                await eventViewModal.getUserCreatedEvent()
-//            }
-//        }
-        .navigationBarBackButtonHidden()  // Hides the default back button
-        .frame(maxHeight: UIScreen.main.bounds.height * 0.9, alignment: .top)  // Limit height to 90% of screen height
+        
+        .navigationBarBackButtonHidden()
+        
+        .frame(maxHeight: UIScreen.main.bounds.height * 0.9, alignment: .top)
 
         // MARK: - Footer Buttons (Share and Edit)
         HStack(spacing: 20) {
             ReusableShareFuncButton(text: .sharePlanString, action: {})  // Share Button
             ReusableEditFuncButtons(text: .editPlanString, action: {})  // Edit Button
         }
-        .frame(width: 375, height: 65)  // Footer button frame size
+        .frame(width: 375, height: 65)
     }
+}
+#Preview{
+    PlanDescriptionView()
+        .environmentObject(CardViewModel())
 }

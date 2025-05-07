@@ -5,12 +5,6 @@
 //  Created by ARYAN SINGHAL on 24/04/25.
 //
 
-//
-//  CardViewModel.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 24/04/25.
-//
 
 import Foundation
 import FirebaseFirestore

@@ -13,7 +13,7 @@ import SwiftUI
 
 struct HomeGridSection: View {
     @EnvironmentObject var cardViewModal : CardViewModel
-
+    @EnvironmentObject var eventViewModal : EventInformationViewModal
     @State private var isNavigating = false
     
     let sectionTitles = ["Nearby", "Recommended", "Trending"]
@@ -52,7 +52,9 @@ struct HomeGridSection: View {
             }
             .listStyle(.plain)
             .navigationDestination(isPresented: $isNavigating) {
-                PlanDescriptionView(cardViewModel: cardViewModal)
+                PlanDescriptionView()
+                    .environmentObject(cardViewModal)
+                    .environmentObject(eventViewModal)
             }
           
         }
