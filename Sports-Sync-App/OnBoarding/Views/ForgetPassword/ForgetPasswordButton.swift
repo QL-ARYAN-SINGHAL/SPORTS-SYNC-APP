@@ -24,15 +24,13 @@ struct ForgetPasswordButton: View {
         VStack {
             ActivatedButton(buttonText: .resetPasswordString) {
                 Task {
-                    firebaseValidation.resetPassword(email: formViewModal.logInData.forgotEmailText) 
+                    firebaseValidation.resetPassword(
+                        email: formViewModal.logInData.forgotEmailText)
                 }
             }
-
-            NavigationLink(
-                destination: ResetPasswordSuccess(),
-                isActive: $shouldNavigate,
-                label: { EmptyView() }
-            )
+            navigationDestination(isPresented: $shouldNavigate) {
+                ResetPasswordSuccess()
+            }
         }
         .alert(isPresented: $showErrorAlert) {
             Alert(

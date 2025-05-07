@@ -63,7 +63,7 @@ struct ReusableCreatePlanCards: View {
 
 
 #Preview {
-   @State var selectedSport: SelectSportDataModal? = nil
+    @Previewable @State var selectedSport: SelectSportDataModal? = nil
     return ReusableCreatePlanCards(
         selectSportData: SelectSportDataModal(sportsName: "Endurance", sportsImage: "endurance"),
         selectedSport: $selectedSport

@@ -9,17 +9,18 @@
 import SwiftUI
 
 struct CreatePostHeading: View {
+    @Environment(\.dismiss) var dismiss
     var body: some View {
         VStack {
-            PostSection()
-            Spacer()
+          
+            
         }
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    // dismiss action here
+                   dismiss()
                 }) {
                     ImageConstants.navigationBackImage
                         .resizable()

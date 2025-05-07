@@ -39,7 +39,7 @@ struct PhotoVideoPickerFooter: View {
             .hidden()
         }
         // Debug log
-        .onChange(of: feedViewModal.selectedDeviceImage) { newValue in
+        .onChange(of: feedViewModal.selectedDeviceImage) { oldValue,newValue in
             if let newValue = newValue {
                 print("Selected item: \(newValue)")
             } else {

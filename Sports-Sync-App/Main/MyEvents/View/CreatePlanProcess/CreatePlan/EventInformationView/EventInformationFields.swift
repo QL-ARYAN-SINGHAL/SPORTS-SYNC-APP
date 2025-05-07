@@ -66,7 +66,7 @@ struct EventInformationFields: View {
                         )
                         .datePickerStyle(.graphical)
                         .labelsHidden()
-                        .onChange(of: selectedDate) { newDate in
+                        .onChange(of: selectedDate) { oldDate,newDate in
                             let formatter = DateFormatter()
                             formatter.dateStyle = .medium
                             eventInformationViewModel.eventInfoData.eventDate = formatter.string(from: newDate)
@@ -101,7 +101,7 @@ struct EventInformationFields: View {
                         )
                         .datePickerStyle(.wheel)
                         .labelsHidden()
-                        .onChange(of: selectedTime) { newTime in
+                        .onChange(of: selectedTime) { oldTime,newTime in
                             let formatter = DateFormatter()
                             formatter.timeStyle = .short
                             eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)
@@ -142,6 +142,7 @@ struct EventInformationFields: View {
                 }
 
                 // Hidden navigation trigger
+                
                 NavigationLink(destination: MainTabView().environmentObject(tabRouter), isActive: $navigateToMainTab) {
                     EmptyView()
                 }
