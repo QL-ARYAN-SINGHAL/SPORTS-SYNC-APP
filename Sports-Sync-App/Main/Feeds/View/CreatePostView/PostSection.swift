@@ -9,7 +9,7 @@ import SwiftUI
 struct PostSection: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
     @FocusState private var isFocused: Bool
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             
@@ -21,7 +21,7 @@ struct PostSection: View {
                     .accentColor(.black)
                     .padding(4)
                     .background(Color.white)
-                  
+                
                 
                 if feedViewModal.feedData.captionPost.isEmpty && !isFocused {
                     Text("Write something about this post...")
@@ -33,23 +33,20 @@ struct PostSection: View {
             .frame(width: 343, height: 62)
             .padding(.vertical, 10)
             
-            // User image is displayed here for post (from localImage)
-//            if let localImage = feedViewModal.localImage {
-            Image(systemName: "camera")
+            if let image = feedViewModal.localImage {
+                Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 343, height: 242)
                     .padding(4)
                     .clipped()
                     .cornerRadius(10)
-                    .overlay(RoundedRectangle(cornerRadius: 10)
-                        .stroke(.clear))
-                    
+                    .overlay(RoundedRectangle(cornerRadius: 10).stroke(.clear))
             }
-//        }
+            
+        }
     }
 }
-
 #Preview {
     PostSection()
         .environmentObject(FeedViewModal())

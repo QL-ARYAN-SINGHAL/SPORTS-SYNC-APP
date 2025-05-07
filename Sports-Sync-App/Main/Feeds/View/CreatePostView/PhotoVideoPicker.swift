@@ -9,14 +9,13 @@ import PhotosUI
 
 struct PhotoVideoPickerFooter: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
-    
+
     var body: some View {
         Divider()
         HStack {
-            
             // Open camera to select photo
             PhotoVideoPickerButton(iconName: "camera.fill", labelText: .cameraString)
-            
+
             // Open gallery to select image or video
             PhotosPicker(
                 selection: $feedViewModal.selectedDeviceImage,
@@ -27,8 +26,18 @@ struct PhotoVideoPickerFooter: View {
             }
         }
         .frame(width: 343, height: 60, alignment: .leading)
+        
+        //debug to check if image is gettting or not
+        .onChange(of: feedViewModal.selectedDeviceImage) { newValue in
+            if let newValue = newValue {
+                print("Selected item: \(newValue)")
+            } else {
+                print("No image or video selected.")
+            }
+        }
     }
 }
+
 
 #Preview {
     PhotoVideoPickerFooter()

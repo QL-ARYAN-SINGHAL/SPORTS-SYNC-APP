@@ -10,14 +10,17 @@ import SwiftUI
 struct CreatePostParent: View {
     @StateObject  var feedViewModal = FeedViewModal()
     var body: some View {
-        VStack{
-            CreatePostHeading()
-            
-            PostSection()
-            
-            Spacer()
-            
-            PhotoVideoPickerFooter()
+        NavigationStack{
+            VStack{
+                CreatePostHeading()
+                
+                PostSection()
+                
+                Spacer()
+                
+                PhotoVideoPickerFooter()
+            }
+            .navigationBarBackButtonHidden()
         }
             .environmentObject(feedViewModal)
     }

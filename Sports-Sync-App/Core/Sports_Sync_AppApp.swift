@@ -22,7 +22,7 @@ struct Sports_Sync_AppApp: App {
         
         WindowGroup {
             if firebaseValidation.isAuthenticated{
-                MainTabView()
+                CreatePostParent()
             }
             else{
                 CreatePostParent()
