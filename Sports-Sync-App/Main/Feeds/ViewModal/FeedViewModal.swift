@@ -1,9 +1,8 @@
-import Foundation
-import _PhotosUI_SwiftUI
-import FirebaseFirestore
-import FirebaseStorage
 import FirebaseAuth
+import FirebaseFirestore
+import Foundation
 import SwiftUI
+import _PhotosUI_SwiftUI
 
 class FeedViewModal: ObservableObject {
     @Published var feedData = FeedDataModal()  // Holds the current post data
@@ -37,16 +36,18 @@ class FeedViewModal: ObservableObject {
         }
     }
 
-    // Function to upload the post to Firebase
+    
+    
+    //MARK: To save user postdetails in firebase
+
     func uploadPostToFirebase(userId: String) {
         guard let image = feedData.localImage else {
             self.errorMessage = "No image selected."
             return
         }
-        
+
         self.isUploading = true
 
-        // Compress the image
         guard let imageData = image.jpegData(compressionQuality: 0.8) else {
             self.errorMessage = "Failed to compress image."
             self.isUploading = false
@@ -54,43 +55,30 @@ class FeedViewModal: ObservableObject {
         }
 
         let imageID = UUID().uuidString
-        let storageRef = Storage.storage().reference().child("postImages/\(imageID).jpg")
+        let fileName = "\(imageID).jpg"
 
-        storageRef.putData(imageData, metadata: nil) { [weak self] metadata, error in
-            guard let self else { return }
+        let fileURL = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(fileName)
 
-            if let error = error {
-                self.errorMessage = "Failed to upload image: \(error.localizedDescription)"
-                self.isUploading = false
-                return
-            }
-
-            storageRef.downloadURL { url, error in
-                if let error = error {
-                    self.errorMessage = "Failed to get download URL: \(error.localizedDescription)"
-                    self.isUploading = false
-                    return
-                }
-
-                guard let url = url else {
-                    self.errorMessage = "Failed to get download URL."
-                    self.isUploading = false
-                    return
-                }
-
-                self.savePostToFirestore(userId: userId, imageURL: url.absoluteString)
-            }
+        do {
+            try imageData.write(to: fileURL)
+            print("Image saved locally at:", fileURL.path)
+            self.savePostToFirestore(userId: userId, imagePath: fileURL.path)
+        } catch {
+            self.errorMessage =
+                "Failed to save image locally: \(error.localizedDescription)"
+            self.isUploading = false
         }
     }
 
-    private func savePostToFirestore(userId: String, imageURL: String) {
+     private func savePostToFirestore(userId: String, imagePath: String) {
         guard let userSession = FirebaseAuth.Auth.auth().currentUser else {
             self.errorMessage = "User not authenticated."
             self.isUploading = false
             return
         }
 
-        // Ensure user ID is the authenticated user
         if userSession.uid != userId {
             self.errorMessage = "User ID mismatch."
             self.isUploading = false
@@ -101,20 +89,35 @@ class FeedViewModal: ObservableObject {
             "captionPost": feedData.captionPost,
             "postLike": feedData.postLike,
             "postTime": Timestamp(date: feedData.postTime),
-            "imageURL": imageURL
+            "imageLocalPath": imagePath,
+            "userId": userId
         ]
 
-        Firestore.firestore()
-            .collection("users")
+        let db = Firestore.firestore()
+
+      //For personal feeds to show
+         
+        db.collection("users")
             .document(userId)
             .collection("MyPosts")
             .addDocument(data: postData) { error in
                 if let error = error {
-                    self.errorMessage = "Failed to save post: \(error.localizedDescription)"
+                    self.errorMessage = "Failed to save user post: \(error.localizedDescription)"
                 } else {
-                    print("Post uploaded successfully.")
+                    print(" User post uploaded successfully.")
+                }
+            }
+
+    //   For universal collection of feeds to be shown
+        db.collection("UniversalFeeds")
+            .addDocument(data: postData) { error in
+                if let error = error {
+                    self.errorMessage = "Failed to save universal post: \(error.localizedDescription)"
+                } else {
+                    print(" Universal post uploaded successfully.")
                 }
                 self.isUploading = false
             }
     }
+
 }
