@@ -20,7 +20,7 @@ struct FeedView: View {
                 }
                
             } else {
-                UserFeedParent()
+                UserFeedParent(feedViewModal: feedViewModal)
                    
             }
         }

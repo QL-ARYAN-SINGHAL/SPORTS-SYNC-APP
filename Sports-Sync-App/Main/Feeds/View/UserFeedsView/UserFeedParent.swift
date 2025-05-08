@@ -9,25 +9,33 @@
 
 import SwiftUI
 struct UserFeedParent: View {
-    
-    @EnvironmentObject var feedViewModal : FeedViewModal
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+    @ObservedObject var feedViewModal: FeedViewModal
+    @EnvironmentObject var firebaseValidation: FirebaseValidation
+
     var body: some View {
-        ScrollView{
-            VStack(spacing : 15){
-                
+        ScrollView {
+            VStack(spacing: 15) {
                 UserPostCreationSection()
+                UserFeedScrollList(feedViewModal: feedViewModal)
+
                 
-                UserPostsList()
+                    
             }
-            .environmentObject(firebaseValidation)
-            .environmentObject(feedViewModal)
-            
+            .padding()
+        }
+        .onAppear {
+            Task {
+                await feedViewModal.fetchUniversalPostsAsync()
+                if let uid = firebaseValidation.userSession?.uid {
+                    await feedViewModal.fetchUserPostsAsync(userId: uid)
+                }
+            }
         }
         .scrollIndicators(.hidden)
     }
 }
-#Preview {
-    UserFeedParent()
-        .environmentObject(FirebaseValidation())
-}
+
+//#Preview {
+//    UserFeedParent()
+//        .environmentObject(FirebaseValidation())
+//}

@@ -5,20 +5,28 @@ import SwiftUI
 import _PhotosUI_SwiftUI
 
 class FeedViewModal: ObservableObject {
+
+    ///Array to fetch the feed perosnal and universal from firestore
+    @Published var userPosts: [FeedDataModal] = []
+    @Published var universalPosts: [FeedDataModal] = []
     @Published var feedData = FeedDataModal()  // Holds the current post data
+
+    ///state managements
     @Published var showPicker = false
     @Published var isUploading = false
-    @Published var errorMessage: String? = nil  // To show error messages
-    @Published var showingCamera = false
-    
     @Published var hasPostedBefore: Bool = false
+    @Published var showingCamera = false
+    @Published var errorMessage: String? = nil  // To show error messages
+
+    /// variable that takes photopicker for change in photo
     @Published var selectedDeviceImage: PhotosPickerItem? = nil {
         didSet {
             setPostImage(from: selectedDeviceImage)
         }
     }
 
-    // Function to set the image selected from the picker
+    //MARK: - Function to set the image selected from the picker
+
     private func setPostImage(from selection: PhotosPickerItem?) {
         guard let selection else { return }
 
@@ -38,43 +46,27 @@ class FeedViewModal: ObservableObject {
         }
     }
 
-    
-    
-    //MARK: To save user postdetails in firebase
+    //MARK: - TO SAVE USER POST DETAILS IN FIREBASE
 
     func uploadPostToFirebase(userId: String) {
-        guard let image = feedData.localImage else {
+        guard feedData.localImage != nil else {
             self.errorMessage = "No image selected."
             return
         }
 
         self.isUploading = true
 
-        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-            self.errorMessage = "Failed to compress image."
+        guard let base64Image = feedData.base64Image else {
+            self.errorMessage = "Failed to convert image to base64."
             self.isUploading = false
             return
         }
 
-        let imageID = UUID().uuidString
-        let fileName = "\(imageID).jpg"
-
-        let fileURL = FileManager.default
-            .urls(for: .documentDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent(fileName)
-
-        do {
-            try imageData.write(to: fileURL)
-            print("Image saved locally at:", fileURL.path)
-            self.savePostToFirestore(userId: userId, imagePath: fileURL.path)
-        } catch {
-            self.errorMessage =
-                "Failed to save image locally: \(error.localizedDescription)"
-            self.isUploading = false
-        }
+        savePostToFirestore(userId: userId, base64Image: base64Image)
     }
 
-     private func savePostToFirestore(userId: String, imagePath: String) {
+
+    private func savePostToFirestore(userId: String, base64Image: String) {
         guard let userSession = FirebaseAuth.Auth.auth().currentUser else {
             self.errorMessage = "User not authenticated."
             self.isUploading = false
@@ -91,14 +83,12 @@ class FeedViewModal: ObservableObject {
             "captionPost": feedData.captionPost,
             "postLike": feedData.postLike,
             "postTime": Timestamp(date: feedData.postTime),
-            "imageLocalPath": imagePath,
-            "userId": userId
+            "base64Image": base64Image,
+            "id": userId
         ]
 
         let db = Firestore.firestore()
 
-      //For personal feeds to show
-         
         db.collection("users")
             .document(userId)
             .collection("MyPosts")
@@ -110,7 +100,6 @@ class FeedViewModal: ObservableObject {
                 }
             }
 
-    //   For universal collection of feeds to be shown
         db.collection("UniversalFeeds")
             .addDocument(data: postData) { error in
                 if let error = error {
@@ -121,8 +110,9 @@ class FeedViewModal: ObservableObject {
                 self.isUploading = false
             }
     }
-   
-// to check if user has any post or not 
+
+
+    // to check if user has any post or not
     func checkIfUserHasPosts(userId: String) {
         Firestore.firestore()
             .collection("users")
@@ -135,7 +125,7 @@ class FeedViewModal: ObservableObject {
                     self.hasPostedBefore = false
                     return
                 }
-                
+
                 if let documents = snapshot?.documents, !documents.isEmpty {
                     self.hasPostedBefore = true
                 } else {
@@ -143,5 +133,74 @@ class FeedViewModal: ObservableObject {
                 }
             }
     }
+
+    //MARK: - GET DATA FROM DATABSE TO DISPLAY ON FEED POST SECTION
+
+    func fetchUserPostsAsync(userId: String) async {
+        do {
+            let snapshot = try await Firestore.firestore()
+                .collection("users")
+                .document(userId)
+                .collection("MyPosts")
+                .order(by: "postTime", descending: true)
+                .getDocuments()
+
+            let posts = snapshot.documents.compactMap { document in
+                let data = document.data()
+                print(data, "<------ user personal feed (async)")
+                return decodePost(from: data)
+            }
+
+            DispatchQueue.main.async {
+                self.userPosts = posts
+            }
+
+        } catch {
+            print("@Error fetching user posts async:", error)
+        }
+    }
+
+    func fetchUniversalPostsAsync() async {
+        do {
+            let snapshot = try await Firestore.firestore()
+                .collection("UniversalFeeds")
+                .order(by: "postTime", descending: true)
+                .getDocuments()
+
+            let posts = snapshot.documents.compactMap { document in
+                let data = document.data()
+                print(data, "<------ universal feed (async)")
+                return decodePost(from: data)
+            }
+
+            DispatchQueue.main.async {
+                self.universalPosts = posts
+                print(self.universalPosts,"I AM GETTING THIS IN UNIVERSAL POSTS")
+            }
+
+        } catch {
+            print("Error fetching universal posts async:", error)
+        }
+    }
+
+    private func decodePost(from data: [String: Any]) -> FeedDataModal? {
+        guard let captionPost = data["captionPost"] as? String,
+              let postLike = data["postLike"] as? Int,
+              let timestamp = data["postTime"] as? Timestamp,
+              let base64Image = data["base64Image"] as? String,
+              let userId = data["id"] as? String else {
+            return nil
+        }
+
+        return FeedDataModal(
+            captionPost: captionPost,
+            id: userId,
+            postLike: postLike,
+            postTime: timestamp.dateValue(),
+            base64Image: base64Image
+        )
+    }
+
+
 
 }
