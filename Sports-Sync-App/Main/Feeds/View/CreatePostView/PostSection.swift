@@ -30,7 +30,7 @@ struct PostSection: View {
                     }
                 }
 
-                if let image = feedViewModal.localImage {
+                if let image = feedViewModal.feedData.localImage {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)

@@ -30,9 +30,10 @@ struct WelcomingScreen: View {
                 VStack {
                     WelcomingText()
                     
-                    navigationDestination(isPresented: $isActive){
-                        SegmentController()
+                    NavigationLink(destination: SegmentController(), isActive: $isActive) {
+                        EmptyView()
                     }
+                    
                    
 
                     ActivatedButton(buttonText: .continueText, action: {

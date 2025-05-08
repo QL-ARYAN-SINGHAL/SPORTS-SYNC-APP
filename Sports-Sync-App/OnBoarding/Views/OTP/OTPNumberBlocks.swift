@@ -29,7 +29,7 @@ struct OTPNumberBlocks: View {
                 .focused($isKeyboardFocused)
                 .frame(width: 0, height: 0)
                 .opacity(0.01)
-                .onChange(of: otpNumber) { oldValue,newValue in
+                .onChange(of: otpNumber) { newValue in
                     if newValue.count > 6 {
                         //limit of 6 character only
                         otpNumber = String(newValue.prefix(6))

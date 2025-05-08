@@ -91,7 +91,7 @@ struct EventInformationSearch: View {
 
         }
 
-        .onChange(of: cardViewModal.selectedCard) { oldValue,newValue in
+        .onChange(of: cardViewModal.selectedCard) { newValue in
 
             if newValue != nil {
 

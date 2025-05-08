@@ -66,7 +66,7 @@ struct EventInformationFields: View {
                         )
                         .datePickerStyle(.graphical)
                         .labelsHidden()
-                        .onChange(of: selectedDate) { oldDate,newDate in
+                        .onChange(of: selectedDate) { newDate in
                             let formatter = DateFormatter()
                             formatter.dateStyle = .medium
                             eventInformationViewModel.eventInfoData.eventDate = formatter.string(from: newDate)
@@ -101,7 +101,7 @@ struct EventInformationFields: View {
                         )
                         .datePickerStyle(.wheel)
                         .labelsHidden()
-                        .onChange(of: selectedTime) { oldTime,newTime in
+                        .onChange(of: selectedTime) { newTime in
                             let formatter = DateFormatter()
                             formatter.timeStyle = .short
                             eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)

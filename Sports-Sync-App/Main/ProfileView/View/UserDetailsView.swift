@@ -88,7 +88,7 @@ struct UserDetailsView: View {
 
         }
 
-        .onChange(of: photoPickerItem) { oldItem,newItem in
+        .onChange(of: photoPickerItem) { newItem in
             if let item = newItem {
                 Task {
                     if let data = try? await item.loadTransferable(

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FeedButton: View {
     @EnvironmentObject var feedViewModal : FeedViewModal
+    @EnvironmentObject var firebaseValidation : FirebaseValidation
     
     var body: some View {
         
@@ -28,6 +29,7 @@ struct FeedButton: View {
           
             .navigationDestination(isPresented: $feedViewModal.feedData.makeNavigation) {
                 CreatePostParent()
+                    .environmentObject(FirebaseValidation())
             }
         }
   
@@ -36,4 +38,5 @@ struct FeedButton: View {
 #Preview {
     FeedButton()
         .environmentObject(FeedViewModal())
+        
 }

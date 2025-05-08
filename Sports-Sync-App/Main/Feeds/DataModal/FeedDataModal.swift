@@ -9,6 +9,19 @@ import SwiftUI
 struct FeedDataModal: Codable {
     var makeNavigation: Bool = false
     var captionPost: String = ""
-    var imagePost: String = ""  // Firebase Storage URL
+    var id: String = ""
+    var postLike: Int = 0
+    var postTime: Date = Date()
     
+    // Not Codable
+    var localImage: UIImage? = nil
+
+    enum CodingKeys: String, CodingKey {
+        case makeNavigation
+        case captionPost
+        case id
+        case postLike
+        case postTime
+        // Exclude localImage from coding
+    }
 }

@@ -10,7 +10,6 @@ import FirebaseAuth
 import FirebaseAppCheck
 import FirebaseCore
 
-
 @main
 struct Sports_Sync_AppApp: App {
     @StateObject var firebaseValidation = FirebaseValidation()
@@ -21,13 +20,15 @@ struct Sports_Sync_AppApp: App {
     var body: some Scene {
         
         WindowGroup {
-            if firebaseValidation.isAuthenticated{
-                MainTabView()
-            }
-            else{
+            if !firebaseValidation.isAuthenticated{
                 LandingScreen()
                     .environmentObject(firebaseValidation)
             }
+            else{
+                MainTabView()
+            }
+               
         }
+       
     }
 }

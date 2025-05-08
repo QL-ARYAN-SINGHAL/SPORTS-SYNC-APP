@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FeedView: View {
     @StateObject var feedViewModal = FeedViewModal()
+    @StateObject var firebaseValidation = FirebaseValidation()
     var body: some View {
         VStack(spacing : 25){
             
@@ -18,6 +19,7 @@ struct FeedView: View {
         }
         .navigationBarBackButtonHidden()
         .environmentObject(feedViewModal)
+        .environmentObject(firebaseValidation)
     }
 }
 

@@ -45,8 +45,18 @@ struct LogInButton: View {
                                 if firebaseValidation.isAuthenticated {
                                     print("Email login successful.")
                                     shouldNavigate = true
-                                    let defaultImage = UIImage(systemName: "person.circle")!
-                                    await firebaseValidation.saveUserData(with: defaultImage)
+                                    
+                                    //this ensures the profile image is not overwritten
+                                    let storedImageData = UserDefaults.standard.data(forKey: "UserImage")
+
+                                    if let storedImageData,
+                                       let userImage = UIImage(data: storedImageData) {
+                                        await firebaseValidation.saveUserData(with: userImage)
+                                    } else {
+                                        let defaultImage = UIImage(systemName: "person.circle")!
+                                        await firebaseValidation.saveUserData(with: defaultImage)
+                                    }
+
                                 } else {
                                     print("Email login failed - Auth flag is false.")
                                     alertMessage = .logInAlertMessage

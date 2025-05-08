@@ -166,26 +166,31 @@ class FirebaseValidation: ObservableObject {
         guard let uid = userSession?.uid,
               let imageData = image.jpegData(compressionQuality: 0.6) else { return }
 
-        let storageRef = Storage.storage().reference().child("profile_images/\(uid).jpg")
+        // Save image to app's local document directory
+        let filename = "\(uid)_profile.jpg"
+        let fileURL = FileManager.default
+            .urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(filename)
 
         do {
-            let _ = try await storageRef.putDataAsync(imageData)
-            let downloadURL = try await storageRef.downloadURL()
+            try imageData.write(to: fileURL)
 
-            print("Image uploaded successfully, URL: \(downloadURL)")
-
+            // Use fileURL.path as the local path string to store in Firestore
             try await Firestore.firestore().collection("users").document(uid).updateData([
-                "profileImageURL": downloadURL.absoluteString
+                "profileImageURL": fileURL.path
             ])
 
+            // Optionally cache for app use
             UserDefaults.standard.set(imageData, forKey: "UserImage")
             self.avatarImage = image
-            self.currentUser?.profileImageURL = downloadURL.absoluteString
+            self.currentUser?.profileImageURL = fileURL.path
 
+            print("Image saved locally and path stored in Firestore: \(fileURL.path)")
         } catch {
-            print("Error uploading image: \(error.localizedDescription)")
+            print("Error saving image locally: \(error.localizedDescription)")
         }
     }
+
 
     // MARK: - UserDefaults Handling
 

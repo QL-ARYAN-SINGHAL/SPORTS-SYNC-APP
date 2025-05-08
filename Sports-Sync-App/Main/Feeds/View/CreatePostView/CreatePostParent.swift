@@ -9,12 +9,12 @@ import SwiftUI
 
 struct CreatePostParent: View {
     @StateObject var feedViewModal = FeedViewModal()
+    
     var body: some View {
         NavigationStack {
 
             CreatePostHeading()
 
-            PostSection()
 
             Spacer()
 
