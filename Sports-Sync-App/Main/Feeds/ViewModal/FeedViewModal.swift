@@ -10,6 +10,7 @@ class FeedViewModal: ObservableObject {
     @Published var isUploading = false
     @Published var errorMessage: String? = nil  // To show error messages
     @Published var showingCamera = false
+    @Published var hasPostedBefore: Bool = false
     @Published var selectedDeviceImage: PhotosPickerItem? = nil {
         didSet {
             setPostImage(from: selectedDeviceImage)
@@ -117,6 +118,28 @@ class FeedViewModal: ObservableObject {
                     print(" Universal post uploaded successfully.")
                 }
                 self.isUploading = false
+            }
+    }
+   
+// to check if user has any post or not 
+    func checkIfUserHasPosts(userId: String) {
+        Firestore.firestore()
+            .collection("users")
+            .document(userId)
+            .collection("MyPosts")
+            .limit(to: 1)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error checking posts:", error)
+                    self.hasPostedBefore = false
+                    return
+                }
+                
+                if let documents = snapshot?.documents, !documents.isEmpty {
+                    self.hasPostedBefore = true
+                } else {
+                    self.hasPostedBefore = false
+                }
             }
     }
 

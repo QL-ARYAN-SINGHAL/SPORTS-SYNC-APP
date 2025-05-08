@@ -4,24 +4,36 @@
 //
 //  Created by ARYAN SINGHAL on 22/04/25.
 //
-
 import SwiftUI
+import FirebaseAuth
 
 struct FeedView: View {
     @StateObject var feedViewModal = FeedViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
+    
     var body: some View {
-        VStack(spacing : 25){
-            
-            FeedTextView()
-            
-            FeedButton()
+        VStack {
+            if !feedViewModal.hasPostedBefore {
+                VStack(spacing: 25) {
+                    FeedTextView()
+                    FeedButton()
+                }
+                .environmentObject(feedViewModal)
+                .environmentObject(firebaseValidation)
+            } else {
+                UserFeedParent()
+                    .environmentObject(firebaseValidation)
+            }
         }
         .navigationBarBackButtonHidden()
-        .environmentObject(feedViewModal)
-        .environmentObject(firebaseValidation)
+        .onAppear {
+            if let userId = Auth.auth().currentUser?.uid {
+                feedViewModal.checkIfUserHasPosts(userId: userId)
+            }
+        }
     }
 }
+
 
 #Preview {
     FeedView()
