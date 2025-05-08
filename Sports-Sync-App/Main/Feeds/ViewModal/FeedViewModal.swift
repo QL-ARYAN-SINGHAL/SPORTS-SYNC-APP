@@ -10,6 +10,7 @@ class FeedViewModal: ObservableObject {
     @Published var isUploading = false
     @Published var errorMessage: String? = nil  // To show error messages
     @Published var showingCamera = false
+    
     @Published var hasPostedBefore: Bool = false
     @Published var selectedDeviceImage: PhotosPickerItem? = nil {
         didSet {

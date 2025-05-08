@@ -60,7 +60,7 @@ class FirebaseValidation: ObservableObject {
             UserDefaults.standard.removeObject(forKey: "SignUpEmail")
             UserDefaults.standard.removeObject(forKey: "SelectedGender")
             UserDefaults.standard.removeObject(forKey: "PhoneNumber")
-            UserDefaults.standard.removeObject(forKey: "UserImage")
+         
             
             // Reset session and current user data
             self.userSession = nil

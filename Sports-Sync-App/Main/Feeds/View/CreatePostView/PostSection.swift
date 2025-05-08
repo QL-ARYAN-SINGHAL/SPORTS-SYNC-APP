@@ -21,6 +21,7 @@ struct PostSection: View {
                         .padding(4)
                         .background(Color.white)
                         .cornerRadius(6)
+                        .lineLimit(5)
 
                     if feedViewModal.feedData.captionPost.isEmpty {
                         Text("Write something about this post...")

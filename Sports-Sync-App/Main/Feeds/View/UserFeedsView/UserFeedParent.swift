@@ -5,19 +5,28 @@
 //  Created by ARYAN SINGHAL on 08/05/25.
 //
 
-import SwiftUI
+//MARK: RESPONSIBILITY : - SHOW USER POSTS AND OPTION TO CREATE A NEW POST IF USER HAS ANY POST EVEN 1
 
+import SwiftUI
 struct UserFeedParent: View {
     
+    @EnvironmentObject var feedViewModal : FeedViewModal
     @EnvironmentObject var firebaseValidation : FirebaseValidation
     var body: some View {
-        VStack{
-            PostCreationSection()
+        ScrollView{
+            VStack(spacing : 15){
+                
+                UserPostCreationSection()
+                
+                UserPostsList()
+            }
+            .environmentObject(firebaseValidation)
+            .environmentObject(feedViewModal)
+            
         }
-        .environmentObject(firebaseValidation)
+        .scrollIndicators(.hidden)
     }
 }
-
 #Preview {
     UserFeedParent()
         .environmentObject(FirebaseValidation())

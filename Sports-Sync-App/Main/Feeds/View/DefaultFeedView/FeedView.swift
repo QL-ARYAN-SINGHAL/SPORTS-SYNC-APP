@@ -18,11 +18,10 @@ struct FeedView: View {
                     FeedTextView()
                     FeedButton()
                 }
-                .environmentObject(feedViewModal)
-                .environmentObject(firebaseValidation)
+               
             } else {
                 UserFeedParent()
-                    .environmentObject(firebaseValidation)
+                   
             }
         }
         .navigationBarBackButtonHidden()
@@ -31,6 +30,8 @@ struct FeedView: View {
                 feedViewModal.checkIfUserHasPosts(userId: userId)
             }
         }
+        .environmentObject(feedViewModal)
+        .environmentObject(firebaseValidation)
     }
 }
 
