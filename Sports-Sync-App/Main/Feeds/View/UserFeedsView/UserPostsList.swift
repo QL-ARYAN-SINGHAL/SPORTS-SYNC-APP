@@ -46,10 +46,6 @@ struct UserPostsList: View {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
             )
-            
-            .onAppear {
-                debugPrint(post.captionPost, "Caption Title")
-            }
         } else {
             Text("User not logged in.")
                 .foregroundColor(.gray)

@@ -16,11 +16,9 @@ struct UserFeedScrollList: View {
                 Text("No posts to show.")
                     .foregroundColor(.gray)
             } else {
-
                 ForEach(feedViewModal.userPosts, id: \.uniqueID) { post in
                     UserPostsList(post: post)
                         .environmentObject(firebaseValidation)
-
                 }
             }
         }

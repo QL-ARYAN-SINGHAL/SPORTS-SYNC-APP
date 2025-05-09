@@ -1,3 +1,5 @@
+//MARK: - RESPONSIBILITY- SAVE THE DATA OF THE POST IN FIREBASE AND GET IT TOO, CHANGE THE PHOTO SELECTED IF USER WANT TO CHANGE , MANAGE THE LIKE COUNT OF EACH POST IN REAL TIME
+
 import FirebaseAuth
 import FirebaseFirestore
 import Foundation
@@ -6,22 +8,26 @@ import _PhotosUI_SwiftUI
 
 class FeedViewModal: ObservableObject {
 
+    /// ARRAYS COTAINING THE USER POST DETAILS AND USER DETAILS
     @Published var userPosts: [FeedDataModal] = []
     @Published var universalPosts: [FeedDataModal] = []
     @Published var feedData = FeedDataModal()
 
+    ///States that are used in views
     @Published var showPicker = false
     @Published var isUploading = false
     @Published var hasPostedBefore: Bool = false
     @Published var showingCamera = false
     @Published var errorMessage: String? = nil
 
+    ///image changer - when image changes in create post section
     @Published var selectedDeviceImage: PhotosPickerItem? = nil {
         didSet {
             setPostImage(from: selectedDeviceImage)
         }
     }
 
+    //MARK: - function to set the image selected from gallery / camera on create post section
     private func setPostImage(from selection: PhotosPickerItem?) {
         guard let selection else { return }
 
@@ -32,7 +38,7 @@ class FeedViewModal: ObservableObject {
                     throw URLError(.cannotDecodeContentData)
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run  {
                     self.feedData.localImage = uiImage
                 }
             } catch {
@@ -40,6 +46,8 @@ class FeedViewModal: ObservableObject {
             }
         }
     }
+
+    //MARK: - Function to upload image in base64 format to firebase when user clicks on post button
 
     func uploadPostToFirebase(userId: String) {
         guard feedData.localImage != nil else {
@@ -58,6 +66,7 @@ class FeedViewModal: ObservableObject {
         savePostToFirestore(userId: userId, base64Image: base64Image)
     }
 
+    //MARK: -  function that saves post & details in firestore
     private func savePostToFirestore(userId: String, base64Image: String) {
         guard let userSession = FirebaseAuth.Auth.auth().currentUser else {
             self.errorMessage = "User not authenticated."
@@ -76,7 +85,7 @@ class FeedViewModal: ObservableObject {
             "postLike": feedData.postLike,
             "postTime": Timestamp(date: feedData.postTime),
             "base64Image": base64Image,
-            "id": userId
+            "id": userId,
         ]
 
         let db = Firestore.firestore()
@@ -86,7 +95,8 @@ class FeedViewModal: ObservableObject {
             .collection("MyPosts")
             .addDocument(data: postData) { error in
                 if let error = error {
-                    self.errorMessage = "Failed to save user post: \(error.localizedDescription)"
+                    self.errorMessage =
+                        "Failed to save user post: \(error.localizedDescription)"
                 } else {
                     print(" User post uploaded successfully.")
                 }
@@ -95,7 +105,8 @@ class FeedViewModal: ObservableObject {
         db.collection("UniversalFeeds")
             .addDocument(data: postData) { error in
                 if let error = error {
-                    self.errorMessage = "Failed to save universal post: \(error.localizedDescription)"
+                    self.errorMessage =
+                        "Failed to save universal post: \(error.localizedDescription)"
                 } else {
                     print(" Universal post uploaded successfully.")
                 }
@@ -103,6 +114,7 @@ class FeedViewModal: ObservableObject {
             }
     }
 
+    //MARK: -  pre check to confirm if user has post or not , if not then he wont be getting any posts
     func checkIfUserHasPosts(userId: String) {
         Firestore.firestore()
             .collection("users")
@@ -124,6 +136,7 @@ class FeedViewModal: ObservableObject {
             }
     }
 
+    //MARK: -  get user posts from databse to show on views
     func fetchUserPostsAsync(userId: String) async {
         do {
             let snapshot = try await Firestore.firestore()
@@ -135,7 +148,7 @@ class FeedViewModal: ObservableObject {
 
             let posts = snapshot.documents.compactMap { decodePost(from: $0) }
 
-            DispatchQueue.main.async {
+            await MainActor.run {
                 self.userPosts = posts
             }
 
@@ -144,6 +157,8 @@ class FeedViewModal: ObservableObject {
         }
     }
 
+
+    //MARK: -  This fetches all the post , currentuser and other users
     func fetchUniversalPostsAsync() async {
         do {
             let snapshot = try await Firestore.firestore()
@@ -153,7 +168,7 @@ class FeedViewModal: ObservableObject {
 
             let posts = snapshot.documents.compactMap { decodePost(from: $0) }
 
-            DispatchQueue.main.async {
+            await MainActor.run  {
                 self.universalPosts = posts
             }
 
@@ -162,14 +177,18 @@ class FeedViewModal: ObservableObject {
         }
     }
 
-    private func decodePost(from document: QueryDocumentSnapshot) -> FeedDataModal? {
+    //MARK: - general function that decodes the data and image and are called by universal and user functions
+    private func decodePost(from document: QueryDocumentSnapshot)
+        -> FeedDataModal?
+    {
         let data = document.data()
 
         guard let captionPost = data["captionPost"] as? String,
-              let postLike = data["postLike"] as? Int,
-              let timestamp = data["postTime"] as? Timestamp,
-              let base64Image = data["base64Image"] as? String,
-              let userId = data["id"] as? String else {
+            let postLike = data["postLike"] as? Int,
+            let timestamp = data["postTime"] as? Timestamp,
+            let base64Image = data["base64Image"] as? String,
+            let userId = data["id"] as? String
+        else {
             return nil
         }
 
@@ -183,9 +202,14 @@ class FeedViewModal: ObservableObject {
         )
     }
 
+    //MARK: - Manages to count of like , each id can have 1 like and if dislike then 0
     func toggleLike(for post: FeedDataModal) {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
-        guard let index = userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) else { return }
+        guard
+            let index = userPosts.firstIndex(where: {
+                $0.uniqueID == post.uniqueID
+            })
+        else { return }
 
         let postRef = Firestore.firestore()
             .collection("users")
@@ -193,13 +217,15 @@ class FeedViewModal: ObservableObject {
             .collection("MyPosts")
             .document(post.uniqueID)
 
-        let likeRef = postRef
+        let likeRef =
+            postRef
             .collection("Likes")
             .document(currentUserId)
 
         likeRef.getDocument { snapshot, error in
             if let snapshot = snapshot, snapshot.exists {
-                postRef.updateData(["postLike": FieldValue.increment(Int64(-1))])
+                postRef.updateData(["postLike": FieldValue.increment(Int64(-1))]
+                )
                 likeRef.delete()
                 DispatchQueue.main.async {
                     self.userPosts[index].postLike -= 1
