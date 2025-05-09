@@ -10,7 +10,7 @@ import FirebaseAuth
 
 struct CreatePostHeading: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var feedViewModel: FeedViewModal
+    @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation : FirebaseValidation
 
     @State private var errorMessage: String? = nil
@@ -21,7 +21,7 @@ struct CreatePostHeading: View {
             PostSection()
                 .padding()
 
-            if let errorMessage = feedViewModel.errorMessage {
+            if let errorMessage = feedViewModal.errorMessage {
                 Text(errorMessage)
                     .foregroundColor(.red)
                     .padding()
@@ -51,10 +51,10 @@ struct CreatePostHeading: View {
                 Button(action: {
                     
                     guard let userSession = firebaseValidation.userSession else {
-                        feedViewModel.errorMessage = "User not authenticated."
+                        feedViewModal.errorMessage = "User not authenticated."
                         return
                     }
-                    feedViewModel.uploadPostToFirebase(userId: userSession.uid)
+                    feedViewModal.uploadPostToFirebase(userId: userSession.uid)
                     print(userSession.uid , "is current user in feed id")
                     dismiss()
                 }) {
@@ -66,11 +66,11 @@ struct CreatePostHeading: View {
                         .background(Color.appTint)
                         .cornerRadius(6)
                 }
-                .disabled(feedViewModel.isUploading)
+                .disabled(feedViewModal.isUploading)
             }
         }
         .overlay {
-            if feedViewModel.isUploading {
+            if feedViewModal.isUploading {
                 ProgressView("Uploading...")
                     .progressViewStyle(CircularProgressViewStyle())
                     .padding()
@@ -78,6 +78,8 @@ struct CreatePostHeading: View {
                     .foregroundColor(.white)
             }
         }
+        .environmentObject(feedViewModal)
+       
     }
 }
 

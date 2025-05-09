@@ -24,8 +24,10 @@ struct FeedDataModal: Identifiable, Codable {
             return UIImage(data: data)
         }
         set {
-            if let image = newValue, let data = image.jpegData(compressionQuality: 0.8) {
+            if let image = newValue, let data = image.jpegData(compressionQuality: 0.2) {
                 base64Image = data.base64EncodedString()
+                print("Base64 length: \(base64Image?.count ?? 0)")
+
             } else {
                 base64Image = nil
             }

@@ -20,7 +20,8 @@ struct FeedView: View {
                 }
                
             } else {
-                UserFeedParent(feedViewModal: feedViewModal)
+                UserFeedParent()
+                   
                    
             }
         }
@@ -32,6 +33,7 @@ struct FeedView: View {
         }
         .environmentObject(feedViewModal)
         .environmentObject(firebaseValidation)
+       
     }
 }
 

@@ -147,12 +147,13 @@ class FeedViewModal: ObservableObject {
 
             let posts = snapshot.documents.compactMap { document in
                 let data = document.data()
-                print(data, "<------ user personal feed (async)")
+//                print(data, "<------ user personal feed (async)")
                 return decodePost(from: data)
             }
 
             DispatchQueue.main.async {
                 self.userPosts = posts
+                print(self.userPosts,"----@USer post data")
             }
 
         } catch {
@@ -175,7 +176,7 @@ class FeedViewModal: ObservableObject {
 
             DispatchQueue.main.async {
                 self.universalPosts = posts
-                print(self.universalPosts,"I AM GETTING THIS IN UNIVERSAL POSTS")
+              //  print(self.universalPosts,"I AM GETTING THIS IN UNIVERSAL POSTS")
             }
 
         } catch {

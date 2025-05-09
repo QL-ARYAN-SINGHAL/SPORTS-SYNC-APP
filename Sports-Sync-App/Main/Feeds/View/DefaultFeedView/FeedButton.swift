@@ -29,7 +29,7 @@ struct FeedButton: View {
           
             .navigationDestination(isPresented: $feedViewModal.feedData.makeNavigation) {
                 CreatePostParent()
-                    .environmentObject(FirebaseValidation())
+                    .environmentObject(firebaseValidation)
             }
         }
   

@@ -20,7 +20,7 @@ struct UserPostCreationSection: View {
     
     var body: some View {
         VStack {
-            NavigationLink(destination: CreatePostParent(), isActive: $navigateToCreatePost) {
+            NavigationLink(destination: CreatePostParent().environmentObject(firebaseValidation), isActive: $navigateToCreatePost) {
                 EmptyView()
             }
             .hidden()
@@ -50,6 +50,7 @@ struct UserPostCreationSection: View {
         }
         .frame(width: 343, height: 74)
         .padding(.vertical , 30)
+        .environmentObject(firebaseValidation)
        
     }
 }

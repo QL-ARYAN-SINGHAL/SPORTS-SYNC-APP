@@ -9,15 +9,16 @@
 
 import SwiftUI
 struct UserFeedParent: View {
-    @ObservedObject var feedViewModal: FeedViewModal
+    @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     var body: some View {
         ScrollView {
             VStack(spacing: 15) {
                 UserPostCreationSection()
-                UserFeedScrollList(feedViewModal: feedViewModal)
-
+                UserFeedScrollList()
+                    .environmentObject(feedViewModal)
+                    .environmentObject(firebaseValidation)
                 
                     
             }
@@ -35,7 +36,7 @@ struct UserFeedParent: View {
     }
 }
 
-//#Preview {
-//    UserFeedParent()
-//        .environmentObject(FirebaseValidation())
-//}
+#Preview {
+    UserFeedParent()
+        .environmentObject(FirebaseValidation())
+}

@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct UserPostsList: View {
-    let post: FeedDataModal
-
+    var post: FeedDataModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     var body: some View {
@@ -49,9 +48,7 @@ struct UserPostsList: View {
     }
 }
 
-
 #Preview {
-    UserPostsList(post: FeedDataModal())
+    UserPostsList(post: FeedDataModal(captionPost: "Sample", postLike: 2))
         .environmentObject(FirebaseValidation())
-        .environmentObject(FeedViewModal())
 }

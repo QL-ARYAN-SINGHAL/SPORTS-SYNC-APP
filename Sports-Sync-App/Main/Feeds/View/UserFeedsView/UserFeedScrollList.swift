@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct UserFeedScrollList: View {
-    @ObservedObject var feedViewModal: FeedViewModal
+    @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     var body: some View {
@@ -17,8 +17,10 @@ struct UserFeedScrollList: View {
                     .foregroundColor(.gray)
             } else {
                 ForEach(feedViewModal.userPosts) { post in
+                    
                     UserPostsList(post: post)
-                      
+                        .environmentObject(firebaseValidation)
+                   // print(post,"-------------- my @#Post in user")
                 }
             }
         }
@@ -26,9 +28,9 @@ struct UserFeedScrollList: View {
     }
 }
 
-//#Preview {
-//    UserFeedScrollList(feedViewModal: \.content)
-//        .environmentObject(FirebaseValidation())
-//        .environmentObject(FeedViewModal())
-//}
+#Preview {
+    UserFeedScrollList()
+        .environmentObject(FirebaseValidation())
+        .environmentObject(FeedViewModal())
+}
 
