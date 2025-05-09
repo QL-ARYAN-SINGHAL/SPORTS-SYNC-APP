@@ -5,7 +5,7 @@ import SwiftUI
 import _PhotosUI_SwiftUI
 
 class FeedViewModal: ObservableObject {
-
+    
     ///Array to fetch the feed perosnal and universal from firestore
     @Published var userPosts: [FeedDataModal] = []
     @Published var universalPosts: [FeedDataModal] = []
@@ -153,7 +153,7 @@ class FeedViewModal: ObservableObject {
 
             DispatchQueue.main.async {
                 self.userPosts = posts
-                print(self.userPosts,"----@USer post data")
+                
             }
 
         } catch {
@@ -170,7 +170,7 @@ class FeedViewModal: ObservableObject {
 
             let posts = snapshot.documents.compactMap { document in
                 let data = document.data()
-                print(data, "<------ universal feed (async)")
+//                print(data, "<------ universal feed (async)")
                 return decodePost(from: data)
             }
 
@@ -196,10 +196,41 @@ class FeedViewModal: ObservableObject {
         return FeedDataModal(
             captionPost: captionPost,
             id: userId,
+            uniqueID: document.documentID(),
             postLike: postLike,
             postTime: timestamp.dateValue(),
             base64Image: base64Image
         )
+    }
+
+    //MARK: - To get real time update on like count of a picture
+    
+    func toggleLike(for post: FeedDataModal) {
+        guard let index = userPosts.firstIndex(where: { $0.id == post.id && $0.postTime == post.postTime }) else { return }
+        
+        // Update like count locally
+        userPosts[index].postLike += 1
+
+        let postId = post.postTime.timeIntervalSince1970 // or use a unique ID if available
+
+        let db = Firestore.firestore().collection("users")
+            .document(post.id)
+            .collection("MyPosts")
+
+        db.whereField("postTime", isEqualTo: Timestamp(date: post.postTime)).getDocuments { snapshot, error in
+            guard let document = snapshot?.documents.first else {
+                print("Post not found for like update")
+                return
+            }
+
+            document.reference.updateData(["postLike": self.userPosts[index].postLike]) { error in
+                if let error = error {
+                    print("Failed to update like count:", error)
+                } else {
+                    print("Like count updated successfully")
+                }
+            }
+        }
     }
 
 

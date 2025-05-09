@@ -9,6 +9,7 @@ struct FeedDataModal: Identifiable, Codable {
     var makeNavigation: Bool = false
     var captionPost: String = ""
     var id: String = ""
+    var uniqueID : String = ""
     var postLike: Int = 0
     var postTime: Date = Date()
     
@@ -38,6 +39,7 @@ struct FeedDataModal: Identifiable, Codable {
         case makeNavigation
         case captionPost
         case id
+        case uniqueID
         case postLike
         case postTime
         case base64Image

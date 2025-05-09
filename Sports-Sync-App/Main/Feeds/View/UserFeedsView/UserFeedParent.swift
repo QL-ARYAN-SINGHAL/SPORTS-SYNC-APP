@@ -8,6 +8,7 @@
 //MARK: RESPONSIBILITY : - SHOW USER POSTS AND OPTION TO CREATE A NEW POST IF USER HAS ANY POST EVEN 1
 
 import SwiftUI
+
 struct UserFeedParent: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
@@ -19,8 +20,7 @@ struct UserFeedParent: View {
                 UserFeedScrollList()
                     .environmentObject(feedViewModal)
                     .environmentObject(firebaseValidation)
-                
-                    
+
             }
             .padding()
         }

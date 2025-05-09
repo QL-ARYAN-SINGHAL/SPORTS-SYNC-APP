@@ -10,9 +10,11 @@ import SwiftUI
 struct UserPostsList: View {
     var post: FeedDataModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
+    @EnvironmentObject var feedViewModal: FeedViewModal
 
     var body: some View {
         if let user = firebaseValidation.currentUser {
+            
             VStack(spacing: 15) {
                 ReusablePostListHeader(
                     userName: user.firstName,
@@ -28,10 +30,13 @@ struct UserPostsList: View {
                 ReusablePostListFooter(
                     commentCount: 20,
                     likeCount: post.postLike,
-                    likeAction: {},
+                    likeAction: {
+                        feedViewModal.toggleLike(for: post)
+                    },
                     commentAction: {},
                     shareAction: {}
                 )
+
             }
             .frame(width: 343)
             .padding()
@@ -41,6 +46,10 @@ struct UserPostsList: View {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
             )
+            
+            .onAppear {
+                debugPrint(post.captionPost, "Caption Title")
+            }
         } else {
             Text("User not logged in.")
                 .foregroundColor(.gray)
