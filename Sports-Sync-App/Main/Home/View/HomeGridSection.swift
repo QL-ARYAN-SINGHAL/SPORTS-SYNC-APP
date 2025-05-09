@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct HomeGridSection: View {
-    @EnvironmentObject var cardViewModal : CardViewModel
-    @EnvironmentObject var eventViewModal : EventInformationViewModal
+    @EnvironmentObject var cardViewModal: CardViewModel
+    @EnvironmentObject var eventViewModal: EventInformationViewModal
     @State private var isNavigating = false
-    
+
     let sectionTitles = ["Nearby", "Recommended", "Trending"]
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -20,7 +20,9 @@ struct HomeGridSection: View {
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 12) {
-                                ForEach(cardViewModal.cards(for: title), id: \.self) { card in
+                                ForEach(
+                                    cardViewModal.cards(for: title), id: \.self
+                                ) { card in
                                     ReusableCards(cardData: card) {
                                         cardViewModal.selectCard(card)
                                         isNavigating = true
@@ -32,7 +34,7 @@ struct HomeGridSection: View {
                     }
                     .onAppear {
                         if cardViewModal.cardsHomeData.isEmpty {
-                            cardViewModal.fetchAllCards()
+                            cardViewModal.fetchHomeCards()
                         }
                     }
                 }
@@ -45,9 +47,7 @@ struct HomeGridSection: View {
             }
         }
     }
-    
-   
-   
+
 }
 
 #Preview {

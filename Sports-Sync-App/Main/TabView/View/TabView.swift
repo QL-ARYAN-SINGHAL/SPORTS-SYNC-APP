@@ -50,6 +50,7 @@ struct MainTabView: View {
                         Text(verbatim: .feedsTabName)
                     }
                     .tag(2)
+                    
                 
                 UserProfileViewParent()
                     .tabItem {
@@ -62,6 +63,7 @@ struct MainTabView: View {
                     }
                     .tag(3)
             }
+            .environmentObject(tabRouter)
             .accentColor(.appTint)
             .toolbar {
                 if tabRouter.tabDataModal.selectedTab != 3 {
@@ -109,6 +111,7 @@ struct MainTabView: View {
                 }
             }
             .navigationBarBackButtonHidden()
+           
         }
     }
 }

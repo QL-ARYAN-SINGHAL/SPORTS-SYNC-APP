@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct ImageConstants {
-    static let appImage = Image("SportSync")
     static let welcomeBikeImage = Image("welcomeBikeImage")
     static let successImage = Image("Success")
     static let navigationBackImage = Image("NavigationBackImage")
@@ -22,17 +21,4 @@ struct ImageConstants {
     static let emptyBoxImage = Image("emptyBox")
     static let calendarMonthImage = Image("calendarMonth")
     static let feedDefaultImage = Image("feedDefaultImage")
-
-    static let sportImageNames: [String: String] = [
-        "Team Sports": "baseball",
-        "Individual Sports": "IndivisualSports",
-        "Combat Sports": "Boxing",
-        "Endurance Sports": "EnduranceSports",
-        "Racquet Sports": "RacquetSports",
-        "Water Sports": "WaterSports",
-        "Winter Sports": "WinterSports",
-        "Adventure Sports": "AdventureSports",
-        "Motor Sports": "MotorSports",
-        "Gymnastic": "Gymnastic"
-    ]
 }

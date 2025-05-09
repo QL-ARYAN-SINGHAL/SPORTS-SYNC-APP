@@ -69,7 +69,15 @@ struct CreatePostHeading: View {
                 .disabled(feedViewModal.isUploading)
             }
         }
-      
+        .overlay {
+            if feedViewModal.isUploading {
+                ProgressView("Uploading...")
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .padding()
+                    .background(Color.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
+                    .foregroundColor(.white)
+            }
+        }
         .environmentObject(feedViewModal)
        
     }

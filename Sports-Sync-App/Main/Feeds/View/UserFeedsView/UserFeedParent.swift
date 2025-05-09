@@ -13,10 +13,11 @@ struct UserFeedParent: View {
     @State private var selectedOption: String = "General"
     @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
+    @EnvironmentObject var tabRouter : TabRouter
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 15) {
+        List {
+            VStack(spacing: 10) {
                 UserPostCreationSection()
 
                 // Dropdown aligned to the right
@@ -31,6 +32,7 @@ struct UserFeedParent: View {
                     .environmentObject(firebaseValidation)
             }
             .padding()
+            .environmentObject(tabRouter)
         }
         .onAppear {
             Task {
@@ -41,6 +43,7 @@ struct UserFeedParent: View {
             }
         }
         .scrollIndicators(.hidden)
+        .listStyle(.plain)
     }
 }
 

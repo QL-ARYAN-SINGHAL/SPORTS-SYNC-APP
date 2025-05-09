@@ -62,7 +62,7 @@ struct StadiumListSheet: View {
                     .listStyle(.plain)
                 }
                 .onAppear {
-                    cardViewModel.fetchAllCards()
+                    cardViewModel.fetchHomeCards()
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .searchable(text: $eventInformationViewModal.eventInfoData.searchText, prompt: "Select stadium ...")

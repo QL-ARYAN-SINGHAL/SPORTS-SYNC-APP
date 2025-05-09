@@ -38,7 +38,7 @@ struct UserCreatedEventView: View {
             }
         }
         .onAppear {
-            cardViewModal.fetchAllCards()
+            cardViewModal.fetchHomeCards()
             Task {
                 await eventViewModal.getUserCreatedEvent()
             }

@@ -10,20 +10,19 @@ import SwiftUI
 struct HomeView: View {
     @StateObject var cardViewModal = CardViewModel()
     @StateObject var eventViewModal = EventInformationViewModal()
-    
+
     var body: some View {
-        
-            VStack{
-                HomeSearchAndList()
-            
-                HomeGridSection()
-                
-            }
-          
-            .environmentObject(cardViewModal)
-            .environmentObject(eventViewModal)
-       
-           
+
+        VStack {
+            HomeSearchAndList()
+
+            HomeGridSection()
+
+        }
+
+        .environmentObject(cardViewModal)
+        .environmentObject(eventViewModal)
+
     }
 }
 

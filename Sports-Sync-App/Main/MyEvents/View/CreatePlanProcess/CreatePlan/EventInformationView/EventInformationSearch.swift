@@ -87,7 +87,7 @@ struct EventInformationSearch: View {
         }
         .onAppear {
 
-            cardViewModal.fetchAllCards()
+            cardViewModal.fetchHomeCards()
 
         }
 

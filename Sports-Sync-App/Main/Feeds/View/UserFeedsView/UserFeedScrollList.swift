@@ -29,11 +29,13 @@ struct UserFeedScrollList: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            
             if filteredPosts.isEmpty {
                 Text("No posts to show.")
                     .foregroundColor(.gray)
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
             } else {
+                
                 ForEach(filteredPosts, id: \.uniqueID) { post in
                     UserPostsList(post: post)
                         .environmentObject(firebaseValidation)

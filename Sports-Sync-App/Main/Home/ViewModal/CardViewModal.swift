@@ -1,39 +1,48 @@
-//
 //  CardViewModel.swift
 //  Sports-Sync-App
 //
 //  Created by ARYAN SINGHAL on 24/04/25.
-//
-
+//import FirebaseFirestore
 
 import Foundation
+import SwiftUI
 import FirebaseFirestore
 
 class CardViewModel: ObservableObject {
-    
+
     private var db = Firestore.firestore()
-    
+
+    //Array consisting of the data to filter out as per categories orto access their respective description
     @Published var cardsHomeData: [HomeCardsDataModal] = []
-    @Published var selectedCard: HomeCardsDataModal?
-    @Published var homeDataModal = HomeCardsDataModal()
-    @Published var filteredCards: [HomeCardsDataModal] = []
+
+    //category wise cards array
     @Published var nearbyCards: [HomeCardsDataModal] = []
     @Published var trendingCards: [HomeCardsDataModal] = []
     @Published var recommendedCards: [HomeCardsDataModal] = []
+
+    //filtered card logic where flteredcards = Filterednearby + FilteredTrending + FilteredRecommended
+    @Published var filteredCards: [HomeCardsDataModal] = []
     @Published var filteredNearbyCards: [HomeCardsDataModal] = []
     @Published var filteredRecommendedCards: [HomeCardsDataModal] = []
     @Published var filteredTrendingCards: [HomeCardsDataModal] = []
 
+    @Published var selectedCard: HomeCardsDataModal?
+    @Published var homeDataModal = HomeCardsDataModal()
 
+    //MARK: - FUNCTIONS
 
+    //PARTICULAR CARD SELECTED LOGIC
     func selectCard(_ card: HomeCardsDataModal) {
         selectedCard = card
     }
 
-    func fetchAllCards() {
+    //FUNCTION TO FETCH ALL CARDS FROM DATABASE
+    func fetchHomeCards() {
         db.collection("cards").getDocuments { snapshot, error in
             if let error = error {
-                print("Error fetching cards collection: \(error.localizedDescription)")
+                print(
+                    "Error fetching cards collection: \(error.localizedDescription)"
+                )
                 return
             }
 
@@ -48,8 +57,13 @@ class CardViewModel: ObservableObject {
             var recommended: [HomeCardsDataModal] = []
 
             for document in documents {
-                guard let cardsData = document.data()["cards"] as? [String: [String: Any]] else {
-                    print("Cards field missing in document \(document.documentID)")
+                guard
+                    let cardsData = document.data()["cards"]
+                        as? [String: [String: Any]]
+                else {
+                    print(
+                        "Cards field missing in document \(document.documentID)"
+                    )
                     continue
                 }
 
@@ -105,12 +119,17 @@ class CardViewModel: ObservableObject {
         }
     }
 
+    //Function to filter the cards as per spots name
     func filterCards(by sport: String?) {
         if let sport = sport, !sport.isEmpty {
             // Filter cards for each category based on sport
             filteredNearbyCards = nearbyCards.filter { $0.sportsName == sport }
-            filteredRecommendedCards = recommendedCards.filter { $0.sportsName == sport }
-            filteredTrendingCards = trendingCards.filter { $0.sportsName == sport }
+            filteredRecommendedCards = recommendedCards.filter {
+                $0.sportsName == sport
+            }
+            filteredTrendingCards = trendingCards.filter {
+                $0.sportsName == sport
+            }
         } else {
             // If no sport is selected, return all cards for each category
             filteredNearbyCards = nearbyCards
@@ -119,10 +138,13 @@ class CardViewModel: ObservableObject {
         }
 
         // Optional: Update a general filtered cards array if you want a unified view
-        filteredCards = filteredNearbyCards + filteredRecommendedCards + filteredTrendingCards
+        filteredCards =
+            filteredNearbyCards + filteredRecommendedCards
+            + filteredTrendingCards
     }
-    
-     func cards(for title: String) -> [HomeCardsDataModal] {
+
+    //to return cards with filtered sports category wise
+    func cards(for title: String) -> [HomeCardsDataModal] {
         switch title {
         case "Nearby":
             return filteredNearbyCards
@@ -134,7 +156,5 @@ class CardViewModel: ObservableObject {
             return []
         }
     }
-
-
 
 }
