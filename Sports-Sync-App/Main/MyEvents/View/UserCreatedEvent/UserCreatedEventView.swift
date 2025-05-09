@@ -2,12 +2,13 @@ import SwiftUI
 
 struct UserCreatedEventView: View {
 
+    //EnvironemntObject
     @EnvironmentObject var eventViewModal: EventInformationViewModal
     @EnvironmentObject var cardViewModal: CardViewModel
 
+    //States
     @State private var shouldNavigate: Bool = false
     @State private var selectedUserEvent: EventInformationDataModal? = nil
-
     @State private var selectedStadiumData: HomeCardsDataModal? = nil
 
     var body: some View {

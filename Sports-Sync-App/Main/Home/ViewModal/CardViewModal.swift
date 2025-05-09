@@ -26,6 +26,8 @@ class CardViewModel: ObservableObject {
     @Published var filteredRecommendedCards: [HomeCardsDataModal] = []
     @Published var filteredTrendingCards: [HomeCardsDataModal] = []
 
+    
+    //selectedCard for plan description
     @Published var selectedCard: HomeCardsDataModal?
     @Published var homeDataModal = HomeCardsDataModal()
 

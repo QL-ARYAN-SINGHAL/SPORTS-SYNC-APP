@@ -5,13 +5,6 @@
 //  Created by ARYAN SINGHAL on 02/05/25.
 //
 
-//
-//  PrivacyPolicy.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 02/05/25.
-//
-
 import SwiftUI
 
 struct PrivacyPolicy: View {
