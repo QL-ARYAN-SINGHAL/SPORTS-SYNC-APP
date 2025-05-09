@@ -16,22 +16,15 @@ struct UserFeedScrollList: View {
                 Text("No posts to show.")
                     .foregroundColor(.gray)
             } else {
-                
-                ForEach(feedViewModal.userPosts) { post in
+
+                ForEach(feedViewModal.userPosts, id: \.uniqueID) { post in
                     UserPostsList(post: post)
                         .environmentObject(firebaseValidation)
-                   // print(post,"-------------- my @#Post in user")
+
                 }
             }
         }
         .padding()
-        .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                for i in 0..<feedViewModal.userPosts.count {
-                    debugPrint("Index:\(i), \(feedViewModal.userPosts[i].captionPost)")
-                }
-            }
-        }
     }
 }
 
@@ -40,4 +33,3 @@ struct UserFeedScrollList: View {
         .environmentObject(FirebaseValidation())
         .environmentObject(FeedViewModal())
 }
-

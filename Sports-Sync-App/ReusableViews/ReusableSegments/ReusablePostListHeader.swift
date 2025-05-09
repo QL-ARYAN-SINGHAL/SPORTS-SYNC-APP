@@ -4,11 +4,10 @@ struct ReusablePostListHeader: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
     var userName: String
     var postTime: Date
-    var userImage : UIImage?
+    var userImage: UIImage?
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            
-            
+
             Image(
                 uiImage: userImage
                     ?? UIImage(
@@ -23,9 +22,7 @@ struct ReusablePostListHeader: View {
                     Color.gray.opacity(0.3), lineWidth: 1)
             )
             .shadow(radius: 4)
-            
-            
-            
+
             VStack(alignment: .leading, spacing: 4) {
                 Text(userName)
                     .font(Font.custom(.fontJakartaBold, size: 14))
@@ -38,7 +35,8 @@ struct ReusablePostListHeader: View {
                         .frame(width: 10, height: 10)
                         .foregroundStyle(.disabledFont)
 
-                    Text(postTime.formatted(date: .abbreviated, time: .omitted))
+                    Text(postTime.formatted(date: .omitted, time: .shortened))
+
                         .font(Font.custom(.fontJakarta, size: 12))
                         .foregroundStyle(.disabledFont)
                 }

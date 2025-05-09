@@ -21,7 +21,7 @@ struct ReusablePostListMid: View {
             if let image = postImage {
                 Image(uiImage: image)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: .fill)
                     .frame(width: 319, height: 174)
                     .cornerRadius(4)
             } else {

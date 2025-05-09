@@ -5,27 +5,22 @@ import SwiftUI
 import _PhotosUI_SwiftUI
 
 class FeedViewModal: ObservableObject {
-    
-    ///Array to fetch the feed perosnal and universal from firestore
+
     @Published var userPosts: [FeedDataModal] = []
     @Published var universalPosts: [FeedDataModal] = []
-    @Published var feedData = FeedDataModal()  // Holds the current post data
+    @Published var feedData = FeedDataModal()
 
-    ///state managements
     @Published var showPicker = false
     @Published var isUploading = false
     @Published var hasPostedBefore: Bool = false
     @Published var showingCamera = false
-    @Published var errorMessage: String? = nil  // To show error messages
+    @Published var errorMessage: String? = nil
 
-    /// variable that takes photopicker for change in photo
     @Published var selectedDeviceImage: PhotosPickerItem? = nil {
         didSet {
             setPostImage(from: selectedDeviceImage)
         }
     }
-
-    //MARK: - Function to set the image selected from the picker
 
     private func setPostImage(from selection: PhotosPickerItem?) {
         guard let selection else { return }
@@ -46,8 +41,6 @@ class FeedViewModal: ObservableObject {
         }
     }
 
-    //MARK: - TO SAVE USER POST DETAILS IN FIREBASE
-
     func uploadPostToFirebase(userId: String) {
         guard feedData.localImage != nil else {
             self.errorMessage = "No image selected."
@@ -64,7 +57,6 @@ class FeedViewModal: ObservableObject {
 
         savePostToFirestore(userId: userId, base64Image: base64Image)
     }
-
 
     private func savePostToFirestore(userId: String, base64Image: String) {
         guard let userSession = FirebaseAuth.Auth.auth().currentUser else {
@@ -111,8 +103,6 @@ class FeedViewModal: ObservableObject {
             }
     }
 
-
-    // to check if user has any post or not
     func checkIfUserHasPosts(userId: String) {
         Firestore.firestore()
             .collection("users")
@@ -134,8 +124,6 @@ class FeedViewModal: ObservableObject {
             }
     }
 
-    //MARK: - GET DATA FROM DATABSE TO DISPLAY ON FEED POST SECTION
-
     func fetchUserPostsAsync(userId: String) async {
         do {
             let snapshot = try await Firestore.firestore()
@@ -145,15 +133,10 @@ class FeedViewModal: ObservableObject {
                 .order(by: "postTime", descending: true)
                 .getDocuments()
 
-            let posts = snapshot.documents.compactMap { document in
-                let data = document.data()
-//                print(data, "<------ user personal feed (async)")
-                return decodePost(from: data)
-            }
+            let posts = snapshot.documents.compactMap { decodePost(from: $0) }
 
             DispatchQueue.main.async {
                 self.userPosts = posts
-                
             }
 
         } catch {
@@ -168,15 +151,10 @@ class FeedViewModal: ObservableObject {
                 .order(by: "postTime", descending: true)
                 .getDocuments()
 
-            let posts = snapshot.documents.compactMap { document in
-                let data = document.data()
-//                print(data, "<------ universal feed (async)")
-                return decodePost(from: data)
-            }
+            let posts = snapshot.documents.compactMap { decodePost(from: $0) }
 
             DispatchQueue.main.async {
                 self.universalPosts = posts
-              //  print(self.universalPosts,"I AM GETTING THIS IN UNIVERSAL POSTS")
             }
 
         } catch {
@@ -184,7 +162,9 @@ class FeedViewModal: ObservableObject {
         }
     }
 
-    private func decodePost(from data: [String: Any]) -> FeedDataModal? {
+    private func decodePost(from document: QueryDocumentSnapshot) -> FeedDataModal? {
+        let data = document.data()
+
         guard let captionPost = data["captionPost"] as? String,
               let postLike = data["postLike"] as? Int,
               let timestamp = data["postTime"] as? Timestamp,
@@ -196,43 +176,42 @@ class FeedViewModal: ObservableObject {
         return FeedDataModal(
             captionPost: captionPost,
             id: userId,
-            uniqueID: document.documentID(),
+            uniqueID: document.documentID,
             postLike: postLike,
             postTime: timestamp.dateValue(),
             base64Image: base64Image
         )
     }
 
-    //MARK: - To get real time update on like count of a picture
-    
     func toggleLike(for post: FeedDataModal) {
-        guard let index = userPosts.firstIndex(where: { $0.id == post.id && $0.postTime == post.postTime }) else { return }
-        
-        // Update like count locally
-        userPosts[index].postLike += 1
+        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        guard let index = userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) else { return }
 
-        let postId = post.postTime.timeIntervalSince1970 // or use a unique ID if available
-
-        let db = Firestore.firestore().collection("users")
+        let postRef = Firestore.firestore()
+            .collection("users")
             .document(post.id)
             .collection("MyPosts")
+            .document(post.uniqueID)
 
-        db.whereField("postTime", isEqualTo: Timestamp(date: post.postTime)).getDocuments { snapshot, error in
-            guard let document = snapshot?.documents.first else {
-                print("Post not found for like update")
-                return
-            }
+        let likeRef = postRef
+            .collection("Likes")
+            .document(currentUserId)
 
-            document.reference.updateData(["postLike": self.userPosts[index].postLike]) { error in
-                if let error = error {
-                    print("Failed to update like count:", error)
-                } else {
-                    print("Like count updated successfully")
+        likeRef.getDocument { snapshot, error in
+            if let snapshot = snapshot, snapshot.exists {
+                postRef.updateData(["postLike": FieldValue.increment(Int64(-1))])
+                likeRef.delete()
+                DispatchQueue.main.async {
+                    self.userPosts[index].postLike -= 1
+                }
+            } else {
+                postRef.updateData(["postLike": FieldValue.increment(Int64(1))])
+                likeRef.setData(["likedAt": Timestamp()])
+                DispatchQueue.main.async {
+                    self.userPosts[index].postLike += 1
                 }
             }
         }
     }
-
-
 
 }
