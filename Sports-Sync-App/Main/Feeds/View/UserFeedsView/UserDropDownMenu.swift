@@ -1,29 +1,26 @@
-//
-//  UserDropDownMenu.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 09/05/25.
-//
-
 import SwiftUI
 
-struct BasicDropdownMenu: View {
-  @State private var selectedOption: String = "Select an Option"
+struct UserDropdownMenu: View {
+    @Binding var selectedOption: String
 
-  var body: some View {
-    Menu {
-      Button("Option 1", action: { selectedOption = "Option 1" })
-      Button("Option 2", action: { selectedOption = "Option 2" })
-      Button("Option 3", action: { selectedOption = "Option 3" })
-    } label: {
-      Label(selectedOption, systemImage: "chevron.down")
-        .padding()
-        .background(Color.blue.opacity(0.1))
-        .cornerRadius(8)
+    var body: some View {
+        Menu {
+            Button("General") { selectedOption = "General" }
+            Button("My Feed") { selectedOption = "My Feed" }
+        } label: {
+            HStack {
+                Text(selectedOption)
+                    .fontWeight(.semibold)
+                Image(systemName: "chevron.down")
+                    .font(.subheadline)
+            }
+            .foregroundColor(.white)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .background(Color.appTint)
+            .clipShape(Capsule())
+        }
+        .frame(height : 30)
+        .padding(.trailing, 20)
     }
-  }
-}
-
-#Preview {
-  BasicDropdownMenu()
 }

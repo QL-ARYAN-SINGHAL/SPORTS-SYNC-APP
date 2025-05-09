@@ -10,6 +10,7 @@
 import SwiftUI
 
 struct UserFeedParent: View {
+    @State private var selectedOption: String = "General"
     @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
@@ -17,10 +18,17 @@ struct UserFeedParent: View {
         ScrollView {
             VStack(spacing: 15) {
                 UserPostCreationSection()
-                UserFeedScrollList()
+
+                // Dropdown aligned to the right
+                HStack {
+                    Spacer()
+                    UserDropdownMenu(selectedOption: $selectedOption)
+                }
+
+                // Filtered feed based on dropdown
+                UserFeedScrollList(selectedOption: selectedOption)
                     .environmentObject(feedViewModal)
                     .environmentObject(firebaseValidation)
-
             }
             .padding()
         }
@@ -39,4 +47,5 @@ struct UserFeedParent: View {
 #Preview {
     UserFeedParent()
         .environmentObject(FirebaseValidation())
+        .environmentObject(FeedViewModal())
 }
