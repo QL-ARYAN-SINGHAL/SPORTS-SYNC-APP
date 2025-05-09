@@ -10,12 +10,12 @@ import SwiftUI
 struct CreatePostParent: View {
     @StateObject var feedViewModal = FeedViewModal()
     @EnvironmentObject var firebaseValidation : FirebaseValidation
-    @EnvironmentObject var tabRouter : TabRouter
+
     var body: some View {
         NavigationStack {
 
             CreatePostHeading()
-                .environmentObject(tabRouter)
+                
 
 
             Spacer()

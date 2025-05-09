@@ -10,7 +10,6 @@ import FirebaseAuth
 struct FeedView: View {
     @StateObject var feedViewModal = FeedViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
-    @EnvironmentObject var tabRouter : TabRouter
     
     var body: some View {
         VStack {
@@ -35,7 +34,7 @@ struct FeedView: View {
         }
         .environmentObject(feedViewModal)
         .environmentObject(firebaseValidation)
-        .environmentObject(tabRouter)
+      
        
     }
 }

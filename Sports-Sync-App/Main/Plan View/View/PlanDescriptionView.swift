@@ -16,7 +16,7 @@ struct PlanDescriptionView: View {
             
             if let userEvent = userEvent {
                 ZStack(alignment: .topLeading) {
-                    AsyncImage(url: URL(string: cardViewModel.homeDataModal.imageName)) { image in
+                    AsyncImage(url: URL(string: stadiumData?.imageName ?? "")) { image in
                         image
                             .resizable()
                             .aspectRatio(contentMode: .fill)

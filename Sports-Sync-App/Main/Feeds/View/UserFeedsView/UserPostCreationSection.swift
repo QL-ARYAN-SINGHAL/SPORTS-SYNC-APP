@@ -10,10 +10,10 @@ struct UserPostCreationSection: View {
     
     @EnvironmentObject var firebaseValidation : FirebaseValidation
     @State private var navigateToCreatePost = false
-    @EnvironmentObject var tabRouter: TabRouter
+  
     var body: some View {
         VStack {
-            NavigationLink(destination: CreatePostParent().environmentObject(tabRouter).environmentObject(firebaseValidation), isActive: $navigateToCreatePost) {
+            NavigationLink(destination: CreatePostParent().environmentObject(firebaseValidation), isActive: $navigateToCreatePost) {
                             EmptyView()
                         }
                         .hidden() // Hides the link view
@@ -46,7 +46,7 @@ struct UserPostCreationSection: View {
         .frame(width: 343, height: 74)
         .padding(.vertical , 30)
         .environmentObject(firebaseValidation)
-        .environmentObject(tabRouter)
+      
        
     }
 }

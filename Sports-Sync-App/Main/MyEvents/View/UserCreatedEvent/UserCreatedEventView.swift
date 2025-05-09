@@ -7,18 +7,19 @@ struct UserCreatedEventView: View {
 
     @State private var shouldNavigate: Bool = false
     @State private var selectedUserEvent: EventInformationDataModal? = nil
-   
 
+    @State private var selectedStadiumData: HomeCardsDataModal? = nil
 
     var body: some View {
         VStack {
             ScrollView {
                 VStack(spacing: 16) {
 
-                   
-                    ForEach(eventViewModal.userCreatedEvents, id: \.self) { event in
+                    ForEach(eventViewModal.userCreatedEvents, id: \.self) {
+                        event in
 
-                        let matchingStadium = cardViewModal.cardsHomeData.first {
+                        let matchingStadium = cardViewModal.cardsHomeData.first
+                        {
                             $0.stadiumName == event.selectedStadium
                         }
 
@@ -27,11 +28,11 @@ struct UserCreatedEventView: View {
                             stadiumData: matchingStadium,
                             action: {
                                 selectedUserEvent = event
+                                selectedStadiumData = matchingStadium
                                 shouldNavigate = true
                             }
                         )
 
-                        
                     }
                 }
                 .padding()
@@ -45,15 +46,16 @@ struct UserCreatedEventView: View {
         }
         .navigationDestination(isPresented: $shouldNavigate) {
             if let userEvent = selectedUserEvent {
-                PlanDescriptionView( userEvent: userEvent)
-                    .environmentObject(cardViewModal)
-                    .environmentObject(eventViewModal)
+                PlanDescriptionView(
+                    userEvent: userEvent, stadiumData: selectedStadiumData
+                )
+                .environmentObject(cardViewModal)
+                .environmentObject(eventViewModal)
             }
         }
 
     }
 }
-
 
 #Preview {
     UserCreatedEventView()

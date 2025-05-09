@@ -13,7 +13,6 @@ struct UserFeedParent: View {
     @State private var selectedOption: String = "General"
     @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
-    @EnvironmentObject var tabRouter : TabRouter
 
     var body: some View {
         List {
@@ -32,7 +31,7 @@ struct UserFeedParent: View {
                     .environmentObject(firebaseValidation)
             }
             .padding()
-            .environmentObject(tabRouter)
+
         }
         .onAppear {
             Task {
