@@ -1,14 +1,3 @@
-//
-//  HomeGridSection.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 25/04/25.
-//
-
-
-//Responsiiblities : Creating a view where we have vertical scrolling for section category and horizontal scroll for cards
-
-
 import SwiftUI
 
 struct HomeGridSection: View {
@@ -28,10 +17,10 @@ struct HomeGridSection: View {
                             .frame(width: 300, height: 30, alignment: .leading)
                             .listRowSeparator(.hidden)
                             .padding(.top, 10)
-                        
+
                         ScrollView(.horizontal, showsIndicators: false) {
                             LazyHStack(spacing: 12) {
-                                ForEach(cardViewModal.filteredCards, id: \.self) { card in
+                                ForEach(cardViewModal.cards(for: title), id: \.self) { card in
                                     ReusableCards(cardData: card) {
                                         cardViewModal.selectCard(card)
                                         isNavigating = true
@@ -46,8 +35,6 @@ struct HomeGridSection: View {
                             cardViewModal.fetchAllCards()
                         }
                     }
-
-
                 }
             }
             .listStyle(.plain)
@@ -56,11 +43,12 @@ struct HomeGridSection: View {
                     .environmentObject(cardViewModal)
                     .environmentObject(eventViewModal)
             }
-          
         }
     }
+    
+   
+   
 }
-
 
 #Preview {
     HomeGridSection()

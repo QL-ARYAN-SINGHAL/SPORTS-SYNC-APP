@@ -26,6 +26,8 @@ class FeedViewModal: ObservableObject {
             setPostImage(from: selectedDeviceImage)
         }
     }
+    
+
 
     //MARK: - function to set the image selected from gallery / camera on create post section
     private func setPostImage(from selection: PhotosPickerItem?) {

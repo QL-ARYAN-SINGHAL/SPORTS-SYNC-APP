@@ -32,17 +32,31 @@ struct PostSection: View {
                 }
 
                 if let image = feedViewModal.feedData.localImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(maxWidth: 343)
-                        .padding(4)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10).stroke(
-                                Color.clear))
-                       
+                    ZStack(alignment: .topTrailing) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: 343)
+                            .padding(4)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10).stroke(Color.clear)
+                            )
+
+                        Button(action: {
+                            feedViewModal.feedData.localImage = nil
+                        }) {
+                            Image(systemName: "xmark")
+                                .foregroundColor(.gray)
+                                .frame(width: 24, height: 24)
+                                .background(Color.white)
+                                .clipShape(Circle())
+                                .shadow(radius: 1)
+                        }
+                        .padding(8)
+                    }
                 }
+
             }
             .padding(.vertical, 10)
             .padding(.horizontal, 16)

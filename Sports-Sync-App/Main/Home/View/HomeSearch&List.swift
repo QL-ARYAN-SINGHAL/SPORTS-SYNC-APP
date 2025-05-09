@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HomeTopSearchAndList: View {
+struct HomeSearchAndList: View {
 
     @EnvironmentObject var cardViewModal: CardViewModel
 
@@ -14,7 +14,7 @@ struct HomeTopSearchAndList: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
 
-//Textfield to filter cards as per the sports when submitted
+            // Textfield to filter cards as per the sports when submitted
             TextField(
                 "Search Tournaments",
                 text: $cardViewModal.homeDataModal.searchText
@@ -25,15 +25,12 @@ struct HomeTopSearchAndList: View {
             .padding(.horizontal, 16)
             .onSubmit {
                 selectedSport = cardViewModal.homeDataModal.searchText
-                cardViewModal.filterCards(
-                    by: cardViewModal.homeDataModal.searchText)
+                cardViewModal.filterCards(by: selectedSport)
             }
 
-// Horizontal list of sport buttons that filters sportscards
+            // Horizontal list of sport buttons that filters sports cards
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 12) {
-                    
-//shows all cards as the filtercards is nill when clicked on ALL button
                     Button(action: {
                         selectedSport = nil
                         cardViewModal.filterCards(by: nil)
@@ -45,7 +42,7 @@ struct HomeTopSearchAndList: View {
                             .background(Color.appTint)
                             .cornerRadius(10)
                     }
-//Shows all the cards through foreach fetched from our databse 
+
                     ForEach(sportsNames, id: \.self) { sport in
                         ReusableListButtons(buttonText: sport) {
                             selectedSport = sport
@@ -62,6 +59,6 @@ struct HomeTopSearchAndList: View {
 }
 
 #Preview {
-    HomeTopSearchAndList()
+    HomeSearchAndList()
         .environmentObject(CardViewModel())
 }

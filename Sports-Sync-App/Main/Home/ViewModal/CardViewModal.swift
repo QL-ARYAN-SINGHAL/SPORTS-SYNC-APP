@@ -17,6 +17,13 @@ class CardViewModel: ObservableObject {
     @Published var selectedCard: HomeCardsDataModal?
     @Published var homeDataModal = HomeCardsDataModal()
     @Published var filteredCards: [HomeCardsDataModal] = []
+    @Published var nearbyCards: [HomeCardsDataModal] = []
+    @Published var trendingCards: [HomeCardsDataModal] = []
+    @Published var recommendedCards: [HomeCardsDataModal] = []
+    @Published var filteredNearbyCards: [HomeCardsDataModal] = []
+    @Published var filteredRecommendedCards: [HomeCardsDataModal] = []
+    @Published var filteredTrendingCards: [HomeCardsDataModal] = []
+
 
 
     func selectCard(_ card: HomeCardsDataModal) {
@@ -35,13 +42,18 @@ class CardViewModel: ObservableObject {
                 return
             }
 
-            var fetchedCards: [HomeCardsDataModal] = []
+            var allCards: [HomeCardsDataModal] = []
+            var nearby: [HomeCardsDataModal] = []
+            var trending: [HomeCardsDataModal] = []
+            var recommended: [HomeCardsDataModal] = []
 
             for document in documents {
                 guard let cardsData = document.data()["cards"] as? [String: [String: Any]] else {
                     print("Cards field missing in document \(document.documentID)")
                     continue
                 }
+
+                var sectionCards: [HomeCardsDataModal] = []
 
                 for (_, cardInfo) in cardsData {
                     guard
@@ -67,25 +79,62 @@ class CardViewModel: ObservableObject {
                         eventDate: eventDate,
                         eventTime: eventTime
                     )
-                    fetchedCards.append(card)
+                    allCards.append(card)
+                    sectionCards.append(card)
+                }
+
+                switch document.documentID.lowercased() {
+                case "nearby": nearby = sectionCards
+                case "trending": trending = sectionCards
+                case "recommended": recommended = sectionCards
+                default: break
                 }
             }
 
             DispatchQueue.main.async {
-                self.cardsHomeData = fetchedCards
-                self.filteredCards = fetchedCards
-            }
+                self.cardsHomeData = allCards
+                self.filteredCards = allCards
+                self.nearbyCards = nearby
+                self.trendingCards = trending
+                self.recommendedCards = recommended
+                self.filteredNearbyCards = self.nearbyCards
+                self.filteredRecommendedCards = self.recommendedCards
+                self.filteredTrendingCards = self.trendingCards
 
+            }
         }
     }
-    
+
     func filterCards(by sport: String?) {
         if let sport = sport, !sport.isEmpty {
-            filteredCards = cardsHomeData.filter { $0.sportsName == sport }
+            // Filter cards for each category based on sport
+            filteredNearbyCards = nearbyCards.filter { $0.sportsName == sport }
+            filteredRecommendedCards = recommendedCards.filter { $0.sportsName == sport }
+            filteredTrendingCards = trendingCards.filter { $0.sportsName == sport }
         } else {
-            filteredCards = cardsHomeData 
+            // If no sport is selected, return all cards for each category
+            filteredNearbyCards = nearbyCards
+            filteredRecommendedCards = recommendedCards
+            filteredTrendingCards = trendingCards
+        }
+
+        // Optional: Update a general filtered cards array if you want a unified view
+        filteredCards = filteredNearbyCards + filteredRecommendedCards + filteredTrendingCards
+    }
+    
+     func cards(for title: String) -> [HomeCardsDataModal] {
+        switch title {
+        case "Nearby":
+            return filteredNearbyCards
+        case "Trending":
+            return filteredTrendingCards
+        case "Recommended":
+            return filteredRecommendedCards
+        default:
+            return []
         }
     }
+
 
 
 }
