@@ -16,7 +16,9 @@ struct UserDetailsView: View {
         VStack {
             if let user = firebaseValidation.userData {
 
-                Button(action: {}) {
+                Button(action: {
+                    //In futuer a view will be added to display user prifle with all details in better way
+                }) {
                     HStack(spacing: 20) {
                         PhotosPicker(
                             selection: $photoPickerItem, matching: .images

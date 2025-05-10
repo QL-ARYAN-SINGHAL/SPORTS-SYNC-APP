@@ -14,7 +14,7 @@ struct EventListView: View {
     @EnvironmentObject var eventViewModal : EventInformationViewModal
    
     
-    let weeks = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5", "Week 6", "Week 7"]
+    let weeks = ["Week 1", "Week 2", "Week 3", "Week 4","Week 5"]
 
     var selectedMonth: String {
         let formatter = DateFormatter()
@@ -32,10 +32,16 @@ struct EventListView: View {
                                 showDatePicker.toggle()
                         }
 
-                    ForEach(weeks, id: \.self) { week in
-                        ReusableListButtons(buttonText: week, action: {})
-                            .padding(10)
+                    ForEach(0..<weeks.count, id: \.self) { index in
+                        let startOfMonth = currentMonth.startOfMonth
+                        let weekStart = Calendar.current.date(byAdding: .day, value: index * 7, to: startOfMonth)!
+
+                        ReusableListButtons(buttonText: weeks[index]) {
+                            eventViewModal.filterEvents(for: weekStart)
+                        }
+                        .padding(10)
                     }
+
                 }
                 .padding(.leading , 8)
             }
@@ -47,6 +53,11 @@ struct EventListView: View {
             }
         }
         
+    }
+}
+extension Date {
+    var startOfMonth: Date {
+        Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: self))!
     }
 }
 

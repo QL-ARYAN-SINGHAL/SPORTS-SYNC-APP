@@ -14,11 +14,20 @@
         // MARK: - Published Properties
         @Published var eventDataModal = EventDataModal()
         @Published var eventInfoData = EventInformationDataModal()
+        
+        @Published var submittedEventInfo: EventInformationDataModal?
+        
+        //MARK: - ARRAY VARIABLES THAT STORES THE DTA TO BE REPRRESENTED IN VIEW
+        //SHOWS USER CREATEDEVENTS
+        @Published var userCreatedEvents: [EventInformationDataModal] = []
+        
+        //SHOW FILTEREDEVENTS AS PER THE WEEK
+        @Published var filteredEventsWeek: [EventInformationDataModal] = []
+        
+        
+        //STATES
         @Published var didSubmitSuccessfully = false
         @Published var isSubmitting = false
-        @Published var submittedEventInfo: EventInformationDataModal?
-        @Published var userCreatedEvents: [EventInformationDataModal] = []
-       
 
         // MARK: - Dependencies
         private let db = Firestore.firestore()
@@ -70,6 +79,28 @@
                 }
             }
         }
+        
+        //  MARK: - FILTERERD USER CREATED EVENTS AS PER THE WEEKS
+        
+
+        // Helper to convert "dd-MM-yyyy" string to Date
+        private func convertToDate(_ dateString: String) -> Date? {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd-MM-yyyy"
+            return formatter.date(from: dateString)
+        }
+
+        // Week filtering method
+        func filterEvents(for weekStartDate: Date) {
+            let calendar = Calendar.current
+            let weekEndDate = calendar.date(byAdding: .day, value: 6, to: weekStartDate)!
+
+            filteredEventsWeek = userCreatedEvents.filter { event in
+                guard let date = convertToDate(event.eventDate) else { return false }
+                return date >= weekStartDate && date <= weekEndDate
+            }
+        }
+
 
         // MARK: - Firestore: Fetch User-Created Events
         func getUserCreatedEvent() async {
@@ -105,7 +136,11 @@
 
                 DispatchQueue.main.async {
                     self.userCreatedEvents = events
+                    // Default filter: current week
+                    let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+                    self.filterEvents(for: startOfWeek)
                 }
+
 
             } catch {
                 print("Error fetching user events: \(error.localizedDescription)")

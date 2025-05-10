@@ -30,7 +30,7 @@ struct UserProfileViewParent: View {
             .environmentObject(firebaseValidation)
         }
     }
-
+	
     @ViewBuilder
     private func destinationView(for destination: String) -> some View {
         switch destination {

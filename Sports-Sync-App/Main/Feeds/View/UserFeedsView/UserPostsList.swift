@@ -6,7 +6,6 @@
 // Updated UserPostsList.swift
 
 import SwiftUI
-
 struct UserPostsList: View {
     var post: FeedDataModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
@@ -14,12 +13,20 @@ struct UserPostsList: View {
 
     var body: some View {
         if let user = firebaseValidation.currentUser {
-            
+            let isOwner = user.id == post.id
+
             VStack(spacing: 15) {
                 ReusablePostListHeader(
                     userName: user.firstName,
                     postTime: post.postTime,
-                    userImage: firebaseValidation.avatarImage
+                    userImage: firebaseValidation.avatarImage,
+                    isOwner: isOwner,
+                    onDelete: {
+                        print("Delete is pressed")
+                    },
+                    onReport: {
+                       print("Report is pressed")
+                    }
                 )
 
                 ReusablePostListMid(

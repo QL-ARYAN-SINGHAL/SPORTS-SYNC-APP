@@ -16,7 +16,7 @@ struct UserCreatedEventView: View {
             ScrollView {
                 VStack(spacing: 16) {
 
-                    ForEach(eventViewModal.userCreatedEvents, id: \.self) {
+                    ForEach(eventViewModal.filteredEventsWeek, id: \.self) {
                         event in
 
                         let matchingStadium = cardViewModal.cardsHomeData.first
