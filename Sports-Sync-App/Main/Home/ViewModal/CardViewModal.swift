@@ -158,5 +158,29 @@ class CardViewModel: ObservableObject {
             return []
         }
     }
+    
+    func generateShareText(userEvent: EventInformationDataModal?, stadiumData: HomeCardsDataModal?) -> String {
+        if let event = userEvent {
+            return """
+            📍 Stadium: \(event.selectedStadium ?? "")
+            🌟 Rating: \(stadiumData?.rating ?? "N/A")
+            📌 Location: \(stadiumData?.location ?? "")
+            📅 Date: \(event.eventDate)
+            ⏰ Time: \(event.eventTime)
+            🏅 Sport: \(event.sportsName)
+            """
+        } else if let card = selectedCard {
+            return """
+            📍 Stadium: \(card.stadiumName)
+            🌟 Rating: \(card.rating)
+            📌 Location: \(card.location)
+            📅 Date: \(card.eventDate)
+            ⏰ Time: \(card.eventTime)
+            """
+        }
+        return "No event selected."
+    }
+
 
 }
+

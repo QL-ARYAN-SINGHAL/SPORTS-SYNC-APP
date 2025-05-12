@@ -4,10 +4,6 @@
 //
 //  Created by ARYAN SINGHAL on 23/04/25.
 //
-
-
-import SwiftUI
-
 import SwiftUI
 
 struct EventView: View {
@@ -15,8 +11,7 @@ struct EventView: View {
     @StateObject private var cardViewModel = CardViewModel()
     @StateObject private var firebaseValidation = FirebaseValidation()
     
-    @State private var hasFetchedOnce = false  // <- Track initial fetch
-
+    @State private var hasFetchedOnce = false
     private var shouldShowUserCreatedEvents: Bool {
         eventViewModel.userCreatedEvents.contains { $0.id == firebaseValidation.currentUser?.id }
     }

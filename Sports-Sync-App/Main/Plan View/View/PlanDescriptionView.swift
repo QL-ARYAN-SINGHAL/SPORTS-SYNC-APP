@@ -7,7 +7,9 @@ struct PlanDescriptionView: View {
     @EnvironmentObject var cardViewModel: CardViewModel
     var userEvent: EventInformationDataModal? = nil
     var stadiumData: HomeCardsDataModal?
-  
+    @State private var isSharePresented = false
+    @State private var generatedShareText: String = ""
+
     
     var body: some View {
         VStack(spacing: 25) {
@@ -202,9 +204,25 @@ struct PlanDescriptionView: View {
 
         // MARK: - Footer Buttons (Share and Edit)
         HStack(spacing: 20) {
-            ReusableShareFuncButton(text: .sharePlanString, action: {})  // Share Button
-            ReusableEditFuncButtons(text: .editPlanString, action: {})  // Edit Button
+            ReusableShareFuncButton(text: .sharePlanString, action: {
+                generatedShareText = cardViewModel.generateShareText(userEvent: userEvent, stadiumData: stadiumData)
+                
+                if generatedShareText.contains("Date: ") == false {
+                    print("DEBUG: Event date missing in share text!")
+                } else {
+                    print("DEBUG: Share text is ready")
+                }
+                
+                isSharePresented = true
+            })
+            
+            ReusableEditFuncButtons(text: .editPlanString, action: {})
         }
+        .sheet(isPresented: $isSharePresented) {
+            ShareSheet(activityItems: [generatedShareText])
+                .presentationDetents([.medium, .fraction(0.7), .large])
+        }
+
         .frame(width: 375, height: 65)
     }
 }
