@@ -87,7 +87,7 @@ class FeedViewModal: ObservableObject {
             "postLike": feedData.postLike,
             "postTime": Timestamp(date: feedData.postTime),
             "base64Image": base64Image,
-            "id": userId,
+            "id": userId
         ]
         
         let db = Firestore.firestore()
@@ -112,6 +112,7 @@ class FeedViewModal: ObservableObject {
                 
             }
     }
+    
     //MARK: -  pre check to confirm if user has post or not , if not then he wont be getting any posts
     func checkIfUserHasPosts(userId: String) {
         Firestore.firestore()
@@ -225,43 +226,44 @@ class FeedViewModal: ObservableObject {
 
         likeRef.getDocument { snapshot, error in
             if let snapshot = snapshot, snapshot.exists {
-              
+                // UNLIKE: decrement like count and remove like doc
                 userPostRef.updateData(["postLike": FieldValue.increment(Int64(-1))])
                 likeRef.delete()
 
-               
                 DispatchQueue.main.async {
+                    // Update user post like count
                     if let userIndex = self.userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
                         self.userPosts[userIndex].postLike -= 1
                     }
+                    // Update universal post like count
                     if let universalIndex = self.universalPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
                         self.universalPosts[universalIndex].postLike -= 1
                     }
                 }
 
-               
+                // Update universal feed like count
                 universalPostQuery.getDocuments { querySnapshot, _ in
                     if let doc = querySnapshot?.documents.first {
                         doc.reference.updateData(["postLike": FieldValue.increment(Int64(-1))])
                     }
                 }
-
             } else {
                 // LIKE: increment like count and create like doc
                 userPostRef.updateData(["postLike": FieldValue.increment(Int64(1))])
                 likeRef.setData(["likedAt": Timestamp()])
 
-              
                 DispatchQueue.main.async {
+                    // Update user post like count
                     if let userIndex = self.userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
                         self.userPosts[userIndex].postLike += 1
                     }
+                    // Update universal post like count
                     if let universalIndex = self.universalPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
                         self.universalPosts[universalIndex].postLike += 1
                     }
                 }
 
-                ///Universal feed is updates here
+                // Update universal feed like count
                 universalPostQuery.getDocuments { querySnapshot, _ in
                     if let doc = querySnapshot?.documents.first {
                         doc.reference.updateData(["postLike": FieldValue.increment(Int64(1))])
@@ -272,62 +274,92 @@ class FeedViewModal: ObservableObject {
     }
 
 
+
     //MARK: - FUNCTION TO DELETE USER POST FROM FIREBASE AND FROM UI
     
     func deleteUserPost(post: FeedDataModal) {
-        guard let currentUserId = Auth.auth().currentUser?.uid else {
-            print("No user logged in")
-            return
-        }
-
-        guard post.id == currentUserId else {
-            print("User is not the owner of this post")
-            return
-        }
-
-        let db = Firestore.firestore()
-
-        // Reference to user-specific post
-        let userPostRef = db
-            .collection("users")
-            .document(currentUserId)
-            .collection("MyPosts")
-            .document(post.uniqueID)
-
-        // Reference to universal post (adjust collection name as needed)
-        let universalPostRef = db
-            .collection("UniversalFeeds")
-            .document(post.uniqueID)
-
-        // Delete both
-        userPostRef.delete { userError in
-            if let userError = userError {
-                print("Error deleting user post: \(userError.localizedDescription)")
-            } else {
-                print("User post deleted")
+            guard let currentUserId = Auth.auth().currentUser?.uid else {
+                print("No user logged in")
+                return
             }
 
-            // Delete from universal after user post
-            universalPostRef.delete { universalError in
-                if let universalError = universalError {
-                    print("Error deleting universal post: \(universalError.localizedDescription)")
-                } else {
-                    print("Universal post deleted")
-                }
+            guard post.id == currentUserId else {
+                print("User is not the owner of this post")
+                return
+            }
 
-                // Update UI
-                DispatchQueue.main.async {
-                    self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
-                    print("Removed image having id in userPosts", post.uniqueID)
-                    self.universalPosts.removeAll { $0.uniqueID == post.uniqueID }
+            let db = Firestore.firestore()
+            
+            // Start a batch write operation for atomic updates
+            let batch = db.batch()
+            
+           
+            let userPostRef = db
+                .collection("users")
+                .document(currentUserId)
+                .collection("MyPosts")
+                .document(post.uniqueID)
+            
+           
+            batch.deleteDocument(userPostRef)
+            
+           
+            db.collection("UniversalFeeds")
+                .whereField("id", isEqualTo: post.id)
+                .whereField("captionPost", isEqualTo: post.captionPost)
+                .getDocuments { querySnapshot, error in
                     
+                    if let error = error {
+                        print("Error finding universal post: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    guard let documents = querySnapshot?.documents, !documents.isEmpty else {
+                        print("No matching universal post found")
+                        
+                     
+                        batch.commit { error in
+                            if let error = error {
+                                print("Error deleting user post: \(error.localizedDescription)")
+                            } else {
+                                print("User post deleted successfully")
+                                
+                               
+                                DispatchQueue.main.async {
+                                    self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
+                                }
+                            }
+                        }
+                        return
+                    }
+                    
+                    // Add each matching universal post to the batch delete operation
+                    for document in documents {
+                        batch.deleteDocument(document.reference)
+                        print("Adding universal post \(document.documentID) to batch delete")
+                    }
+                    
+                    // Commit the batch operation
+                    batch.commit { error in
+                        if let error = error {
+                            print("Error in batch delete: \(error.localizedDescription)")
+                        } else {
+                            print("All posts deleted successfully")
+                            
+                            // Update UI
+                            DispatchQueue.main.async {
+                                self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
+                                
+                                // For universal posts, we need to match by content since the ID might be different
+                                self.universalPosts.removeAll {
+                                    $0.id == post.id &&
+                                    $0.captionPost == post.captionPost &&
+                                    $0.base64Image == post.base64Image
+                                }
+                            }
+                        }
+                    }
                 }
-            }
         }
-    }
-
-
-
-
 
 }

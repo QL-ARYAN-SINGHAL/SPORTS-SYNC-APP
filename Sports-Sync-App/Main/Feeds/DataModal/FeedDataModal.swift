@@ -3,20 +3,22 @@
 //  Sports-Sync-App
 //
 //  Created by ARYAN SINGHAL on 05/05/25.
+
 import SwiftUI
 
 struct FeedDataModal: Identifiable, Codable {
     var makeNavigation: Bool = false
     var captionPost: String = ""
-    var id: String = ""
-    var uniqueID : String = ""
+    var id: String = ""              // Firestore Document ID
+    var uniqueID: String = ""        // User UID
     var postLike: Int = 0
     var postTime: Date = Date()
-   
-    // This will store base64 encoded image string (for Firebase)
     var base64Image: String? = nil
 
-    // Computed property to convert base64 string to UIImage
+    // New fields
+    var username: String = ""
+    var userImageURL: String = ""
+
     var localImage: UIImage? {
         get {
             guard let base64Image, let data = Data(base64Encoded: base64Image) else {
@@ -27,8 +29,6 @@ struct FeedDataModal: Identifiable, Codable {
         set {
             if let image = newValue, let data = image.jpegData(compressionQuality: 0.3) {
                 base64Image = data.base64EncodedString()
-                print("Base64 length: \(base64Image?.count ?? 0)")
-
             } else {
                 base64Image = nil
             }
@@ -43,6 +43,7 @@ struct FeedDataModal: Identifiable, Codable {
         case postLike
         case postTime
         case base64Image
-       
+        case username
+        case userImageURL
     }
 }

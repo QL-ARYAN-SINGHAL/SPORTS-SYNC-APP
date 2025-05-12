@@ -10,7 +10,7 @@
 import SwiftUI
 
 struct UserFeedParent: View {
-    @State private var selectedOption: String = "General"
+    @State private var selectedOption: String = "My Feed"
     @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
