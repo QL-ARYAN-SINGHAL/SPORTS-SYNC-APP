@@ -36,7 +36,6 @@ struct LogInFields: View {
     }
 }
 
-// MARK: - Preview
 #Preview {
-    LogInFields()
+    LogInView(isLoading: .constant(true))
 }

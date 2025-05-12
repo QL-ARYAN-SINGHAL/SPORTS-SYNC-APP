@@ -21,19 +21,20 @@ struct ReusablePostListMid: View {
             if let image = postImage {
                 Image(uiImage: image)
                     .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 319, height: 174)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: 319)
                     .cornerRadius(4)
             } else {
                 Image(systemName: "photo.on.rectangle")
                     .resizable()
-                    .scaledToFit()
+                    .aspectRatio(contentMode: .fit)
                     .frame(width: 80, height: 80)
                     .foregroundStyle(.gray)
-                    .frame(width: 319, height: 174)
+                    .frame(maxWidth: 319, minHeight: 174)
                     .background(Color.gray.opacity(0.1))
                     .cornerRadius(4)
             }
+
         }
     }
 }

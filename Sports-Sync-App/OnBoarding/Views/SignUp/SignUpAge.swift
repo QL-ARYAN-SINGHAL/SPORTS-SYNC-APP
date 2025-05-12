@@ -7,7 +7,7 @@ import SwiftUI
 struct SignUpAge: View {
     @EnvironmentObject var formViewModal: FormViewModal
     
-    private var ageRange: ClosedRange<Double> { 10...100 }
+    private var ageRange: ClosedRange<Double> { 0...70 }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {

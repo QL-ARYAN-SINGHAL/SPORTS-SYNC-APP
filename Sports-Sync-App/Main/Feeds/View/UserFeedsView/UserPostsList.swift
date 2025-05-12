@@ -6,6 +6,8 @@
 // Updated UserPostsList.swift
 
 import SwiftUI
+
+
 struct UserPostsList: View {
     var post: FeedDataModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
@@ -22,13 +24,13 @@ struct UserPostsList: View {
                     userImage: firebaseValidation.avatarImage,
                     isOwner: isOwner,
                     onDelete: {
+                        // Call delete function and pass the post
                         feedViewModal.deleteUserPost(post: post)
                     },
                     onReport: {
                         print("Report is pressed")
                     }
                 )
-
 
                 ReusablePostListMid(
                     postCaption: post.captionPost,
@@ -44,7 +46,6 @@ struct UserPostsList: View {
                     commentAction: {},
                     shareAction: {}
                 )
-
             }
             .frame(width: 343)
             .padding()
@@ -54,6 +55,12 @@ struct UserPostsList: View {
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
             )
+            .onAppear {
+                Task{
+                    // Refresh the feed list whenever a post is deleted
+                    await feedViewModal.fetchUserPostsAsync(userId: firebaseValidation.currentUser?.id ?? "")
+                }
+            }
         } else {
             Text("User not logged in.")
                 .foregroundColor(.gray)

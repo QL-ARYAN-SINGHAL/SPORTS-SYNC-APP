@@ -61,6 +61,9 @@ class FormViewModal: ObservableObject {
             }
             if signUpData.ageValue != 0 {
                 newProgress += 15
+                if signUpData.ageValue == 0{
+                    newProgress -= 15
+                }
             }
             
             self.signUpData.progress = newProgress

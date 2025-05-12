@@ -75,13 +75,13 @@ class FeedViewModal: ObservableObject {
             self.isUploading = false
             return
         }
-
+        
         if userSession.uid != userId {
             self.errorMessage = "User ID mismatch."
             self.isUploading = false
             return
         }
-
+        
         let postData: [String: Any] = [
             "captionPost": feedData.captionPost,
             "postLike": feedData.postLike,
@@ -89,33 +89,29 @@ class FeedViewModal: ObservableObject {
             "base64Image": base64Image,
             "id": userId,
         ]
-
+        
         let db = Firestore.firestore()
-
+        
         db.collection("users")
             .document(userId)
             .collection("MyPosts")
             .addDocument(data: postData) { error in
                 if let error = error {
                     self.errorMessage =
-                        "Failed to save user post: \(error.localizedDescription)"
-                } else {
-                    print(" User post uploaded successfully.")
+                    "Failed to save user post: \(error.localizedDescription)"
                 }
             }
-
+        
         db.collection("UniversalFeeds")
             .addDocument(data: postData) { error in
                 if let error = error {
                     self.errorMessage =
-                        "Failed to save universal post: \(error.localizedDescription)"
-                } else {
-                    print(" Universal post uploaded successfully.")
+                    "Failed to save universal post: \(error.localizedDescription)"
                 }
                 self.isUploading = false
+                
             }
     }
-
     //MARK: -  pre check to confirm if user has post or not , if not then he wont be getting any posts
     func checkIfUserHasPosts(userId: String) {
         Firestore.firestore()
@@ -149,6 +145,8 @@ class FeedViewModal: ObservableObject {
                 .getDocuments()
 
             let posts = snapshot.documents.compactMap { decodePost(from: $0) }
+            
+            
 
             await MainActor.run {
                 self.userPosts = posts
@@ -207,41 +205,73 @@ class FeedViewModal: ObservableObject {
     //MARK: - Manages to count of like , each id can have 1 like and if dislike then 0
     func toggleLike(for post: FeedDataModal) {
         guard let currentUserId = Auth.auth().currentUser?.uid else { return }
-        guard
-            let index = userPosts.firstIndex(where: {
-                $0.uniqueID == post.uniqueID
-            })
-        else { return }
 
-        let postRef = Firestore.firestore()
+        let db = Firestore.firestore()
+
+        let userPostRef = db
             .collection("users")
             .document(post.id)
             .collection("MyPosts")
             .document(post.uniqueID)
 
-        let likeRef =
-            postRef
+        let universalPostQuery = db
+            .collection("UniversalFeeds")
+            .whereField("id", isEqualTo: post.id)
+            .whereField("captionPost", isEqualTo: post.captionPost)
+
+        let likeRef = userPostRef
             .collection("Likes")
             .document(currentUserId)
 
         likeRef.getDocument { snapshot, error in
             if let snapshot = snapshot, snapshot.exists {
-                postRef.updateData(["postLike": FieldValue.increment(Int64(-1))]
-                )
+              
+                userPostRef.updateData(["postLike": FieldValue.increment(Int64(-1))])
                 likeRef.delete()
+
+               
                 DispatchQueue.main.async {
-                    self.userPosts[index].postLike -= 1
+                    if let userIndex = self.userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
+                        self.userPosts[userIndex].postLike -= 1
+                    }
+                    if let universalIndex = self.universalPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
+                        self.universalPosts[universalIndex].postLike -= 1
+                    }
                 }
+
+               
+                universalPostQuery.getDocuments { querySnapshot, _ in
+                    if let doc = querySnapshot?.documents.first {
+                        doc.reference.updateData(["postLike": FieldValue.increment(Int64(-1))])
+                    }
+                }
+
             } else {
-                postRef.updateData(["postLike": FieldValue.increment(Int64(1))])
+                // LIKE: increment like count and create like doc
+                userPostRef.updateData(["postLike": FieldValue.increment(Int64(1))])
                 likeRef.setData(["likedAt": Timestamp()])
+
+              
                 DispatchQueue.main.async {
-                    self.userPosts[index].postLike += 1
+                    if let userIndex = self.userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
+                        self.userPosts[userIndex].postLike += 1
+                    }
+                    if let universalIndex = self.universalPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
+                        self.universalPosts[universalIndex].postLike += 1
+                    }
+                }
+
+                ///Universal feed is updates here
+                universalPostQuery.getDocuments { querySnapshot, _ in
+                    if let doc = querySnapshot?.documents.first {
+                        doc.reference.updateData(["postLike": FieldValue.increment(Int64(1))])
+                    }
                 }
             }
         }
     }
-    
+
+
     //MARK: - FUNCTION TO DELETE USER POST FROM FIREBASE AND FROM UI
     
     func deleteUserPost(post: FeedDataModal) {
@@ -256,23 +286,47 @@ class FeedViewModal: ObservableObject {
         }
 
         let db = Firestore.firestore()
+
+        // Reference to user-specific post
         let userPostRef = db
             .collection("users")
             .document(currentUserId)
             .collection("MyPosts")
             .document(post.uniqueID)
 
-        userPostRef.delete { error in
-            if let error = error {
-                print(" Error deleting post: \(error.localizedDescription)")
+        // Reference to universal post (adjust collection name as needed)
+        let universalPostRef = db
+            .collection("UniversalFeeds")
+            .document(post.uniqueID)
+
+        // Delete both
+        userPostRef.delete { userError in
+            if let userError = userError {
+                print("Error deleting user post: \(userError.localizedDescription)")
             } else {
-                print(" Post deleted successfully")
+                print("User post deleted")
+            }
+
+            // Delete from universal after user post
+            universalPostRef.delete { universalError in
+                if let universalError = universalError {
+                    print("Error deleting universal post: \(universalError.localizedDescription)")
+                } else {
+                    print("Universal post deleted")
+                }
+
+                // Update UI
                 DispatchQueue.main.async {
                     self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
+                    print("Removed image having id in userPosts", post.uniqueID)
+                    self.universalPosts.removeAll { $0.uniqueID == post.uniqueID }
+                    
                 }
             }
         }
     }
+
+
 
 
 

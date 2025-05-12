@@ -35,6 +35,8 @@ class FirebaseValidation: ObservableObject {
     // MARK: - Authentication Methods
 
     /// Signs in a user using email and password
+// make these functions static and make firebase servive
+    
     func signIn(withEmail email: String, withPassword password: String) async throws {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)

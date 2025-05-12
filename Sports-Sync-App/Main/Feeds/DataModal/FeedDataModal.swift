@@ -12,7 +12,7 @@ struct FeedDataModal: Identifiable, Codable {
     var uniqueID : String = ""
     var postLike: Int = 0
     var postTime: Date = Date()
-    
+   
     // This will store base64 encoded image string (for Firebase)
     var base64Image: String? = nil
 
@@ -43,5 +43,6 @@ struct FeedDataModal: Identifiable, Codable {
         case postLike
         case postTime
         case base64Image
+       
     }
 }

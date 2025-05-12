@@ -101,7 +101,9 @@ struct MainTabView: View {
             }
             .onAppear {
                 let appearance = UITabBarAppearance()
-                appearance.backgroundColor = UIColor.white.withAlphaComponent(1)
+                appearance.backgroundColor = UIColor.white
+                
+                // make the taoolbar visible  on scrolling
                 UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
                 

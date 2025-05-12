@@ -32,15 +32,19 @@ struct PlanDescriptionView: View {
                     .frame(maxWidth: .infinity)
                     .clipped()
 
-                    Button {
-                        dismiss()
-                    } label: {
-                        ImageConstants.navigationBackImage
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .padding(16)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                ImageConstants.navigationBackImage
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                            }
+                        }
                     }
+
                 }
 
                 VStack(alignment: .leading, spacing: 25) {
@@ -124,16 +128,19 @@ struct PlanDescriptionView: View {
                     .clipped()
                     
                     // MARK: - Back Button
-                    Button {
-                        dismiss()
-                    } label: {
-                        ImageConstants.navigationBackImage
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 24, height: 24)
-                            .padding(16)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: {
+                                dismiss()
+                            }) {
+                                ImageConstants.navigationBackImage
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                            }
+                        }
                     }
-                    .accessibilityLabel("Back")
+
                 }
 
                 // MARK: - Selected Card Information (Event Details)

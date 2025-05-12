@@ -7,18 +7,20 @@
 import SwiftUI
 
 struct UserPostCreationSection: View {
-    
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+
+    @EnvironmentObject var firebaseValidation: FirebaseValidation
     @State private var navigateToCreatePost = false
-  
+
     var body: some View {
         VStack {
-            NavigationLink(destination: CreatePostParent().environmentObject(firebaseValidation), isActive: $navigateToCreatePost) {
-                            EmptyView()
-                        }
-                        .hidden() // Hides the link view
-                        
-            
+            NavigationLink(
+                destination: CreatePostParent().environmentObject(
+                    firebaseValidation), isActive: $navigateToCreatePost
+            ) {
+                EmptyView()
+            }
+            .hidden()
+
             VStack {
                 if let user = firebaseValidation.currentUser {
                     Text("What's on your mind, \(user.firstName)?")
@@ -31,23 +33,24 @@ struct UserPostCreationSection: View {
                         .frame(width: 343, height: 39, alignment: .leading)
                         .foregroundStyle(.disabledFont)
                 }
-                
+
                 HStack {
-                    ReusablePhotoVideoPicker(iconName: "camera.fill", labelText: .cameraString)
-                    ReusablePhotoVideoPicker(iconName: "photo.fill.on.rectangle.fill", labelText: .photoVideoString)
+                    ReusablePhotoVideoPicker(
+                        iconName: "camera.fill", labelText: .cameraString)
+                    ReusablePhotoVideoPicker(
+                        iconName: "photo.fill.on.rectangle.fill",
+                        labelText: .photoVideoString)
                 }
-                .frame(width: 343, height: 40, alignment: .leading)
+                .frame(width: 343, height: 30, alignment: .leading)
             }
             .onTapGesture {
                 navigateToCreatePost = true
-              
             }
         }
-        .frame(width: 343, height: 74)
-        .padding(.vertical , 30)
+        .frame(width: 343, height: 34)
+        .padding(.vertical, 30)
         .environmentObject(firebaseValidation)
-      
-       
+
     }
 }
 

@@ -13,17 +13,18 @@ struct FeedView: View {
     
     var body: some View {
         VStack {
-            if !feedViewModal.hasPostedBefore {
+            if feedViewModal.hasPostedBefore {
+                VStack{
+                    UserFeedParent()
+                    
+                }
+                
+               
+            } else {
                 VStack(spacing: 25) {
                     FeedTextView()
                     FeedButton()
                 }
-               
-            } else {
-                UserFeedParent()
-                
-                   
-                   
             }
         }
         .navigationBarBackButtonHidden()

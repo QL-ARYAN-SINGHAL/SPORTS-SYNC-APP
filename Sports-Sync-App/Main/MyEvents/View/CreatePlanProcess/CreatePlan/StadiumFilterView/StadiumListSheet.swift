@@ -28,8 +28,16 @@ struct StadiumListSheet: View {
     }
 
     var body: some View {
-        ZStack(alignment: .top) {
-            NavigationStack {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 8) {
+                
+                Capsule()
+                    .fill(Color.secondary)
+                    .frame(width: 40, height: 5)
+                    .padding(.top, 8)
+                    .padding(.bottom, 4)
+                    .frame(maxWidth: .infinity, alignment: .center)
+
                 VStack(alignment: .leading, spacing: 8) {
                     Text(verbatim: .popularCourtsString)
                         .font(Font.custom(.fontJakartaBold, size: 18))
@@ -61,28 +69,17 @@ struct StadiumListSheet: View {
                     }
                     .listStyle(.plain)
                 }
-                .onAppear {
-                    cardViewModel.fetchHomeCards()
-                }
-                .navigationBarTitleDisplayMode(.inline)
-                .searchable(text: $eventInformationViewModal.eventInfoData.searchText, prompt: "Select stadium ...")
+                .searchable(
+                    text: $eventInformationViewModal.eventInfoData.searchText,
+                    prompt: "Select stadium ..."
+                )
             }
-
-            
-            Button(action: {
-                isPresented = false
-            }) {
-                // fix the floating circle
-                Image(systemName: "xmark")
-                    .font(.system(size: 18, weight: .bold))
-                    .background{
-                        RoundedRectangle(cornerRadius: 15)
-                            .fill(.background)
-                    }
+            .onAppear {
+                cardViewModel.fetchHomeCards()
             }
+            .navigationBarTitleDisplayMode(.inline)
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
 }
-

@@ -29,20 +29,19 @@ struct EventInformationParent: View {
             .environmentObject(eventInformationViewModel)
             .environmentObject(tabRouter)
             .environmentObject(firebaseValidation)
-
-            if eventInformationViewModel.isSubmitting {
-                ZStack {
-                    Color.black.opacity(0.5)
-                        .ignoresSafeArea()
-
-                    ProgressView("Creating Plan...")
-                        .progressViewStyle(
-                            CircularProgressViewStyle(tint: .white)
-                        )
-                        .foregroundColor(.white)
-                        .padding(24)
-                        .background(Color.black.opacity(0.8))
-                        .cornerRadius(16)
+            .overlay {
+                if eventInformationViewModel.isSubmitting {
+                    ZStack {
+                        Color.black.opacity(0.4).ignoresSafeArea()
+                        ProgressView("Please wait...")
+                            .progressViewStyle(
+                                CircularProgressViewStyle(tint: .white)
+                            )
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.black.opacity(0.7))
+                            .cornerRadius(10)
+                    }
                 }
             }
         }

@@ -55,7 +55,7 @@ struct CreatePostHeading: View {
                         return
                     }
                     feedViewModal.uploadPostToFirebase(userId: userSession.uid)
-                    print(userSession.uid , "is current user in feed id")
+                    
                     dismiss()
                 }) {
                     Text(verbatim: .postString)

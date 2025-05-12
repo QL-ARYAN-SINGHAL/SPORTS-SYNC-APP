@@ -1,55 +1,25 @@
-//
-//  LogIn.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 12/04/25.
-//
 import SwiftUI
 
 struct LogInView: View {
-    
-    // MARK: - StateObjects
+    @Binding var isLoading: Bool
     @StateObject var formViewModal = FormViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
-    @Binding var isLoading: Bool
-    
-    // MARK: - Body
+
     var body: some View {
-        ZStack {
-            VStack {
-                // MARK: - Login Input Fields
-                LogInFields()
-                    .padding()
-                
-                // MARK: - Login Button Handler
-                LogInButton(isLoading: $isLoading)
-            }
-            //ANOTHER LOADER TO DISPLAY
-//            if isLoading {
-//                       Color.black.opacity(0.6)
-//                           .ignoresSafeArea()
-//                       
-//                       ProgressView("Signing up...")
-//                           .progressViewStyle(CircularProgressViewStyle(tint: .white))
-//                           .foregroundColor(.white)
-//                           .font(.headline)
-//                   }
-            
-            if isLoading {
-                Color.black.opacity(0.6)
-                    .ignoresSafeArea()
-                
-                ProgressView("Logging in...")
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .foregroundColor(.white)
-                    .font(.headline)
-            }
+        VStack {
+            LogInFields()
+                .padding()
+
+            LogInButton(isLoading: $isLoading)
+            Spacer()
         }
-        // MARK: - Dependency Injection via Environment Objects
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environmentObject(formViewModal)
         .environmentObject(firebaseValidation)
     }
 }
+
+
 
 // MARK: - Preview
 #Preview {

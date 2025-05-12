@@ -30,18 +30,21 @@ struct EventInformationFields: View {
 
                 VStack(spacing: 16) {
                     FormTextfields(
-                        textField: $eventInformationViewModel.eventInfoData.eventName,
+                        textField: $eventInformationViewModel.eventInfoData
+                            .eventName,
                         placeholder: .eventNameString
                     )
 
                     FormTextfields(
-                        textField: $eventInformationViewModel.eventInfoData.sportsName,
+                        textField: $eventInformationViewModel.eventInfoData
+                            .sportsName,
                         placeholder: .sportsNameString
                     )
 
                     ZStack(alignment: .trailing) {
                         FormTextfields(
-                            textField: $eventInformationViewModel.eventInfoData.eventDate,
+                            textField: $eventInformationViewModel.eventInfoData
+                                .eventDate,
                             placeholder: .eventDateString
                         )
                         .disabled(true)
@@ -62,20 +65,23 @@ struct EventInformationFields: View {
 
                     if showDatePicker {
                         DatePicker(
-                            "", selection: $selectedDate, displayedComponents: .date
+                            "", selection: $selectedDate,
+                            displayedComponents: .date
                         )
                         .datePickerStyle(.graphical)
                         .labelsHidden()
                         .onChange(of: selectedDate) { newDate in
                             let formatter = DateFormatter()
                             formatter.dateStyle = .medium
-                            eventInformationViewModel.eventInfoData.eventDate = formatter.string(from: newDate)
+                            eventInformationViewModel.eventInfoData.eventDate =
+                                formatter.string(from: newDate)
                         }
                     }
 
                     ZStack(alignment: .trailing) {
                         FormTextfields(
-                            textField: $eventInformationViewModel.eventInfoData.eventTime,
+                            textField: $eventInformationViewModel.eventInfoData
+                                .eventTime,
                             placeholder: .eventTimeString
                         )
                         .disabled(true)
@@ -104,7 +110,8 @@ struct EventInformationFields: View {
                         .onChange(of: selectedTime) { newTime in
                             let formatter = DateFormatter()
                             formatter.timeStyle = .short
-                            eventInformationViewModel.eventInfoData.eventTime = formatter.string(from: newTime)
+                            eventInformationViewModel.eventInfoData.eventTime =
+                                formatter.string(from: newTime)
                         }
                     }
                 }
@@ -113,41 +120,67 @@ struct EventInformationFields: View {
 
                 ActivatedButton(buttonText: .createPlanString) {
                     if eventInformationViewModel.checkValidation() {
+                        eventInformationViewModel.isSubmitting = true
                         eventInformationViewModel.eventInformationStoreDB(
                             id: firebaseValidation.currentUser?.id ?? "id",
-                            eventName: eventInformationViewModel.eventInfoData.eventName,
-                            sportsName: eventInformationViewModel.eventInfoData.sportsName,
-                            eventDate: eventInformationViewModel.eventInfoData.eventDate,
-                            eventTime: eventInformationViewModel.eventInfoData.eventTime,
-                            state: eventInformationViewModel.eventInfoData.searchText,
-                            selectedStadium: eventInformationViewModel.eventInfoData.selectedStadium ?? "Failed to get stadium name!"
+                            eventName: eventInformationViewModel.eventInfoData
+                                .eventName,
+                            sportsName: eventInformationViewModel.eventInfoData
+                                .sportsName,
+                            eventDate: eventInformationViewModel.eventInfoData
+                                .eventDate,
+                            eventTime: eventInformationViewModel.eventInfoData
+                                .eventTime,
+                            state: eventInformationViewModel.eventInfoData
+                                .searchText,
+                            selectedStadium: eventInformationViewModel
+                                .eventInfoData.selectedStadium
+                                ?? "Failed to get stadium name!"
                         )
 
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            
                             if eventInformationViewModel.didSubmitSuccessfully {
-                                eventInformationViewModel.resetFields()
-                                selectedDate = Date()
-                                selectedTime = Date()
-                                showDatePicker = false
-                                showTimePicker = false
-                                eventInformationViewModel.eventInfoData.selectedStadium = nil
+                                Task {
+                                    await eventInformationViewModel
+                                        .getUserCreatedEvent()
 
-                                tabRouter.tabDataModal.selectedTab = 1
-                                navigateToMainTab = true
+                                    DispatchQueue.main.async {
+                                        eventInformationViewModel.resetFields()
+                                        selectedDate = Date()
+                                        selectedTime = Date()
+                                        showDatePicker = false
+                                        showTimePicker = false
+                                        eventInformationViewModel.eventInfoData
+                                            .selectedStadium = nil
+
+                                        tabRouter.tabDataModal.selectedTab = 1
+                                        eventInformationViewModel.isSubmitting =
+                                            false
+                                        navigateToMainTab = true
+                                    }
+                                }
+                            } else {
+                                eventInformationViewModel.isSubmitting = false
                             }
                         }
+
                     } else {
                         showAlert = true
                     }
                 }
 
                 // Hidden navigation trigger
-                
-                NavigationLink(destination: MainTabView().environmentObject(tabRouter), isActive: $navigateToMainTab) {
+
+                NavigationLink(
+                    destination: MainTabView().environmentObject(tabRouter),
+                    isActive: $navigateToMainTab
+                ) {
                     EmptyView()
                 }
                 .hidden()
             }
+
             .padding(.horizontal)
             .disabled(eventInformationViewModel.isSubmitting)
             .alert("Please fill out all the fields.", isPresented: $showAlert) {

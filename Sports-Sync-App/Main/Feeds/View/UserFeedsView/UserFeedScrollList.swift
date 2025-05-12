@@ -6,13 +6,11 @@
 //
 import SwiftUI
 
-
 struct UserFeedScrollList: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
-    var selectedOption: String
+    @Binding var selectedOption: String
 
-    @State private var previousSelection: String = ""
 
     var filteredPosts: [FeedDataModal] {
         switch selectedOption {
@@ -28,30 +26,37 @@ struct UserFeedScrollList: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        List {
+           
+            HStack {
+                Spacer()
+                UserDropdownMenu(selectedOption: $selectedOption)
+            }
+            .listRowSeparator(.hidden)
+            .listRowInsets(.none)
+
             
             if filteredPosts.isEmpty {
                 Text("No posts to show.")
                     .foregroundColor(.gray)
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.none)
             } else {
-                
                 ForEach(filteredPosts, id: \.uniqueID) { post in
                     UserPostsList(post: post)
                         .environmentObject(firebaseValidation)
-                        .transition(.opacity.combined(with: .scale))
+                        .environmentObject(feedViewModal)
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(.none)
+                        .background(Color.clear)
                 }
             }
         }
-        .padding()
-        .animation(.easeInOut(duration: 0.3), value: selectedOption) 
+        .listStyle(.plain)
+        .buttonStyle(PlainButtonStyle())
     }
 }
 
 
-
-#Preview {
-    UserFeedScrollList( selectedOption: "My Filter")
-        .environmentObject(FirebaseValidation())
-        .environmentObject(FeedViewModal())
-}

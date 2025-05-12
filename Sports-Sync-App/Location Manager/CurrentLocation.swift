@@ -1,83 +1,74 @@
-//
-//  CurrentLocation.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 30/04/25.
-//
-
-
-//MARK: Responsibilities: - Fetch user location latitude and longitude through CLLOcation , use that fetched lat , lon as argument in reverse geocoder that will convert the lat,lon to the address(particularly we want State).
-import Foundation
+import SwiftUI
 import CoreLocation
-
-//final keyword --> prevents anyone to make an extension or inherit another from this class, this is particularly used when u dont watn to change the data from another part of code and keep data secure.
-
 
 final class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
-         @Published var lastKnownLocation: CLLocationCoordinate2D?
+    @Published var lastKnownLocation: CLLocationCoordinate2D?
     
-    //Variables
-         private var locationCompletion: ((String?) -> Void)?
-         private var manager: CLLocationManager = CLLocationManager()
+    // Variables
+    private var locationCompletion: ((String?) -> Void)?
+    private var manager: CLLocationManager = CLLocationManager()
 
-//    Initialiser
+    // Initializer
     override init() {
         super.init()
-        manager.delegate = self //deleagte here makes the manager to keep a record of change or update in location
+        manager.delegate = self // Delegate here makes the manager keep a record of change or update in location
     }
     
-    func requestState(completion: @escaping (String?) -> Void) { //request for location as State
-                locationCompletion = completion
-                checkLocationAuthorization()
+    func requestState(completion: @escaping (String?) -> Void) { // Request for location as City
+        locationCompletion = completion
+        checkLocationAuthorization()
     }
     
     private func checkLocationAuthorization() {
         
         switch manager.authorizationStatus {
             
-              case .notDetermined:
-                                  manager.requestWhenInUseAuthorization()
-                                  print("User not determined here")
-              case .restricted, .denied:
-                                  print("Location access denied or restricted")
-                                  locationCompletion?(nil)
-              case .authorizedWhenInUse, .authorizedAlways:
-                                  manager.startUpdatingLocation()
-              @unknown default:
-                                  locationCompletion?(nil)
+            case .notDetermined:
+                manager.requestWhenInUseAuthorization()
+                print("User not determined here")
+                
+            case .restricted, .denied:
+                print("Location access denied or restricted")
+                locationCompletion?(nil)
+                
+            case .authorizedWhenInUse, .authorizedAlways:
+                manager.startUpdatingLocation()
+                
+            @unknown default:
+                locationCompletion?(nil)
         }
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-                       checkLocationAuthorization()
+        checkLocationAuthorization()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-                     manager.stopUpdatingLocation()
+        manager.stopUpdatingLocation()
         
-                     guard let location = locations.first else {
-                     locationCompletion?(nil)
-                       return
+        guard let location = locations.first else {
+            locationCompletion?(nil)
+            return
         }
         
-                     lastKnownLocation = location.coordinate
+        lastKnownLocation = location.coordinate
         
-        //call to revser geocoder to fetch state
-                     reverseGeocoding(location: location) { [weak self] state in
-                     self?.locationCompletion?(state)
-                     self?.locationCompletion = nil
+        // Call to reverse geocoder to fetch city
+        reverseGeocoding(location: location) { [weak self] city in
+            self?.locationCompletion?(city)
+            self?.locationCompletion = nil
         }
     }
 
-    //Reverse Geocoder to fetch address from lat,lon
+    // Reverse Geocoder to fetch city from lat,lon
     private func reverseGeocoding(location: CLLocation, completion: @escaping (String?) -> Void) {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
-            if let state = placemarks?.first?.administrativeArea {
-                completion(state)
+            if let city = placemarks?.first?.locality {
+                completion(city) // Return city name
             } else {
-                completion(nil)
+                completion(nil) // Return nil if city is not found
             }
         }
     }

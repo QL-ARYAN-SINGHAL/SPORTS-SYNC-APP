@@ -15,22 +15,17 @@ struct UserFeedParent: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     var body: some View {
-        List {
-            VStack(spacing: 10) {
-                UserPostCreationSection()
+        VStack(spacing: 0) {
+            
+            // Fixed at top
+            UserPostCreationSection()
+                .padding(.horizontal)
+                
 
-                // Dropdown aligned to the right
-                HStack {
-                    Spacer()
-                    UserDropdownMenu(selectedOption: $selectedOption)
-                }
-
-                // Filtered feed based on dropdown
-                UserFeedScrollList(selectedOption: selectedOption)
-                    .environmentObject(feedViewModal)
-                    .environmentObject(firebaseValidation)
-            }
-            .padding()
+            // Dropdown and Feed List in scrollable List
+            UserFeedScrollList(selectedOption: $selectedOption)
+                .environmentObject(feedViewModal)
+                .environmentObject(firebaseValidation)
         }
         .onAppear {
             Task {
@@ -40,10 +35,9 @@ struct UserFeedParent: View {
                 }
             }
         }
-        .scrollIndicators(.hidden)
-        .listStyle(.plain)
     }
 }
+
 
 #Preview {
     UserFeedParent()
