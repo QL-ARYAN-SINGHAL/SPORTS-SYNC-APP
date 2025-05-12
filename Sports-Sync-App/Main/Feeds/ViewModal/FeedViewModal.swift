@@ -241,5 +241,39 @@ class FeedViewModal: ObservableObject {
             }
         }
     }
+    
+    //MARK: - FUNCTION TO DELETE USER POST FROM FIREBASE AND FROM UI
+    
+    func deleteUserPost(post: FeedDataModal) {
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            print("No user logged in")
+            return
+        }
+
+        guard post.id == currentUserId else {
+            print("User is not the owner of this post")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userPostRef = db
+            .collection("users")
+            .document(currentUserId)
+            .collection("MyPosts")
+            .document(post.uniqueID)
+
+        userPostRef.delete { error in
+            if let error = error {
+                print(" Error deleting post: \(error.localizedDescription)")
+            } else {
+                print(" Post deleted successfully")
+                DispatchQueue.main.async {
+                    self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
+                }
+            }
+        }
+    }
+
+
 
 }

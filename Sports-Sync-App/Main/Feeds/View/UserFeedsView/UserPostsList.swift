@@ -22,12 +22,13 @@ struct UserPostsList: View {
                     userImage: firebaseValidation.avatarImage,
                     isOwner: isOwner,
                     onDelete: {
-                        print("Delete is pressed")
+                        feedViewModal.deleteUserPost(post: post)
                     },
                     onReport: {
-                       print("Report is pressed")
+                        print("Report is pressed")
                     }
                 )
+
 
                 ReusablePostListMid(
                     postCaption: post.captionPost,

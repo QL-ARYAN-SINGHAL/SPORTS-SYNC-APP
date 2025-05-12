@@ -33,7 +33,7 @@
         private let db = Firestore.firestore()
         
         // TODO: Use dependency injection for FirebaseValidation instead of @StateObject in future for better testability and architecture
-        @StateObject var firebaseValidation = FirebaseValidation()
+        
 
         // MARK: - Firestore: Store Event
         func eventInformationStoreDB(
@@ -104,9 +104,13 @@
 
         // MARK: - Firestore: Fetch User-Created Events
         func getUserCreatedEvent() async {
-            guard let currentUserID = firebaseValidation.userSession?.uid else {
+            guard let currentUserID = Auth.auth().currentUser?.uid else {
                 print("User not logged in")
                 return
+            }
+
+            DispatchQueue.main.async {
+                self.isSubmitting = true
             }
 
             do {
@@ -136,16 +140,19 @@
 
                 DispatchQueue.main.async {
                     self.userCreatedEvents = events
-                    // Default filter: current week
                     let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
                     self.filterEvents(for: startOfWeek)
+                    self.isSubmitting = false
                 }
 
-
             } catch {
-                print("Error fetching user events: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    print("Error fetching user events: \(error.localizedDescription)")
+                    self.isSubmitting = false
+                }
             }
         }
+
 
         // MARK: - Form Reset
         func resetFields() {

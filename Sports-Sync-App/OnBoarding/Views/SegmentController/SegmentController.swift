@@ -69,7 +69,10 @@ struct SegmentController: View {
             } else {
                 SignUpView(isLoading: $isLoading)
             }
+           
         }
+        
+        
         .navigationBarBackButtonHidden()
         Spacer()
     }

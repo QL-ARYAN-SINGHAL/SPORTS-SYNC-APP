@@ -31,7 +31,6 @@ struct UserFeedParent: View {
                     .environmentObject(firebaseValidation)
             }
             .padding()
-
         }
         .onAppear {
             Task {

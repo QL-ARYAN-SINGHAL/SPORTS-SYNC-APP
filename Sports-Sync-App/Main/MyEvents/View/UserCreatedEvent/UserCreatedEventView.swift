@@ -39,6 +39,7 @@ struct UserCreatedEventView: View {
                 .padding()
             }
         }
+        
         .onAppear {
             cardViewModal.fetchHomeCards()
             Task {
