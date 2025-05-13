@@ -9,7 +9,7 @@ import Foundation
 enum LoginWith: String,Identifiable,CaseIterable,Codable{
    
     case withEmail = " "
-    case withPhoneNumber = ""
+  
     
     var id: String { self.rawValue }
 }

@@ -27,11 +27,11 @@ struct SignUpButton: View {
                 
                 // MARK: - Form Validation Flags
                 let isEmailSignup = formViewModal.signUpData.signUpWith == .withEmail
-                let isPhoneSignup = formViewModal.signUpData.signUpWith == .withPhoneNumber
+              
 
                 let isEmailValid = formViewModal.isEmailValid(email: formViewModal.signUpData.signUpEmail)
                 let isPasswordValid = formViewModal.isPasswordValid(password: formViewModal.signUpData.signUpPassword)
-                let isPhoneValid = formViewModal.signUpData.phoneNumber.count == 10
+               
                 let isPasswordConfirmed = formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword
                 let isGenderSelected = formViewModal.signUpData.selectedGender != nil
 
@@ -56,28 +56,7 @@ struct SignUpButton: View {
                         credentialAlert = true
                     }
                 }
-                else if isPhoneSignup {
-                    if isPhoneValid && isPasswordValid && isPasswordConfirmed && isGenderSelected {
-                        Task {
-                            isLoading = true
-                            await firebaseValidation.register(
-                                withEmail: "Aryan@Gmail.com",
-                                password: formViewModal.signUpData.signUpPassword,
-                                firstName: formViewModal.signUpData.firstName,
-                                lastName: formViewModal.signUpData.lastName,
-                                age: formViewModal.signUpData.ageValue,
-                                gender: formViewModal.signUpData.selectedGender?.rawValue ?? "",
-                                phoneNumber: formViewModal.signUpData.phoneNumber
-                            )
-                            let defaultImage = UIImage(systemName: "person.circle")!
-                            await firebaseValidation.saveUserData(with: defaultImage)
-                            shouldNavigate = true
-                            isLoading = false
-                        }
-                    } else {
-                        credentialAlert = true
-                    }
-                }
+               
             }
         }
         .alert("Alert", isPresented: $credentialAlert) {

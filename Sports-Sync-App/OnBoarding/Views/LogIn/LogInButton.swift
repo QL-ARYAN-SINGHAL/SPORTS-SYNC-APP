@@ -52,18 +52,6 @@ struct LogInButton: View {
                             isLoading = false
                         }
 
-                    case .withPhoneNumber:
-                        Task {
-                            isLoading = true
-                            firebaseValidation.sendOTP(phoneNumber: formViewModal.logInData.phoneNumber)
-                            if firebaseValidation.isAuthenticated {
-                                navigateToOTP = true
-                            } else {
-                                alertMessage = "Failed to send OTP. Try again."
-                                showAlert = true
-                            }
-                            isLoading = false
-                        }
                     }
                 }
                 .alert(isPresented: $showAlert) {

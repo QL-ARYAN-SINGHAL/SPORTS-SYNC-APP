@@ -27,7 +27,7 @@ class FormViewModal: ObservableObject {
         return isValid
     }
     
-    
+  
     
     
     func isPasswordValid<T>(password : T) -> Bool {
@@ -38,6 +38,10 @@ class FormViewModal: ObservableObject {
         return isPasswordValid
     }
     
+    //function to make  a charcater limit
+    func characterLimit(_ text: String, limit: Int) -> String {
+        return String(text.prefix(limit))
+    }
     
     
     func calculateProgress(from signUpData: SignUpDataModel)->Int {

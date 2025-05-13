@@ -132,9 +132,6 @@ class FirebaseValidation: ObservableObject {
             if email?.contains("@") == true {
                 user.signUpEmail = email ?? ""
                 user.signUpWith = .withEmail
-            } else if let phone = phoneNumber, phone.count == 10 {
-                user.phoneNumber = phone
-                user.signUpWith = .withPhoneNumber
             }
 
             let encodedUser = try Firestore.Encoder().encode(user)

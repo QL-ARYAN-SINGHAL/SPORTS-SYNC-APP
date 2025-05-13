@@ -17,13 +17,7 @@ struct LogInFields: View {
                     textField: $formViewModal.logInData.loginEmail,
                     placeholder: .emailPlaceholder
                 )
-                
-            case .withPhoneNumber:
-               
-                FormTextfields(
-                    textField: $formViewModal.logInData.phoneNumber,
-                    placeholder: .emailPlaceholder
-                )
+        
             }
             
             // MARK: - Secure Password Field
