@@ -25,6 +25,7 @@ struct EventView: View {
                         VStack(spacing: 16) {
                             EventListView()
                             UserCreatedEventView()
+                            Spacer().frame(height : 100)
                             EventButton()
                                 .environmentObject(tabRouter)
                         }

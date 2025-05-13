@@ -145,9 +145,7 @@ class FeedViewModal: ObservableObject {
                 .order(by: "postTime", descending: true)
                 .getDocuments()
 
-            var posts = snapshot.documents.compactMap { decodePost(from: $0) }
-
-            // Fetch first name only once since all posts are by the same user
+            // Fetch display name
             var displayName = "Anonymous"
             do {
                 let userSnapshot = try await Firestore.firestore()
@@ -159,11 +157,12 @@ class FeedViewModal: ObservableObject {
                 print("Failed to get name for user:", error)
             }
 
-            // Assign displayName to all posts
-            for i in posts.indices {
-                posts[i].displayName = displayName
+            // Create posts with displayName already set
+            let posts = snapshot.documents.compactMap { doc -> FeedDataModal? in
+                var post = decodePost(from: doc)
+                post?.displayName = displayName
+                return post
             }
-           
 
             await MainActor.run {
                 self.userPosts = posts

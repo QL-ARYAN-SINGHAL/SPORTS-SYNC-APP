@@ -65,6 +65,7 @@ struct EventInformationFields: View {
                 if showDatePicker {
                     DatePicker(
                         "", selection: $selectedDate,
+                        in: Date()...,
                         displayedComponents: .date
                     )
                     .datePickerStyle(.graphical)
