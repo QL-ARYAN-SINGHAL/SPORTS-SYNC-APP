@@ -1,12 +1,10 @@
-//Responsibility : Here we are fetching the selected sports ards and data to be selected
-
 import SwiftUI
 
 struct SportSelection: View {
 
     @Environment(\.dismiss) private var dismiss
     @StateObject var selectSportsViewModal = SelectSportsViewModal()
-
+    @EnvironmentObject var tabRouter: TabRouter
     @State private var selectedSport: SelectSportDataModal? = nil
     @State private var shouldNavigate = false
 
@@ -58,14 +56,21 @@ struct SportSelection: View {
                     }
                 )
                 .frame(height: 60, alignment: .center)
+
+                // Using NavigationLink with isActive to navigate
+                NavigationLink(
+                    destination: EventInformationParent()
+                        .environmentObject(tabRouter),
+                    isActive: $shouldNavigate
+                ) {
+                    EmptyView()
+                }
+                .hidden()
             }
             .onAppear {
                 selectSportsViewModal.fetchSelectSports()
             }
             .navigationBarBackButtonHidden()
-            .navigationDestination(isPresented: $shouldNavigate) {
-                EventInformationParent()
-            }
         }
     }
 }

@@ -5,14 +5,14 @@ struct EventInformationFields: View {
     @EnvironmentObject var eventInformationViewModel: EventInformationViewModal
     @EnvironmentObject var tabRouter: TabRouter
     @EnvironmentObject var firebaseValidation: FirebaseValidation
-
+     
+    @State private var navigateBackToMain: Bool = false
     @State private var currentMonth = Date.now
     @State private var showDatePicker = false
     @State private var showTimePicker = false
     @State private var selectedDate = Date()
     @State private var selectedTime = Date()
     @State private var showAlert = false
-    @State private var navigateToMainTab = false
 
     var selectedMonth: String {
         let formatter = DateFormatter()
@@ -27,20 +27,20 @@ struct EventInformationFields: View {
                     .font(Font.custom(.fontJakartaBold, size: 18))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, 17)
-
+                
                 VStack(spacing: 16) {
                     FormTextfields(
                         textField: $eventInformationViewModel.eventInfoData
                             .eventName,
                         placeholder: .eventNameString
                     )
-
+                    
                     FormTextfields(
                         textField: $eventInformationViewModel.eventInfoData
                             .sportsName,
                         placeholder: .sportsNameString
                     )
-
+                    
                     ZStack(alignment: .trailing) {
                         FormTextfields(
                             textField: $eventInformationViewModel.eventInfoData
@@ -51,7 +51,7 @@ struct EventInformationFields: View {
                         .onTapGesture {
                             withAnimation { showDatePicker.toggle() }
                         }
-
+                        
                         Button(action: {
                             withAnimation { showDatePicker.toggle() }
                         }) {
@@ -62,7 +62,7 @@ struct EventInformationFields: View {
                                 .padding(.trailing, 8)
                         }
                     }
-
+                    
                     if showDatePicker {
                         DatePicker(
                             "", selection: $selectedDate,
@@ -74,10 +74,10 @@ struct EventInformationFields: View {
                             let formatter = DateFormatter()
                             formatter.dateStyle = .medium
                             eventInformationViewModel.eventInfoData.eventDate =
-                                formatter.string(from: newDate)
+                            formatter.string(from: newDate)
                         }
                     }
-
+                    
                     ZStack(alignment: .trailing) {
                         FormTextfields(
                             textField: $eventInformationViewModel.eventInfoData
@@ -88,7 +88,7 @@ struct EventInformationFields: View {
                         .onTapGesture {
                             showTimePicker.toggle()
                         }
-
+                        
                         Button(action: {
                             showTimePicker.toggle()
                         }) {
@@ -99,7 +99,7 @@ struct EventInformationFields: View {
                                 .padding(.trailing, 8)
                         }
                     }
-
+                    
                     if showTimePicker {
                         DatePicker(
                             "", selection: $selectedTime,
@@ -111,13 +111,13 @@ struct EventInformationFields: View {
                             let formatter = DateFormatter()
                             formatter.timeStyle = .short
                             eventInformationViewModel.eventInfoData.eventTime =
-                                formatter.string(from: newTime)
+                            formatter.string(from: newTime)
                         }
                     }
                 }
-
+                
                 Spacer()
-
+                
                 ActivatedButton(buttonText: .createPlanString) {
                     if eventInformationViewModel.checkValidation() {
                         eventInformationViewModel.isSubmitting = true
@@ -135,16 +135,16 @@ struct EventInformationFields: View {
                                 .searchText,
                             selectedStadium: eventInformationViewModel
                                 .eventInfoData.selectedStadium
-                                ?? "Failed to get stadium name!"
+                            ?? "Failed to get stadium name!"
                         )
-
+                        
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             
                             if eventInformationViewModel.didSubmitSuccessfully {
                                 Task {
                                     await eventInformationViewModel
                                         .getUserCreatedEvent()
-
+                                    
                                     DispatchQueue.main.async {
                                         eventInformationViewModel.resetFields()
                                         selectedDate = Date()
@@ -153,43 +153,39 @@ struct EventInformationFields: View {
                                         showTimePicker = false
                                         eventInformationViewModel.eventInfoData
                                             .selectedStadium = nil
-
-                                        tabRouter.tabDataModal.selectedTab = 1
-                                        eventInformationViewModel.isSubmitting =
-                                            false
-                                        navigateToMainTab = true
+                                        
+                                        
+                                        tabRouter.tabDataModal.selectedTab = 1 // Set the selected tab to 1
+                                        
+                                        eventInformationViewModel.isSubmitting = false
+                                        navigateBackToMain = true
                                     }
                                 }
                             } else {
                                 eventInformationViewModel.isSubmitting = false
                             }
                         }
-
+                        
                     } else {
                         showAlert = true
                     }
                 }
-               
-
-                NavigationLink(
-                    destination: MainTabView()
-                        .environmentObject(tabRouter),
-                    isActive: $navigateToMainTab
-                ) {
-                    EmptyView()
-                }
-                .hidden()
-
-
             }
-
             .padding(.horizontal)
             .disabled(eventInformationViewModel.isSubmitting)
             .alert("Please fill out all the fields.", isPresented: $showAlert) {
                 Button("OK", role: .cancel) {}
-                // Hidden navigation trigger
-
             }
+
+            // NavigationLink with isActive
+            NavigationLink(
+                destination: MainTabView() // Replace with the correct destination view
+                    .environmentObject(tabRouter),
+                isActive: $navigateBackToMain
+            ) {
+                EmptyView()
+            }
+            .hidden()
         }
     }
 }

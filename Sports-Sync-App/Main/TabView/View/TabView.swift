@@ -28,6 +28,7 @@ struct MainTabView: View {
                     .tag(0)
                 
                 EventView()
+                    .environmentObject(tabRouter)
                    
                     .tabItem {
                         ImageConstants.calenderTabImage
@@ -63,11 +64,6 @@ struct MainTabView: View {
                     }
                     .tag(3)
             }
-            .onChange(of: tabRouter.tabDataModal.selectedTab) { newTab in
-                print("Tab selected: \(newTab)")
-            }
-
-            .environmentObject(tabRouter)
             .accentColor(.appTint)
             .toolbar {
                 if tabRouter.tabDataModal.selectedTab != 3 {
@@ -104,6 +100,7 @@ struct MainTabView: View {
                 }
             }
             .onAppear {
+               
                 let appearance = UITabBarAppearance()
                 appearance.backgroundColor = UIColor.white
                 

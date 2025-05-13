@@ -13,8 +13,6 @@ struct EventInformationTitle: View {
     //Propertywrappers
     @Environment(\.dismiss) private var dismiss
     
-   
-    
     var body: some View {
         VStack {
             HStack(spacing: 12) {

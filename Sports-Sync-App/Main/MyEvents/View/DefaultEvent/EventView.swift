@@ -10,6 +10,7 @@ struct EventView: View {
     @StateObject private var eventViewModel = EventInformationViewModal()
     @StateObject private var cardViewModel = CardViewModel()
     @StateObject private var firebaseValidation = FirebaseValidation()
+    @EnvironmentObject var tabRouter : TabRouter
     
     @State private var hasFetchedOnce = false
     private var shouldShowUserCreatedEvents: Bool {
@@ -25,6 +26,7 @@ struct EventView: View {
                             EventListView()
                             UserCreatedEventView()
                             EventButton()
+                                .environmentObject(tabRouter)
                         }
                     }
                 } else {

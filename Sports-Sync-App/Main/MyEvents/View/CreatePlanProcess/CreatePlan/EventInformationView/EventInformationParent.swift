@@ -10,7 +10,7 @@ import SwiftUI
 struct EventInformationParent: View {
 
     @StateObject var eventInformationViewModel = EventInformationViewModal()
-    @StateObject var tabRouter = TabRouter()
+    @EnvironmentObject var tabRouter : TabRouter
     @StateObject var firebaseValidation = FirebaseValidation()
 
     var body: some View {
@@ -22,12 +22,12 @@ struct EventInformationParent: View {
                     VStack(spacing: 16) {
                         EventInformationSearch()
                         EventInformationFields()
+                            .environmentObject(tabRouter)
                     }
                 }
                 .navigationBarBackButtonHidden(true)
             }
             .environmentObject(eventInformationViewModel)
-            .environmentObject(tabRouter)
             .environmentObject(firebaseValidation)
             .overlay {
                 if eventInformationViewModel.isSubmitting {
@@ -52,6 +52,4 @@ struct EventInformationParent: View {
     EventInformationParent()
 }
 
-#Preview {
-    EventInformationParent()
-}
+
