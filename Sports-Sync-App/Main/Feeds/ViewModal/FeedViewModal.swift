@@ -145,9 +145,25 @@ class FeedViewModal: ObservableObject {
                 .order(by: "postTime", descending: true)
                 .getDocuments()
 
-            let posts = snapshot.documents.compactMap { decodePost(from: $0) }
-            
-            
+            var posts = snapshot.documents.compactMap { decodePost(from: $0) }
+
+            // Fetch first name only once since all posts are by the same user
+            var displayName = "Anonymous"
+            do {
+                let userSnapshot = try await Firestore.firestore()
+                    .collection("users")
+                    .document(userId)
+                    .getDocument()
+                displayName = userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
+            } catch {
+                print("Failed to get name for user:", error)
+            }
+
+            // Assign displayName to all posts
+            for i in posts.indices {
+                posts[i].displayName = displayName
+            }
+           
 
             await MainActor.run {
                 self.userPosts = posts
@@ -159,6 +175,7 @@ class FeedViewModal: ObservableObject {
     }
 
 
+
     //MARK: -  This fetches all the post , currentuser and other users
     func fetchUniversalPostsAsync() async {
         do {
@@ -167,9 +184,24 @@ class FeedViewModal: ObservableObject {
                 .order(by: "postTime", descending: true)
                 .getDocuments()
 
-            let posts = snapshot.documents.compactMap { decodePost(from: $0) }
+            var posts = snapshot.documents.compactMap { decodePost(from: $0) }
 
-            await MainActor.run  {
+            for i in posts.indices {
+                let userId = posts[i].id
+                do {
+                    let userSnapshot = try await Firestore.firestore()
+                        .collection("users")
+                        .document(userId)
+                        .getDocument()
+
+                    let name = userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
+                    posts[i].displayName = name
+                } catch {
+                    print("Failed to get name for \(userId):", error)
+                }
+            }
+
+            await MainActor.run {
                 self.universalPosts = posts
             }
 
@@ -178,23 +210,22 @@ class FeedViewModal: ObservableObject {
         }
     }
 
+
     //MARK: - general function that decodes the data and image and are called by universal and user functions
-    private func decodePost(from document: QueryDocumentSnapshot)
-        -> FeedDataModal?
-    {
+    private func decodePost(from document: QueryDocumentSnapshot) -> FeedDataModal? {
         let data = document.data()
 
         guard let captionPost = data["captionPost"] as? String,
-            let postLike = data["postLike"] as? Int,
-            let timestamp = data["postTime"] as? Timestamp,
-            let base64Image = data["base64Image"] as? String,
-            let userId = data["id"] as? String
-          
-           
+              let postLike = data["postLike"] as? Int,
+              let timestamp = data["postTime"] as? Timestamp,
+              let base64Image = data["base64Image"] as? String,
+              let userId = data["id"] as? String
         else {
             return nil
         }
+
         let likedUsers = data["likedUsers"] as? [String] ?? []
+
         return FeedDataModal(
             captionPost: captionPost,
             id: userId,
@@ -202,9 +233,11 @@ class FeedViewModal: ObservableObject {
             postLike: postLike,
             postTime: timestamp.dateValue(),
             base64Image: base64Image,
-            likedUsers: likedUsers
+            likedUsers: likedUsers,
+            displayName: "Anonymous"
         )
     }
+
 
     //MARK: - Manages to count of like , each id can have 1 like and if dislike then 0
     func toggleLike(for post: FeedDataModal) {

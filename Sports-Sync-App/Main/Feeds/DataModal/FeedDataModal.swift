@@ -15,7 +15,7 @@ struct FeedDataModal: Identifiable, Codable {
     var postTime: Date = Date()
     var base64Image: String? = nil
     var likedUsers: [String]? = []
-
+    var displayName : String = ""
     // New fields
     var username: String = ""
     var userImageURL: String = ""
@@ -28,7 +28,7 @@ struct FeedDataModal: Identifiable, Codable {
             return UIImage(data: data)
         }
         set {
-            if let image = newValue, let data = image.jpegData(compressionQuality: 0.3) {
+            if let image = newValue, let data = image.jpegData(compressionQuality: 0.2) {
                 base64Image = data.base64EncodedString()
             } else {
                 base64Image = nil
@@ -46,5 +46,6 @@ struct FeedDataModal: Identifiable, Codable {
         case base64Image
         case username
         case userImageURL
+        case displayName
     }
 }

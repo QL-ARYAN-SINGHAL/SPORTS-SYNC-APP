@@ -10,5 +10,7 @@ import SwiftUI
 
 class TabRouter: ObservableObject {
     @Published var tabDataModal = TabDataModal()
+    @Published var shouldReturnToRoot = false
     
 }
+

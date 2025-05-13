@@ -5,12 +5,6 @@
 //  Created by ARYAN SINGHAL on 05/05/25.
 //
 
-//
-//  EventTextView.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 24/04/25.
-//
 
 import SwiftUI
 

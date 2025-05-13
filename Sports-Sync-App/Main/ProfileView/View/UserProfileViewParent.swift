@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct UserProfileViewParent: View {
-    @State private var navigationDestination: String = ""
+    @State private var navigationTermCondition: Bool = false
+    @State private var navigationPrivacyPolicy: Bool = false
     @StateObject var firebaseValidation = FirebaseValidation()
 
     var body: some View {
@@ -12,36 +13,27 @@ struct UserProfileViewParent: View {
                 UserDetailsView()
 
                 ReusableDetailButton(title: .privacyPolicyString, action: {
-                    navigationDestination = "PrivacyPolicy"
+                    navigationPrivacyPolicy = true
                 })
 
                 ReusableDetailButton(title: .termsConditionString, action: {
-                    navigationDestination = "TermsAndConditions"
+                    navigationTermCondition = true
                 })
 
                 UserLogOut()
 
-                // Hidden NavigationLink Trigger
-                NavigationLink(destination: destinationView(for: navigationDestination), isActive: .constant(!navigationDestination.isEmpty)) {
-                    EmptyView()
-                }
+                    .navigationDestination(isPresented: $navigationPrivacyPolicy){
+                        PrivacyPolicy()
+                    }
+                    .navigationDestination(isPresented: $navigationTermCondition){
+                        TermsAndConditions()
+                    }
             }
             .frame(height: 600, alignment: .top)
             .environmentObject(firebaseValidation)
         }
     }
 	
-    @ViewBuilder
-    private func destinationView(for destination: String) -> some View {
-        switch destination {
-        case "PrivacyPolicy":
-            PrivacyPolicy()
-        case "TermsAndConditions":
-            TermsAndConditions()
-        default:
-            EmptyView()
-        }
-    }
 }
 
 #Preview {

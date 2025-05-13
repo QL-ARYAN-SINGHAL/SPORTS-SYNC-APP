@@ -70,6 +70,8 @@ struct SportSelection: View {
             .onAppear {
                 selectSportsViewModal.fetchSelectSports()
             }
+           
+
             .navigationBarBackButtonHidden()
         }
     }

@@ -5,7 +5,7 @@ struct UserDropdownMenu: View {
 
     var body: some View {
         Menu {
-            Button("General") { selectedOption = "General" }
+            Button("All") { selectedOption = "All" }
             Button("My Feed") { selectedOption = "My Feed" }
         } label: {
             HStack {

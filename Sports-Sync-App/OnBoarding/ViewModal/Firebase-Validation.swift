@@ -166,7 +166,7 @@ class FirebaseValidation: ObservableObject {
     /// Uploads profile image and updates Firestore
     func uploadProfileImageAndSaveToFirestore(_ image: UIImage) async {
         guard let uid = userSession?.uid,
-              let imageData = image.jpegData(compressionQuality: 0.6) else { return }
+              let imageData = image.jpegData(compressionQuality: 0.4) else { return }
 
         // Save image to app's local document directory
         let filename = "\(uid)_profile.jpg"
@@ -218,7 +218,7 @@ class FirebaseValidation: ObservableObject {
             }
 
             if let avatarImage = avatarImage,
-               let imageData = avatarImage.jpegData(compressionQuality: 0.6) {
+               let imageData = avatarImage.jpegData(compressionQuality: 0.5) {
                 self.avatarImage = avatarImage
                 UserDefaults.standard.set(imageData, forKey: "UserImage")
                 print("User image saved in UserDefaults, size: \(imageData.count) bytes")

@@ -22,7 +22,7 @@ struct UserPostsList: View {
 
                 VStack(spacing: 15) {
                     ReusablePostListHeader(
-                        userName: user.firstName,
+                        userName: post.displayName,
                         postTime: post.postTime,
                         userImage: firebaseValidation.avatarImage,
                         isOwner: isOwner,

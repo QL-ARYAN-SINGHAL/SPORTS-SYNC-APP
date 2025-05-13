@@ -10,6 +10,8 @@ struct MainTabView: View {
     let locationManager = LocationManager()
     
     @State private var currentLocation: String = "Fetching..."
+    
+
 
     var body: some View {
         NavigationStack {
@@ -29,6 +31,7 @@ struct MainTabView: View {
                 
                 EventView()
                     .environmentObject(tabRouter)
+                    
                    
                     .tabItem {
                         ImageConstants.calenderTabImage
