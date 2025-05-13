@@ -92,15 +92,15 @@ class FirebaseValidation: ObservableObject {
     }
 
     /// Sends a password reset email
-    func resetPassword(email: String) {
-        Auth.auth().sendPasswordReset(withEmail: email) { error in
-            if let error = error {
-                print("Reset Password error: \(error.localizedDescription)")
-                return
-            }
-            print("Password reset email sent successfully")
+    func resetPassword(email: String) async -> Bool {
+        do {
+            try await Auth.auth().sendPasswordReset(withEmail: email)
+            return true
+        } catch {
+            return false
         }
     }
+
 
     // MARK: - Registration
 

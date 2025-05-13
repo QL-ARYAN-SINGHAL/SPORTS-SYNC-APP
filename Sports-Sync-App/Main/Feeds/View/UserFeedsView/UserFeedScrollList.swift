@@ -15,7 +15,7 @@ struct UserFeedScrollList: View {
     var filteredPosts: [FeedDataModal] {
         switch selectedOption {
         case "My Feed":
-            return feedViewModal.userPosts.filter {
+            return feedViewModal.universalPosts.filter {
                 $0.id == firebaseValidation.currentUser?.id
             }
         case "All":

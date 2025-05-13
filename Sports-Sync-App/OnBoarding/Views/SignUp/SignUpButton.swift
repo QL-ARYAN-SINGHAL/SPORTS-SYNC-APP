@@ -34,9 +34,17 @@ struct SignUpButton: View {
                
                 let isPasswordConfirmed = formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword
                 let isGenderSelected = formViewModal.signUpData.selectedGender != nil
+                
+                //Tghis ensures that no only white spaces allowed
+                let nameCharacterSet = CharacterSet.letters.union(.whitespaces)
+                let isFirstName = !formViewModal.signUpData.firstName.trimmingCharacters(in: .whitespaces).isEmpty &&
+                    formViewModal.signUpData.firstName.rangeOfCharacter(from: nameCharacterSet.inverted) == nil
+
+                let isLastName = !formViewModal.signUpData.lastName.trimmingCharacters(in: .whitespaces).isEmpty &&
+                    formViewModal.signUpData.lastName.rangeOfCharacter(from: nameCharacterSet.inverted) == nil
 
                 if isEmailSignup {
-                    if isEmailValid && isPasswordValid && isPasswordConfirmed && isGenderSelected {
+                    if isEmailValid && isPasswordValid && isFirstName && isLastName && isPasswordConfirmed && isGenderSelected {
                         Task {
                             isLoading = true
                             await firebaseValidation.register(

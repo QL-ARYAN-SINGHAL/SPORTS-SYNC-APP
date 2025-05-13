@@ -5,14 +5,8 @@
 //  Created by ARYAN SINGHAL on 16/04/25.
 //
 
-//
-//  ForgetPasswordButton.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 16/04/25.
-//
-
 import SwiftUI
+
 
 struct ForgetPasswordButton: View {
     @State private var showErrorAlert = false
@@ -21,34 +15,34 @@ struct ForgetPasswordButton: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             VStack {
                 ActivatedButton(buttonText: .resetPasswordString) {
                     Task {
-                        firebaseValidation.resetPassword(
-                            email: formViewModal.logInData.forgotEmailText)
+                        let success = await firebaseValidation.resetPassword(email: formViewModal.logInData.forgotEmailText)
+                        if success {
+                            shouldNavigate = true
+                        } else {
+                            showErrorAlert = true
+                        }
                     }
                 }
-                
-                navigationDestination(isPresented: $shouldNavigate) {
-                    ResetPasswordSuccess()
-                }
             }
-            .alert(isPresented: $showErrorAlert) {
-                Alert(
-                    title: Text("Email invalid or not registered"),
-                    message: Text("Try email again!"),
-                    dismissButton: .default(Text("OK"))
-                )
+            .alert("Email invalid or not registered", isPresented: $showErrorAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Try email again!")
+            }
+            .navigationDestination(isPresented: $shouldNavigate) {
+                ResetPasswordSuccess()
             }
         }
     }
 }
 
 #Preview {
-    NavigationStack {
-        ForgetPasswordButton()
-            .environmentObject(FormViewModal())
-            .environmentObject(FirebaseValidation())
-    }
+    ForgetPasswordButton()
+        .environmentObject(FormViewModal())
+        .environmentObject(FirebaseValidation())
 }
+

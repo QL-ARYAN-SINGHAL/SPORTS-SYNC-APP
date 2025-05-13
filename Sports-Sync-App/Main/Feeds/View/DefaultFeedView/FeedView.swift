@@ -1,3 +1,4 @@
+import FirebaseAuth
 //
 //  HomeView.swift
 //  Sports-Sync-App
@@ -5,21 +6,19 @@
 //  Created by ARYAN SINGHAL on 22/04/25.
 //
 import SwiftUI
-import FirebaseAuth
 
 struct FeedView: View {
     @StateObject var feedViewModal = FeedViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
-    
+
     var body: some View {
         VStack {
             if feedViewModal.hasPostedBefore {
-                VStack{
+                VStack {
                     UserFeedParent()
-                    
+
                 }
-                
-               
+
             } else {
                 VStack(spacing: 25) {
                     FeedTextView()
@@ -35,11 +34,9 @@ struct FeedView: View {
         }
         .environmentObject(feedViewModal)
         .environmentObject(firebaseValidation)
-      
-       
+
     }
 }
-
 
 #Preview {
     FeedView()
