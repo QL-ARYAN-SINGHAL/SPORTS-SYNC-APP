@@ -169,22 +169,26 @@ struct EventInformationFields: View {
                         showAlert = true
                     }
                 }
-
-                // Hidden navigation trigger
+               
 
                 NavigationLink(
-                    destination: MainTabView().environmentObject(tabRouter),
+                    destination: MainTabView()
+                        .environmentObject(tabRouter),
                     isActive: $navigateToMainTab
                 ) {
                     EmptyView()
                 }
                 .hidden()
+
+
             }
 
             .padding(.horizontal)
             .disabled(eventInformationViewModel.isSubmitting)
             .alert("Please fill out all the fields.", isPresented: $showAlert) {
                 Button("OK", role: .cancel) {}
+                // Hidden navigation trigger
+
             }
         }
     }

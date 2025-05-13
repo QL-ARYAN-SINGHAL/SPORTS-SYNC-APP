@@ -10,9 +10,9 @@ struct ReusablePostListFooter: View {
     
     var commentCount: Int
     var likeCount: Int
-    @State private var isLiked: Bool = false
-    @State private var isCommented: Bool = false
-    @State private var isShared: Bool = false
+    var isLiked: Bool
+    var isCommented: Bool
+    var isShared: Bool // Keep this as a parameter
     var likeAction: () -> Void
     var commentAction: () -> Void
     var shareAction: () -> Void
@@ -30,17 +30,15 @@ struct ReusablePostListFooter: View {
 
             HStack(spacing: 20) {
                 Button(action: {
-                    isLiked.toggle()
-                    likeAction()
+                    likeAction() // Just call the action without toggling `isLiked` here
                 }) {
                     Image(systemName: "hand.thumbsup")
                         .font(.subheadline)
-                        .foregroundColor(isLiked ? .white: .black)
+                        .foregroundColor(isLiked ? .white : .black)
                         .padding(8)
                         .background(
                             Circle()
                                 .fill(isLiked ? Color.blue : Color.blue.opacity(0.1))
-                                
                         )
                 }
 
@@ -53,7 +51,6 @@ struct ReusablePostListFooter: View {
                         .background(
                             Circle()
                                 .fill(isCommented ? Color.blue : Color.blue.opacity(0.1))
-                                
                         )
                 }
 
@@ -66,7 +63,6 @@ struct ReusablePostListFooter: View {
                         .background(
                             Circle()
                                 .fill(isShared ? Color.blue : Color.blue.opacity(0.1))
-                                
                         )
                 }
             }
@@ -75,13 +71,13 @@ struct ReusablePostListFooter: View {
     }
 }
 
-#Preview {
-   
-    ReusablePostListFooter(
-        commentCount: 10,
-        likeCount: 4,
-        likeAction: { print("Liked!") },
-        commentAction: { print("Commented!") },
-        shareAction: { print("Shared!") }
-    )
-}
+//#Preview {
+//    ReusablePostListFooter(
+//        commentCount: 10,
+//        likeCount: 4,
+//        isLiked: true, // Provide the value of `isLiked`
+//        likeAction: { print("Liked!") },
+//        commentAction: { print("Commented!") },
+//        shareAction: { print("Shared!") }
+//    )
+//}

@@ -189,84 +189,57 @@ class FeedViewModal: ObservableObject {
             let timestamp = data["postTime"] as? Timestamp,
             let base64Image = data["base64Image"] as? String,
             let userId = data["id"] as? String
+          
+           
         else {
             return nil
         }
-
+        let likedUsers = data["likedUsers"] as? [String] ?? []
         return FeedDataModal(
             captionPost: captionPost,
             id: userId,
             uniqueID: document.documentID,
             postLike: postLike,
             postTime: timestamp.dateValue(),
-            base64Image: base64Image
+            base64Image: base64Image,
+            likedUsers: likedUsers
         )
     }
 
     //MARK: - Manages to count of like , each id can have 1 like and if dislike then 0
     func toggleLike(for post: FeedDataModal) {
-        guard let currentUserId = Auth.auth().currentUser?.uid else { return }
+        guard let userId = Auth.auth().currentUser?.uid else { return }
 
-        let db = Firestore.firestore()
-
-        let userPostRef = db
-            .collection("users")
-            .document(post.id)
-            .collection("MyPosts")
-            .document(post.uniqueID)
-
-        let universalPostQuery = db
+        let postRef = Firestore.firestore()
             .collection("UniversalFeeds")
-            .whereField("id", isEqualTo: post.id)
-            .whereField("captionPost", isEqualTo: post.captionPost)
+            .document(post.uniqueID)
+       
+        postRef.getDocument { document, error in
+            if let document = document, document.exists {
+                let data = document.data()
+                var likeCount = data?["postLike"] as? Int ?? 0
+                var likedUsers = data?["likedUsers"] as? [String] ?? []
 
-        let likeRef = userPostRef
-            .collection("Likes")
-            .document(currentUserId)
-
-        likeRef.getDocument { snapshot, error in
-            if let snapshot = snapshot, snapshot.exists {
-                // UNLIKE: decrement like count and remove like doc
-                userPostRef.updateData(["postLike": FieldValue.increment(Int64(-1))])
-                likeRef.delete()
-
-                DispatchQueue.main.async {
-                    // Update user post like count
-                    if let userIndex = self.userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
-                        self.userPosts[userIndex].postLike -= 1
-                    }
-                    // Update universal post like count
-                    if let universalIndex = self.universalPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
-                        self.universalPosts[universalIndex].postLike -= 1
-                    }
+                if likedUsers.contains(userId) {
+                    likedUsers.removeAll { $0 == userId }
+                    likeCount = max(0, likeCount - 1)
+                } else {
+                    likedUsers.append(userId)
+                    likeCount += 1
                 }
 
-                // Update universal feed like count
-                universalPostQuery.getDocuments { querySnapshot, _ in
-                    if let doc = querySnapshot?.documents.first {
-                        doc.reference.updateData(["postLike": FieldValue.increment(Int64(-1))])
-                    }
-                }
-            } else {
-                // LIKE: increment like count and create like doc
-                userPostRef.updateData(["postLike": FieldValue.increment(Int64(1))])
-                likeRef.setData(["likedAt": Timestamp()])
-
-                DispatchQueue.main.async {
-                    // Update user post like count
-                    if let userIndex = self.userPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
-                        self.userPosts[userIndex].postLike += 1
-                    }
-                    // Update universal post like count
-                    if let universalIndex = self.universalPosts.firstIndex(where: { $0.uniqueID == post.uniqueID }) {
-                        self.universalPosts[universalIndex].postLike += 1
-                    }
-                }
-
-                // Update universal feed like count
-                universalPostQuery.getDocuments { querySnapshot, _ in
-                    if let doc = querySnapshot?.documents.first {
-                        doc.reference.updateData(["postLike": FieldValue.increment(Int64(1))])
+                postRef.updateData([
+                    "postLike": likeCount,
+                    "likedUsers": likedUsers
+                ]) { error in
+                    if error == nil {
+                        DispatchQueue.main.async {
+                            // Refresh the universal feed
+                            Task {
+                                await self.fetchUniversalPostsAsync()
+                                await self.fetchUserPostsAsync(userId: userId)
+                            }
+                        }
                     }
                 }
             }

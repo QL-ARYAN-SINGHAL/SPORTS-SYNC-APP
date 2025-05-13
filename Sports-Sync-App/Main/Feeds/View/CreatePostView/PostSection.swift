@@ -21,7 +21,13 @@ struct PostSection: View {
                         .padding(4)
                         .background(Color.white)
                         .cornerRadius(6)
-                        .lineLimit(5)
+                        .onChange(of: feedViewModal.feedData.captionPost) { newValue in
+                            let lines = newValue.components(separatedBy: .newlines)
+                            if lines.count > 5 {
+                                feedViewModal.feedData.captionPost = lines.prefix(5).joined(separator: "\n")
+                            }
+                        }
+
 
                     if feedViewModal.feedData.captionPost.isEmpty {
                         Text("Write something about this post...")

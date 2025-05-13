@@ -63,6 +63,10 @@ struct MainTabView: View {
                     }
                     .tag(3)
             }
+            .onChange(of: tabRouter.tabDataModal.selectedTab) { newTab in
+                print("Tab selected: \(newTab)")
+            }
+
             .environmentObject(tabRouter)
             .accentColor(.appTint)
             .toolbar {

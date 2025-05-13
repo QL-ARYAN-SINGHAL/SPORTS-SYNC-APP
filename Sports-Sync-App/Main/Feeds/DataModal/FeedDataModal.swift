@@ -14,6 +14,7 @@ struct FeedDataModal: Identifiable, Codable {
     var postLike: Int = 0
     var postTime: Date = Date()
     var base64Image: String? = nil
+    var likedUsers: [String]? = []
 
     // New fields
     var username: String = ""

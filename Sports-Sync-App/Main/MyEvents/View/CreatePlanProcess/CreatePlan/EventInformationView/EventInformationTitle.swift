@@ -35,6 +35,7 @@ struct EventInformationTitle: View {
             
             
         }
+        
     }
 }
 

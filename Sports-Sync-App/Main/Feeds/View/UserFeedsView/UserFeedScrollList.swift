@@ -27,7 +27,6 @@ struct UserFeedScrollList: View {
 
     var body: some View {
         List {
-           
             HStack {
                 Spacer()
                 UserDropdownMenu(selectedOption: $selectedOption)
@@ -35,7 +34,6 @@ struct UserFeedScrollList: View {
             .listRowSeparator(.hidden)
             .listRowInsets(.none)
 
-            
             if filteredPosts.isEmpty {
                 Text("No posts to show.")
                     .foregroundColor(.gray)
@@ -44,7 +42,7 @@ struct UserFeedScrollList: View {
                     .listRowInsets(.none)
             } else {
                 ForEach(filteredPosts, id: \.uniqueID) { post in
-                    UserPostsList(post: post)
+                    UserPostsList(post: post, selectedOption: $selectedOption)  // Pass selectedOption here
                         .environmentObject(firebaseValidation)
                         .environmentObject(feedViewModal)
                         .frame(maxWidth: .infinity)
@@ -58,5 +56,4 @@ struct UserFeedScrollList: View {
         .buttonStyle(PlainButtonStyle())
     }
 }
-
 

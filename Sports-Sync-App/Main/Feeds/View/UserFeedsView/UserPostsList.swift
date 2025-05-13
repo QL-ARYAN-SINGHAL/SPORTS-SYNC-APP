@@ -7,68 +7,75 @@
 
 import SwiftUI
 
-
 struct UserPostsList: View {
     var post: FeedDataModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
     @EnvironmentObject var feedViewModal: FeedViewModal
+    @Binding var selectedOption: String
 
     var body: some View {
-        if let user = firebaseValidation.currentUser {
-            let isOwner = user.id == post.id
+        Group {
+            if let user = firebaseValidation.currentUser {
+                let isOwner = user.id == post.id
+                let isLiked = post.likedUsers?.contains(user.id) ?? false
+                
 
-            VStack(spacing: 15) {
-                ReusablePostListHeader(
-                    userName: user.firstName,
-                    postTime: post.postTime,
-                    userImage: firebaseValidation.avatarImage,
-                    isOwner: isOwner,
-                    onDelete: {
-                        // Call delete function and pass the post
-                        feedViewModal.deleteUserPost(post: post)
-                    },
-                    onReport: {
-                        print("Report is pressed")
-                    }
-                )
+                VStack(spacing: 15) {
+                    ReusablePostListHeader(
+                        userName: user.firstName,
+                        postTime: post.postTime,
+                        userImage: firebaseValidation.avatarImage,
+                        isOwner: isOwner,
+                        onDelete: {
+                            feedViewModal.deleteUserPost(post: post)
+                        },
+                        onReport: {
+                            print("Report is pressed")
+                        }
+                    )
 
-                ReusablePostListMid(
-                    postCaption: post.captionPost,
-                    postImage: post.localImage
-                )
+                    ReusablePostListMid(
+                        postCaption: post.captionPost,
+                        postImage: post.localImage
+                    )
 
-                ReusablePostListFooter(
-                    commentCount: 20,
-                    likeCount: post.postLike,
-                    likeAction: {
-                        feedViewModal.toggleLike(for: post)
-                    },
-                    commentAction: {},
-                    shareAction: {}
-                )
-            }
-            .frame(width: 343)
-            .padding()
-            .background(Color(.systemBackground))
-            .cornerRadius(16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
-            )
-            .onAppear {
-                Task{
-                    // Refresh the feed list whenever a post is deleted
-                    await feedViewModal.fetchUserPostsAsync(userId: firebaseValidation.currentUser?.id ?? "")
+                    ReusablePostListFooter(
+                        commentCount: 20,
+                        likeCount: post.postLike, 
+                        isLiked: isLiked,
+                        isCommented: false,
+                        isShared: false,
+                        likeAction: {
+                            feedViewModal.toggleLike(for: post)
+                        },
+                        commentAction: {},
+                        shareAction: {}
+                    )
                 }
+                .frame(width: 343)
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.gray.opacity(0.3), lineWidth: 0.5)
+                )
+                .onAppear {
+                    Task {
+                        await feedViewModal.fetchUserPostsAsync(
+                            userId: user.id
+                        )
+                    }
+                }
+            } else {
+                Text("User not logged in.")
+                    .foregroundColor(.gray)
             }
-        } else {
-            Text("User not logged in.")
-                .foregroundColor(.gray)
         }
     }
 }
-
-#Preview {
-    UserPostsList(post: FeedDataModal(captionPost: "Sample", postLike: 2))
-        .environmentObject(FirebaseValidation())
-}
+//
+//#Preview {
+//    UserPostsList(post: FeedDataModal(captionPost: "Sample", postLike: 2))
+//        .environmentObject(FirebaseValidation())
+//}
