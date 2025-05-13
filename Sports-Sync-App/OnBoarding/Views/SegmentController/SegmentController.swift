@@ -9,7 +9,7 @@ struct SegmentController: View {
     var body: some View {
         ZStack {
             VStack {
-                // Segment Picker
+               
                 ScrollView(.horizontal, showsIndicators: false) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)

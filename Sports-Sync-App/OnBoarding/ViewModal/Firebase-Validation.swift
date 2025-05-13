@@ -1,11 +1,11 @@
 import FirebaseAuth
 import FirebaseFirestore
-import SwiftUI
 import FirebaseStorage
+import SwiftUI
 
 @MainActor
 class FirebaseValidation: ObservableObject {
-    
+
     // MARK: - Published Properties
     @Published var signUpData = SignUpDataModel()
     @Published var userSession: FirebaseAuth.User?
@@ -35,11 +35,14 @@ class FirebaseValidation: ObservableObject {
     // MARK: - Authentication Methods
 
     /// Signs in a user using email and password
-// make these functions static and make firebase servive
-    
-    func signIn(withEmail email: String, withPassword password: String) async throws {
+    // make these functions static and make firebase servive
+
+    func signIn(withEmail email: String, withPassword password: String)
+        async throws
+    {
         do {
-            let result = try await Auth.auth().signIn(withEmail: email, password: password)
+            let result = try await Auth.auth().signIn(
+                withEmail: email, password: password)
             self.userSession = result.user
             await fetchUser()
             isAuthenticated = true
@@ -53,8 +56,7 @@ class FirebaseValidation: ObservableObject {
     func signOut() {
         do {
             // Sign out from Firebase
-            
-            
+
             // Clear UserDefaults data
             UserDefaults.standard.removeObject(forKey: "FirstName")
             UserDefaults.standard.removeObject(forKey: "LastName")
@@ -62,23 +64,23 @@ class FirebaseValidation: ObservableObject {
             UserDefaults.standard.removeObject(forKey: "SignUpEmail")
             UserDefaults.standard.removeObject(forKey: "SelectedGender")
             UserDefaults.standard.removeObject(forKey: "PhoneNumber")
-         
-            
+
             // Reset session and current user data
             self.userSession = nil
             self.currentUser = nil
             self.isAuthenticated = false
             try Auth.auth().signOut()
-            
+
         } catch {
             print("Failed to sign out user")
         }
     }
 
-
     /// Sends an OTP to the given phone number
     func sendOTP(phoneNumber: String) {
-        PhoneAuthProvider.provider().verifyPhoneNumber("+91\(phoneNumber)", uiDelegate: nil) { verificationID, error in
+        PhoneAuthProvider.provider().verifyPhoneNumber(
+            "+91\(phoneNumber)", uiDelegate: nil
+        ) { verificationID, error in
             if let error = error {
                 print("Failed to send OTP: \(error.localizedDescription)")
                 return
@@ -86,7 +88,8 @@ class FirebaseValidation: ObservableObject {
 
             if let verificationID = verificationID {
                 print("OTP Sent. Verification ID: \(verificationID)")
-                UserDefaults.standard.set(verificationID, forKey: "authVerificationID")
+                UserDefaults.standard.set(
+                    verificationID, forKey: "authVerificationID")
             }
         }
     }
@@ -101,7 +104,6 @@ class FirebaseValidation: ObservableObject {
         }
     }
 
-
     // MARK: - Registration
 
     /// Registers a new user with given details
@@ -115,7 +117,8 @@ class FirebaseValidation: ObservableObject {
         phoneNumber: String? = nil
     ) async {
         do {
-            let result = try await Auth.auth().createUser(withEmail: email!, password: password)
+            let result = try await Auth.auth().createUser(
+                withEmail: email!, password: password)
             self.userSession = result.user
 
             var user = SignUpDataModel(
@@ -129,13 +132,15 @@ class FirebaseValidation: ObservableObject {
                 phoneNumber: phoneNumber ?? ""
             )
 
-            if email?.contains("@") == true {
-                user.signUpEmail = email ?? ""
-                user.signUpWith = .withEmail
-            }
+            //            if email?.contains("@") == true {
+            //                user.signUpEmail = email ?? ""
+            //                user.signUpWith = .withEmail
+            //            }
 
             let encodedUser = try Firestore.Encoder().encode(user)
-            try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            try await Firestore.firestore().collection("users").document(
+                user.id
+            ).setData(encodedUser)
 
             print("Saving user to Firestore with ID: \(user.id)")
 
@@ -152,7 +157,10 @@ class FirebaseValidation: ObservableObject {
     /// Fetches user data from Firestore
     func fetchUser() async {
         guard let uid = self.userSession?.uid else { return }
-        guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else { return }
+        guard
+            let snapshot = try? await Firestore.firestore().collection("users")
+                .document(uid).getDocument()
+        else { return }
         self.currentUser = try? snapshot.data(as: SignUpDataModel.self)
 
         DispatchQueue.main.async {
@@ -163,10 +171,12 @@ class FirebaseValidation: ObservableObject {
     /// Uploads profile image and updates Firestore
     func uploadProfileImageAndSaveToFirestore(_ image: UIImage) async {
         guard let uid = userSession?.uid,
-              let imageData = image.jpegData(compressionQuality: 0.4) else { return }
+            let imageData = image.jpegData(compressionQuality: 0.4)
+        else { return }
 
         // Save image to app's local document directory
         let filename = "\(uid)_profile.jpg"
+        //File manager is repsonoble to manage the files, document directory means the local path ofg the image , user domain mask means to check if they are in current user id
         let fileURL = FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent(filename)
@@ -175,21 +185,23 @@ class FirebaseValidation: ObservableObject {
             try imageData.write(to: fileURL)
 
             // Use fileURL.path as the local path string to store in Firestore
-            try await Firestore.firestore().collection("users").document(uid).updateData([
-                "profileImageURL": fileURL.path
-            ])
+            try await Firestore.firestore().collection("users").document(uid)
+                .updateData([
+                    "profileImageURL": fileURL.path
+                ])
 
             // Optionally cache for app use
             UserDefaults.standard.set(imageData, forKey: "UserImage")
             self.avatarImage = image
             self.currentUser?.profileImageURL = fileURL.path
 
-            print("Image saved locally and path stored in Firestore: \(fileURL.path)")
+            print(
+                "Image saved locally and path stored in Firestore: \(fileURL.path)"
+            )
         } catch {
             print("Error saving image locally: \(error.localizedDescription)")
         }
     }
-
 
     // MARK: - UserDefaults Handling
 
@@ -201,24 +213,30 @@ class FirebaseValidation: ObservableObject {
         }
 
         DispatchQueue.main.async {
-            UserDefaults.standard.set(currentUser.firstName, forKey: "FirstName")
+            UserDefaults.standard.set(
+                currentUser.firstName, forKey: "FirstName")
             UserDefaults.standard.set(currentUser.lastName, forKey: "LastName")
             UserDefaults.standard.set(currentUser.ageValue, forKey: "AgeValue")
-            UserDefaults.standard.set(currentUser.signUpEmail, forKey: "SignUpEmail")
+            UserDefaults.standard.set(
+                currentUser.signUpEmail, forKey: "SignUpEmail")
 
             if let gender = currentUser.selectedGender?.rawValue {
                 UserDefaults.standard.set(gender, forKey: "SelectedGender")
             }
 
             if !currentUser.phoneNumber.isEmpty {
-                UserDefaults.standard.set(currentUser.phoneNumber, forKey: "PhoneNumber")
+                UserDefaults.standard.set(
+                    currentUser.phoneNumber, forKey: "PhoneNumber")
             }
 
             if let avatarImage = avatarImage,
-               let imageData = avatarImage.jpegData(compressionQuality: 0.5) {
+                let imageData = avatarImage.jpegData(compressionQuality: 0.5)
+            {
                 self.avatarImage = avatarImage
                 UserDefaults.standard.set(imageData, forKey: "UserImage")
-                print("User image saved in UserDefaults, size: \(imageData.count) bytes")
+                print(
+                    "User image saved in UserDefaults, size: \(imageData.count) bytes"
+                )
             }
         }
     }
@@ -235,9 +253,11 @@ class FirebaseValidation: ObservableObject {
         let firstName = UserDefaults.standard.string(forKey: "FirstName") ?? ""
         let lastName = UserDefaults.standard.string(forKey: "LastName") ?? ""
         let ageValue = UserDefaults.standard.double(forKey: "AgeValue")
-        let genderRaw = UserDefaults.standard.string(forKey: "SelectedGender") ?? ""
+        let genderRaw =
+            UserDefaults.standard.string(forKey: "SelectedGender") ?? ""
         let email = UserDefaults.standard.string(forKey: "SignUpEmail") ?? ""
-        let phoneNumber = UserDefaults.standard.string(forKey: "PhoneNumber") ?? ""
+        let phoneNumber =
+            UserDefaults.standard.string(forKey: "PhoneNumber") ?? ""
 
         if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
             avatarImage = UIImage(data: imageData)

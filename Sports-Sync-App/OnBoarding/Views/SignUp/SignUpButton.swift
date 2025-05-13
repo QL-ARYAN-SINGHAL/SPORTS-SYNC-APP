@@ -1,10 +1,3 @@
-//
-//  SignUpButton.swift
-//  Sports-Sync-App
-//
-//  Created by ARYAN SINGHAL on 13/04/25.
-//
-
 import SwiftUI
 
 struct SignUpButton: View {
@@ -19,6 +12,7 @@ struct SignUpButton: View {
     // MARK: - State
     @State private var shouldNavigate = false
     @State private var credentialAlert = false
+    @State private var alertMessage = ""
 
     // MARK: - Body
     var body: some View {
@@ -28,23 +22,9 @@ struct SignUpButton: View {
                 // MARK: - Form Validation Flags
                 let isEmailSignup = formViewModal.signUpData.signUpWith == .withEmail
               
-
-                let isEmailValid = formViewModal.isEmailValid(email: formViewModal.signUpData.signUpEmail)
-                let isPasswordValid = formViewModal.isPasswordValid(password: formViewModal.signUpData.signUpPassword)
-               
-                let isPasswordConfirmed = formViewModal.signUpData.confirmPassword == formViewModal.signUpData.signUpPassword
-                let isGenderSelected = formViewModal.signUpData.selectedGender != nil
-                
-                //Tghis ensures that no only white spaces allowed
-                let nameCharacterSet = CharacterSet.letters.union(.whitespaces)
-                let isFirstName = !formViewModal.signUpData.firstName.trimmingCharacters(in: .whitespaces).isEmpty &&
-                    formViewModal.signUpData.firstName.rangeOfCharacter(from: nameCharacterSet.inverted) == nil
-
-                let isLastName = !formViewModal.signUpData.lastName.trimmingCharacters(in: .whitespaces).isEmpty &&
-                    formViewModal.signUpData.lastName.rangeOfCharacter(from: nameCharacterSet.inverted) == nil
-
                 if isEmailSignup {
-                    if isEmailValid && isPasswordValid && isFirstName && isLastName && isPasswordConfirmed && isGenderSelected {
+                    if formViewModal.validateSignUpData() {
+                        
                         Task {
                             isLoading = true
                             await firebaseValidation.register(
@@ -61,20 +41,22 @@ struct SignUpButton: View {
                             isLoading = false
                         }
                     } else {
+                        // Set the alert message if validation fails
+                        alertMessage = formViewModal.alertMessage ?? "Please fill out all required fields."
                         credentialAlert = true
                     }
                 }
-               
             }
         }
-        .alert("Alert", isPresented: $credentialAlert) {
-            Button("OK", role: .cancel) {
-            }
-        } message: {
-            Text(verbatim: .signUpAlertMessage)
+        .alert(isPresented: $credentialAlert) {
+            Alert(
+                title: Text("Alert"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("Okay")) {
+                    credentialAlert = false
+                }
+            )
         }
-
-
         .navigationDestination(isPresented: $shouldNavigate) {
             SuccessSplashView()
         }

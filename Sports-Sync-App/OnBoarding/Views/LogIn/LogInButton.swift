@@ -7,7 +7,6 @@ struct LogInButton: View {
     @State private var navigateToForgotPassword = false
     @State private var showAlert = false
     @State private var alertMessage = ""
-    
 
     @EnvironmentObject var formViewModal: FormViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
@@ -15,15 +14,14 @@ struct LogInButton: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                
-                    Text(verbatim: .forgotPassword)
-                        .font(Font.custom(.fontJakarta, size: 12))
-                        .padding(.leading, 18)
-                        .foregroundStyle(.blueTint)
-                        .onTapGesture {
-                            navigateToForgotPassword = true
-                        }
-                
+
+                Text(verbatim: .forgotPassword)
+                    .font(Font.custom(.fontJakarta, size: 12))
+                    .padding(.leading, 18)
+                    .foregroundStyle(.blueTint)
+                    .onTapGesture {
+                        navigateToForgotPassword = true
+                    }
 
                 ActivatedButton(buttonText: .logInText) {
                     switch formViewModal.logInData.loginWith {
@@ -32,20 +30,20 @@ struct LogInButton: View {
                             isLoading = true
                             do {
                                 try await firebaseValidation.signIn(
-                                    withEmail: formViewModal.logInData.loginEmail,
-                                    withPassword: formViewModal.logInData.loginPassword
+                                    withEmail: formViewModal.logInData
+                                        .loginEmail,
+                                    withPassword: formViewModal.logInData
+                                        .loginPassword
                                 )
 
                                 if firebaseValidation.isAuthenticated {
                                     shouldNavigate = true
-                                    let storedImageData = UserDefaults.standard.data(forKey: "UserImage")
-                                    if let storedImageData,
-                                       let userImage = UIImage(data: storedImageData) {
-                                        await firebaseValidation.saveUserData(with: userImage)
-                                    } else {
-                                        let defaultImage = UIImage(systemName: "person.circle")!
-                                        await firebaseValidation.saveUserData(with: defaultImage)
-                                    }
+
+                                    let defaultImage = UIImage(
+                                        systemName: "person.circle")!
+                                    await firebaseValidation.saveUserData(
+                                        with: defaultImage)
+
                                 } else {
                                     alertMessage = .logInAlertMessage
                                     showAlert = true
