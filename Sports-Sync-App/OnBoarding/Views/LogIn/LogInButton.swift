@@ -4,8 +4,10 @@ struct LogInButton: View {
     @Binding var isLoading: Bool
     @State private var shouldNavigate = false
     @State private var navigateToOTP = false
+    @State private var navigateToForgotPassword = false
     @State private var showAlert = false
     @State private var alertMessage = ""
+    
 
     @EnvironmentObject var formViewModal: FormViewModal
     @EnvironmentObject var firebaseValidation: FirebaseValidation
@@ -13,12 +15,15 @@ struct LogInButton: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {
-                NavigationLink(destination: ForgetPasswordView().environmentObject(firebaseValidation)) {
+                
                     Text(verbatim: .forgotPassword)
                         .font(Font.custom(.fontJakarta, size: 12))
                         .padding(.leading, 18)
                         .foregroundStyle(.blueTint)
-                }
+                        .onTapGesture {
+                            navigateToForgotPassword = true
+                        }
+                
 
                 ActivatedButton(buttonText: .logInText) {
                     switch formViewModal.logInData.loginWith {
@@ -67,6 +72,9 @@ struct LogInButton: View {
             }
             .navigationDestination(isPresented: $navigateToOTP) {
                 OTPView()
+            }
+            .navigationDestination(isPresented: $navigateToForgotPassword) {
+                ForgetPasswordView()
             }
         }
     }

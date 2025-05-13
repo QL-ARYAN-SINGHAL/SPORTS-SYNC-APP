@@ -18,21 +18,30 @@ struct HomeGridSection: View {
                             .listRowSeparator(.hidden)
                             .padding(.top, 10)
 
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 12) {
-                                ForEach(
-                                    cardViewModal.cards(for: title), id: \.self
-                                ) { card in
-                                    ReusableCards(cardData: card) {
-                                        cardViewModal.selectCard(card)
-                                        isNavigating = true
+                       
+                        let cardsForSection = cardViewModal.cards(for: title)
+
+                        if cardsForSection.isEmpty {
+                            Text("No event found in \(title) section")
+                                .font(Font.custom(.fontJakarta, size: 15))
+                                .foregroundStyle(.black)
+                                .padding(.leading, 16)
+                        } else {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                LazyHStack(spacing: 12) {
+                                    ForEach(cardsForSection, id: \.self) {
+                                        card in
+                                        ReusableCards(cardData: card) {
+                                            cardViewModal.selectCard(card)
+                                            isNavigating = true
+                                        }
                                     }
                                 }
                             }
                         }
-                        .listRowSeparator(.hidden)
                     }
                     .onAppear {
+                        // Fetch cards only if they are not already loaded
                         if cardViewModal.cardsHomeData.isEmpty {
                             cardViewModal.fetchHomeCards()
                         }
@@ -47,7 +56,6 @@ struct HomeGridSection: View {
             }
         }
     }
-
 }
 
 #Preview {

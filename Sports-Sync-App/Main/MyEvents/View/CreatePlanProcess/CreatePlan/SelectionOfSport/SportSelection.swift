@@ -7,6 +7,7 @@ struct SportSelection: View {
     @EnvironmentObject var tabRouter: TabRouter
     @State private var selectedSport: SelectSportDataModal? = nil
     @State private var shouldNavigate = false
+    @State private var showAlert: Bool = false
 
     private let adaptiveColumn = [
         GridItem(.adaptive(minimum: 150))
@@ -52,6 +53,8 @@ struct SportSelection: View {
                     action: {
                         if selectedSport != nil {
                             shouldNavigate = true
+                        } else {
+                            showAlert = true
                         }
                     }
                 )
@@ -70,7 +73,9 @@ struct SportSelection: View {
             .onAppear {
                 selectSportsViewModal.fetchSelectSports()
             }
-           
+            .alert("Select Sport to create Event", isPresented: $showAlert) {
+                Button("OK", role: .cancel) {}
+            }
 
             .navigationBarBackButtonHidden()
         }

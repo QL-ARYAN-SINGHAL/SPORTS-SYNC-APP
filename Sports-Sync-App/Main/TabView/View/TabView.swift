@@ -61,75 +61,79 @@ struct MainTabView: View {
                 .accentColor(.appTint)
                 .background(Color.white)
                 .toolbar {
-                         // Check if selectedTab is not 3 (User Profile tab)
-                         if tabRouter.tabDataModal.selectedTab != 3 {
-                             ToolbarItem(placement: .navigationBarLeading) {
-                                 VStack(alignment: .leading,spacing: 6) {
-                                     Text("Current location")
-                                         .foregroundColor(.gray)
-                                         .font(.caption)
-                                        
-                                     HStack {
-                                         Image(systemName: "location.fill")
-                                             .resizable()
-                                             .frame(width: 16, height: 16)
+                    // Check if selectedTab is not 3 (User Profile tab)
+                    if tabRouter.tabDataModal.selectedTab != 3 {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Current location")
+                                    .foregroundColor(.gray)
+                                    .font(.caption)
 
-                                         Text(locationViewModel.currentLocation)
-                                             .font(
-                                                 Font.custom(.fontJakartaBold, size: 14)
-                                             )
-                                             .onTapGesture {
-                                                 locationViewModel.handleLocationTap()
-                                             }
-                                             .alert(
-                                                 isPresented: $locationViewModel
-                                                     .showLocationPermissionAlert
-                                             ) {
-                                                 Alert(
-                                                     title: Text("Location Permission"),
-                                                     message: Text(
-                                                         "Please enable location services in your device settings."
-                                                     ),
-                                                     primaryButton: .default(
-                                                         Text("Go to Settings")
-                                                     ) {
-                                                         if let url = URL(
-                                                             string: UIApplication
-                                                                 .openSettingsURLString),
-                                                             UIApplication.shared
-                                                                 .canOpenURL(url)
-                                                         {
-                                                             UIApplication.shared.open(
-                                                                 url)
-                                                         }
-                                                     },
-                                                     secondaryButton: .cancel()
-                                                 )
-                                             }
-                                     }
-                                 }
-                                 
-                             }
+                                HStack {
+                                    Image(systemName: "location.fill")
+                                        .resizable()
+                                        .frame(width: 16, height: 16)
 
-                             ToolbarItem(placement: .navigationBarTrailing) {
-                                 Button(action: {
-                                     // Notification logic
-                                 }) {
-                                     Image(systemName: "bell")
-                                         .frame(width: 24, height: 24)
-                                         .foregroundStyle(.black)
-                                 }
-                             }
-                         }
-                     }
-                     .onAppear {
-                         locationViewModel.requestLocationPermission()
-                     }
-                     .navigationBarBackButtonHidden()
-                 }
-             }
-         }
-     }
+                                    Text(locationViewModel.currentLocation)
+                                        .font(
+                                            Font.custom(
+                                                .fontJakartaBold, size: 14)
+                                        )
+                                        .onTapGesture {
+                                            locationViewModel.handleLocationTap()
+                                        }
+                                        .alert(
+                                            isPresented: $locationViewModel
+                                                .showLocationPermissionAlert
+                                        ) {
+                                            Alert(
+                                                title: Text(
+                                                    "Location Permission"),
+                                                message: Text(
+                                                    "Please enable location services in your device settings."
+                                                ),
+                                                primaryButton: .default(
+                                                    Text("Go to Settings")
+                                                ) {
+                                                    if let url = URL(
+                                                        string: UIApplication
+                                                            .openSettingsURLString
+                                                    ),
+                                                        UIApplication.shared
+                                                            .canOpenURL(url)
+                                                    {
+                                                        UIApplication.shared
+                                                            .open(
+                                                                url)
+                                                    }
+                                                },
+                                                secondaryButton: .cancel()
+                                            )
+                                        }
+                                }
+                            }
+
+                        }
+
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: {
+                                // Notification logic
+                            }) {
+                                Image(systemName: "bell")
+                                    .frame(width: 24, height: 24)
+                                    .foregroundStyle(.black)
+                            }
+                        }
+                    }
+                }
+                .onAppear {
+                    locationViewModel.requestLocationPermission()
+                }
+                .navigationBarBackButtonHidden()
+            }
+        }
+    }
+}
 
 #Preview {
     MainTabView()

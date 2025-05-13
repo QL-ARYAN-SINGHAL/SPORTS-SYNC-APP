@@ -21,23 +21,26 @@ struct ForgetPasswordButton: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     var body: some View {
-        VStack {
-            ActivatedButton(buttonText: .resetPasswordString) {
-                Task {
-                    firebaseValidation.resetPassword(
-                        email: formViewModal.logInData.forgotEmailText)
+        NavigationStack{
+            VStack {
+                ActivatedButton(buttonText: .resetPasswordString) {
+                    Task {
+                        firebaseValidation.resetPassword(
+                            email: formViewModal.logInData.forgotEmailText)
+                    }
+                }
+                
+                navigationDestination(isPresented: $shouldNavigate) {
+                    ResetPasswordSuccess()
                 }
             }
-            navigationDestination(isPresented: $shouldNavigate) {
-                ResetPasswordSuccess()
+            .alert(isPresented: $showErrorAlert) {
+                Alert(
+                    title: Text("Email invalid or not registered"),
+                    message: Text("Try email again!"),
+                    dismissButton: .default(Text("OK"))
+                )
             }
-        }
-        .alert(isPresented: $showErrorAlert) {
-            Alert(
-                title: Text("Email invalid or not registered"),
-                message: Text("Try email again!"),
-                dismissButton: .default(Text("OK"))
-            )
         }
     }
 }

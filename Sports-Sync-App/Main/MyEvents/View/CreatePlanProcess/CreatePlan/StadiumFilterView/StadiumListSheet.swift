@@ -47,11 +47,16 @@ struct StadiumListSheet: View {
                     List {
                         ForEach(filteredStadiums, id: \.self) { stadium in
                             Button(action: {
-                                eventInformationViewModal.eventInfoData.selectedStadium = stadium
-                                if let matchingCard = cardViewModel.cardsHomeData.first(where: {
-                                    $0.stadiumName == stadium
-                                }) {
-                                    cardViewModel.selectCard(matchingCard)
+                                if eventInformationViewModal.eventInfoData.selectedStadium == stadium {
+                                    eventInformationViewModal.eventInfoData.selectedStadium = ""
+                                    cardViewModel.selectedCard = nil
+                                } else {
+                                    eventInformationViewModal.eventInfoData.selectedStadium = stadium
+                                    if let matchingCard = cardViewModel.cardsHomeData.first(where: {
+                                        $0.stadiumName == stadium
+                                    }) {
+                                        cardViewModel.selectCard(matchingCard)
+                                    }
                                 }
                             }) {
                                 HStack {
@@ -66,6 +71,7 @@ struct StadiumListSheet: View {
                                 }
                             }
                         }
+
                     }
                     .listStyle(.plain)
                 }

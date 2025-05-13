@@ -23,11 +23,10 @@ struct EventInformationSearch: View {
                 Text(verbatim: .searchPopularStadiumString)
                     .font(Font.custom(.fontJakarta, size: 14))
                     .frame(width: 300, alignment: .leading)
-                    .onTapGesture {
-                        sheetNavigate.toggle()
-                    }
+                    
                     .foregroundStyle(.black.opacity(0.3))
             }
+            
             .padding(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
@@ -42,19 +41,27 @@ struct EventInformationSearch: View {
                 HStack(spacing: 12) {
 
                     Button(action: {
-                        // Request location and update the location state
+                      
                         locationManager.requestLocation{ state in
                             fetchedLocation = state ?? "Unknown"
-                            eventInformationViewModel.eventInfoData.searchText = fetchedLocation
+                            if fetchedLocation == "Unknown" {
+                                eventInformationViewModel.eventInfoData.searchText = ""
+                            }else{
+                                eventInformationViewModel.eventInfoData.searchText = fetchedLocation
+                            }
                         }
                     }) {
-                        HStack(spacing: 8) {
+                        HStack(spacing: 10) {
                             Image(systemName: "paperplane.fill")
                                 .frame(width: 13, height: 13)
 
                             Text(verbatim: .selectLocationString)
                                 .font(Font.custom(.fontJakarta, size: 14))
                                 .foregroundColor(.blue)
+                            
+                            Text(fetchedLocation)
+                                .foregroundStyle(.black)
+                                .font(Font.custom(.fontJakartaBold, size: 14))
                         }
                         .frame(height: 23)
                     }
@@ -64,10 +71,26 @@ struct EventInformationSearch: View {
                 Spacer()
             } else {
                 if let selectedCard = cardViewModal.selectedCard {
-                    ReusableStadiumSmallCard(
-                        stadiumcardData: selectedCard)
+                    ZStack(alignment: .topTrailing) {
+                        ReusableStadiumSmallCard(stadiumcardData: selectedCard)
+                            .padding(.top, 8)
+
+                        Button(action: {
+                            cardViewModal.selectedCard = nil
+                            eventInformationViewModel.eventInfoData.showStadiumDetail = false
+                        }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.system(size: 20))
+                                .foregroundColor(.gray)
+                                .padding(8)
+                        }
+                    }
                 }
+
             }
+        }
+        .onTapGesture {
+            sheetNavigate.toggle()
         }
         .onAppear {
             // Fetch cards when the view appears
