@@ -11,7 +11,7 @@ struct EventInformationParent: View {
 
     @StateObject var eventInformationViewModel = EventInformationViewModal()
     @EnvironmentObject var tabRouter : TabRouter
-    @StateObject var firebaseValidation = FirebaseValidation()
+   
 
     var body: some View {
         ZStack {
@@ -28,7 +28,6 @@ struct EventInformationParent: View {
                 .navigationBarBackButtonHidden(true)
             }
             .environmentObject(eventInformationViewModel)
-            .environmentObject(firebaseValidation)
             .overlay {
                 if eventInformationViewModel.isSubmitting {
                     ZStack {

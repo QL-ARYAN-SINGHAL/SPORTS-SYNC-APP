@@ -8,7 +8,7 @@ import SwiftUI
 
 struct UserFeedScrollList: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
+    let firebaseValidation = FirebaseValidation.firebaseInstance
     @Binding var selectedOption: String
 
 

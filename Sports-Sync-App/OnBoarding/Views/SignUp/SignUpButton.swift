@@ -4,7 +4,7 @@ struct SignUpButton: View {
     
     // MARK: - Environment Objects
     @EnvironmentObject var formViewModal: FormViewModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
+   
 
     // MARK: - Props
     @Binding var isLoading: Bool
@@ -13,6 +13,8 @@ struct SignUpButton: View {
     @State private var shouldNavigate = false
     @State private var credentialAlert = false
     @State private var alertMessage = ""
+    
+    let firebaseValidation = FirebaseValidation.firebaseInstance
 
     // MARK: - Body
     var body: some View {

@@ -8,7 +8,7 @@ import SwiftUI
 
 struct UserPostCreationSection: View {
 
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
+    let firebaseValidation = FirebaseValidation.firebaseInstance
     @State private var navigateToCreatePost = false
 
     var body: some View {

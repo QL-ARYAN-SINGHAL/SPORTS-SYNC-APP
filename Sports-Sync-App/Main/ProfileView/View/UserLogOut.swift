@@ -8,7 +8,7 @@ import SwiftUI
 
 struct UserLogOut: View {
     @State private var logOutNavigation: Bool = false
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
+    let firebaseValidation = FirebaseValidation.firebaseInstance
 
     var body: some View {
         NavigationStack {

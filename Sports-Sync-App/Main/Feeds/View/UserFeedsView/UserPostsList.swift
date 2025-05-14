@@ -4,27 +4,38 @@
 //
 //  Created by ARYAN SINGHAL on 08/05/25.
 // Updated UserPostsList.swift
-
 import SwiftUI
 
 struct UserPostsList: View {
     var post: FeedDataModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
+   
     @EnvironmentObject var feedViewModal: FeedViewModal
     @Binding var selectedOption: String
-
+    
+    let firebaseValidation = FirebaseValidation.firebaseInstance
+    // Get the current user's profile image
+    var userProfileImage: UIImage {
+        if let profileImageURL = post.profileImageURL,
+           let imageData = Data(base64Encoded: profileImageURL),
+           let image = UIImage(data: imageData) {
+            return image
+        } else {
+            return UIImage(systemName: "person.crop.circle.fill")!
+            
+        }
+    }
+    
     var body: some View {
         Group {
             if let user = firebaseValidation.currentUser {
                 let isOwner = user.id == post.id
                 let isLiked = post.likedUsers?.contains(user.id) ?? false
                 
-
                 VStack(spacing: 15) {
                     ReusablePostListHeader(
                         userName: post.displayName,
                         postTime: post.postTime,
-                        userImage: firebaseValidation.avatarImage,
+                        userImage: userProfileImage, 
                         isOwner: isOwner,
                         onDelete: {
                             feedViewModal.deleteUserPost(post: post)
@@ -33,15 +44,15 @@ struct UserPostsList: View {
                             print("Report is pressed")
                         }
                     )
-
+                    
                     ReusablePostListMid(
                         postCaption: post.captionPost,
                         postImage: post.localImage
                     )
-
+                    
                     ReusablePostListFooter(
                         commentCount: 20,
-                        likeCount: post.postLike, 
+                        likeCount: post.postLike,
                         isLiked: isLiked,
                         isCommented: false,
                         isShared: false,
@@ -74,8 +85,3 @@ struct UserPostsList: View {
         }
     }
 }
-//
-//#Preview {
-//    UserPostsList(post: FeedDataModal(captionPost: "Sample", postLike: 2))
-//        .environmentObject(FirebaseValidation())
-//}

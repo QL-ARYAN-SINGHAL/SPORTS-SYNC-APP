@@ -82,13 +82,14 @@ class FeedViewModal: ObservableObject {
             self.isUploading = false
             return
         }
-        
+        let profileImageURL = userSession.photoURL?.absoluteString ?? "defaultProfileImageURL"
         let postData: [String: Any] = [
             "captionPost": feedData.captionPost,
             "postLike": feedData.postLike,
             "postTime": Timestamp(date: feedData.postTime),
             "base64Image": base64Image,
-            "id": userId
+            "id": userId,
+            "profileImageURL": profileImageURL
         ]
         
         let db = Firestore.firestore()
@@ -137,6 +138,7 @@ class FeedViewModal: ObservableObject {
     }
 
     //MARK: -  get user posts from databse to show on views
+  
     func fetchUserPostsAsync(userId: String) async {
         do {
             let snapshot = try await Firestore.firestore()
@@ -146,22 +148,25 @@ class FeedViewModal: ObservableObject {
                 .order(by: "postTime", descending: true)
                 .getDocuments()
 
-            // Fetch display name
+            // Fetch display name and profile image URL
             var displayName = "Anonymous"
+            var profileImageURL = "defaultProfileImageURL" // Set a default URL
             do {
                 let userSnapshot = try await Firestore.firestore()
                     .collection("users")
                     .document(userId)
                     .getDocument()
                 displayName = userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
+                profileImageURL = userSnapshot.data()?["profileImageURL"] as? String ?? "defaultProfileImageURL"  // Fetch profile image URL
             } catch {
                 print("Failed to get name for user:", error)
             }
 
-            // Create posts with displayName already set
+            // Create posts with displayName and profileImageURL set
             let posts = snapshot.documents.compactMap { doc -> FeedDataModal? in
                 var post = decodePost(from: doc)
                 post?.displayName = displayName
+                post?.profileImageURL = profileImageURL // Set profile image URL
                 return post
             }
 
@@ -176,6 +181,7 @@ class FeedViewModal: ObservableObject {
 
 
 
+    //MARK: -  This fetches all the post , currentuser and other users
     //MARK: -  This fetches all the post , currentuser and other users
     func fetchUniversalPostsAsync() async {
         do {
@@ -195,7 +201,9 @@ class FeedViewModal: ObservableObject {
                         .getDocument()
 
                     let name = userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
+                    let profileImageURL = userSnapshot.data()?["profileImageURL"] as? String ?? "defaultProfileImageURL" // Fetch profile image URL
                     posts[i].displayName = name
+                    posts[i].profileImageURL = profileImageURL // Set profile image URL
                 } catch {
                     print("Failed to get name for \(userId):", error)
                 }

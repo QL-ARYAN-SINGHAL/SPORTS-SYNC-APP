@@ -9,12 +9,17 @@ import SwiftUI
 struct EventView: View {
     @StateObject private var eventViewModel = EventInformationViewModal()
     @StateObject private var cardViewModel = CardViewModel()
-    @StateObject private var firebaseValidation = FirebaseValidation()
+
     @StateObject var tabRouter = TabRouter()
-    
+
     @State private var hasFetchedOnce = false
+
+    let firebaseValidation = FirebaseValidation.firebaseInstance
+
     private var shouldShowUserCreatedEvents: Bool {
-        eventViewModel.userCreatedEvents.contains { $0.id == firebaseValidation.currentUser?.id }
+        eventViewModel.userCreatedEvents.contains {
+            $0.id == firebaseValidation.currentUser?.id
+        }
     }
 
     var body: some View {
@@ -24,8 +29,8 @@ struct EventView: View {
                     ScrollView {
                         VStack(spacing: 16) {
                             EventListView()
-                                                        UserCreatedEventView()
-                            Spacer().frame(height : 100)
+                            UserCreatedEventView()
+                            Spacer().frame(height: 100)
                             EventButton()
                                 .environmentObject(tabRouter)
                         }
@@ -39,7 +44,9 @@ struct EventView: View {
                     }
                 }
 
-                if shouldShowUserCreatedEvents && eventViewModel.isSubmitting && !hasFetchedOnce {
+                if shouldShowUserCreatedEvents && eventViewModel.isSubmitting
+                    && !hasFetchedOnce
+                {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
                     ProgressView("Fetching Data...")
@@ -62,7 +69,7 @@ struct EventView: View {
         }
         .environmentObject(eventViewModel)
         .environmentObject(cardViewModel)
-        .environmentObject(firebaseValidation)
+       
     }
 }
 

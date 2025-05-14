@@ -31,7 +31,7 @@ struct OTPNumberBlocks: View {
                 .opacity(0.01)
                 .onChange(of: otpNumber) { newValue in
                     if newValue.count > 6 {
-                        //limit of 6 character only
+                                                       
                         otpNumber = String(newValue.prefix(6))
                     }
                 }

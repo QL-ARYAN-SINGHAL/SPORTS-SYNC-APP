@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @StateObject var formViewModal = FormViewModal()
-    @StateObject var firebaseValidation = FirebaseValidation()
+    
     @Binding var isLoading: Bool
     
     var body: some View {
@@ -22,7 +22,7 @@ struct SignUpView: View {
             }
         }
         .environmentObject(formViewModal)
-        .environmentObject(firebaseValidation)
+       
           }
     }
 

@@ -12,7 +12,7 @@ import SwiftUI
 struct UserFeedParent: View {
     @State private var selectedOption: String = "All"
     @EnvironmentObject var feedViewModal: FeedViewModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
+    let firebaseValidation = FirebaseValidation.firebaseInstance
 
     var body: some View {
         VStack(spacing: 0) {

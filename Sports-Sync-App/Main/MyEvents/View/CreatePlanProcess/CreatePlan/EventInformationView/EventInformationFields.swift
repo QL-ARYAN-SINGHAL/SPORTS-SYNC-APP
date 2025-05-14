@@ -4,7 +4,6 @@ struct EventInformationFields: View {
     
     @EnvironmentObject var eventInformationViewModel: EventInformationViewModal
     @EnvironmentObject var tabRouter: TabRouter
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
   
     @State private var currentMonth = Date.now
     @State private var showDatePicker = false
@@ -13,6 +12,9 @@ struct EventInformationFields: View {
     @State private var selectedTime = Date()
     @State private var showAlert = false
     @State private var shouldNavigate = false
+    
+    let firebaseValidation = FirebaseValidation.firebaseInstance
+    
     var selectedMonth: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM"

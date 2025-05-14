@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FeedButton: View {
     @EnvironmentObject var feedViewModal : FeedViewModal
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+    let firebaseValidation = FirebaseValidation.firebaseInstance
     
     var body: some View {
         

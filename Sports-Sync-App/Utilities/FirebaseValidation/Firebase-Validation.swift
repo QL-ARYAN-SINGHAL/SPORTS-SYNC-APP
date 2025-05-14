@@ -18,7 +18,7 @@ class FirebaseValidation: ObservableObject {
     @Published var userData: SignUpDataModel? = nil
 
     // MARK: - Avatar Image
-    var avatarImage: UIImage? = nil
+    @Published var avatarImage: UIImage? = nil
 
     // MARK: - Initializer
     init() {
@@ -178,6 +178,7 @@ class FirebaseValidation: ObservableObject {
 
         // Save image to app's local document directory
         let filename = "\(uid)_profile.jpg"
+        print(filename,"User image profile name ")
         //File manager is repsonoble to manage the files, document directory means the local path ofg the image , user domain mask means to check if they are in current user id
         let fileURL = FileManager.default
             .urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -186,20 +187,18 @@ class FirebaseValidation: ObservableObject {
         do {
             try imageData.write(to: fileURL)
 
-            // Use fileURL.path as the local path string to store in Firestore
+            let base64String = imageData.base64EncodedString()
+
             try await Firestore.firestore().collection("users").document(uid)
                 .updateData([
-                    "profileImageURL": fileURL.path
+                    "profileImageURL": base64String
                 ])
 
-            // Optionally cache for app use
             UserDefaults.standard.set(imageData, forKey: "UserImage")
             self.avatarImage = image
-            self.currentUser?.profileImageURL = fileURL.path
+            self.currentUser?.profileImageURL = base64String
 
-            print(
-                "Image saved locally and path stored in Firestore: \(fileURL.path)"
-            )
+            
         } catch {
             print("Error saving image locally: \(error.localizedDescription)")
         }

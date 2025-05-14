@@ -16,6 +16,7 @@ struct FeedDataModal: Identifiable, Codable {
     var base64Image: String? = nil
     var likedUsers: [String]? = []
     var displayName : String = ""
+    var profileImageURL: String? = ""
     // New fields
     var username: String = ""
     var userImageURL: String = ""
@@ -47,5 +48,6 @@ struct FeedDataModal: Identifiable, Codable {
         case username
         case userImageURL
         case displayName
+        case profileImageURL
     }
 }
