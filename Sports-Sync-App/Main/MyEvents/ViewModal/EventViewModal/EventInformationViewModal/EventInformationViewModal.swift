@@ -15,6 +15,8 @@
         @Published var eventDataModal = EventDataModal()
         @Published var eventInfoData = EventInformationDataModal()
         
+        @Published var eventAlertMessage: String?
+
         @Published var submittedEventInfo: EventInformationDataModal?
         
         //MARK: - ARRAY VARIABLES THAT STORES THE DTA TO BE REPRRESENTED IN VIEW
@@ -29,11 +31,45 @@
         @Published var didSubmitSuccessfully = false
         @Published var isSubmitting = false
 
+        
         // MARK: - Dependencies
         private let db = Firestore.firestore()
         
-        // TODO: Use dependency injection for FirebaseValidation instead of @StateObject in future for better testability and architecture
         
+        //MARK: - SET THE CHARACTER LIMIT FOR TEXTFIELD
+        func characterLimit(_ text: String, limit: Int) -> String {
+            return String(text.prefix(limit))
+        }
+
+        
+        //MARK: - Specified Alerts for textfields
+     
+        func validateEventData() -> Bool {
+            let data = eventInfoData
+            let allowedCharacterSet = CharacterSet.letters.union(.whitespaces)
+
+            if data.eventName.trimmingCharacters(in: .whitespaces).isEmpty {
+                eventAlertMessage = "Event Name is required."
+                return false
+            }
+            if data.eventName.rangeOfCharacter(from: allowedCharacterSet.inverted) != nil {
+                eventAlertMessage = "Event Name contains invalid characters."
+                return false
+            }
+
+            if data.sportsName.trimmingCharacters(in: .whitespaces).isEmpty {
+                eventAlertMessage = "Sports Name is required."
+                return false
+            }
+            if data.sportsName.rangeOfCharacter(from: allowedCharacterSet.inverted) != nil {
+                eventAlertMessage = "Sports Name contains invalid characters."
+                return false
+            }
+
+            eventAlertMessage = nil
+            return true
+        }
+
 
         // MARK: - Firestore: Store Event
         func eventInformationStoreDB(

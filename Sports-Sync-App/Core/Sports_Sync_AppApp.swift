@@ -9,16 +9,16 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseAppCheck
 import FirebaseCore
+import UserNotifications
+import FirebaseMessaging
 
 @main
 struct Sports_Sync_AppApp: App {
     @StateObject var firebaseValidation = FirebaseValidation()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    
-    init(){
-        FirebaseApp.configure()
-    }
     var body: some Scene {
+        
         
         WindowGroup {
             if !firebaseValidation.isAuthenticated{
@@ -29,7 +29,10 @@ struct Sports_Sync_AppApp: App {
                 MainTabView()
             }
                
+               
         }
+        
+        
        
     }
 }

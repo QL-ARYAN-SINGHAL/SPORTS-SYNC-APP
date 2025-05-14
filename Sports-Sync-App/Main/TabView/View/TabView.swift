@@ -6,6 +6,7 @@ struct MainTabView: View {
     let locationManager = LocationManager()
 
     @State private var currentLocation: String = "Fetching..."
+    @State private var navigateNotification : Bool = false
 
     var body: some View {
         NavigationStack {
@@ -117,7 +118,7 @@ struct MainTabView: View {
 
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button(action: {
-                                // Notification logic
+                                navigateNotification = true
                             }) {
                                 Image(systemName: "bell")
                                     .frame(width: 24, height: 24)
@@ -130,8 +131,15 @@ struct MainTabView: View {
                     locationViewModel.requestLocationPermission()
                 }
                 .navigationBarBackButtonHidden()
+                .navigationDestination(isPresented: $navigateNotification){
+                    Notifications()
+                }
+                
             }
         }
+//        .onAppear{
+//            NotificationManager.notificationInstance.requestAuthorization()
+//        }
     }
 }
 

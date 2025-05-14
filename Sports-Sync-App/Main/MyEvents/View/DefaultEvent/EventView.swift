@@ -24,7 +24,7 @@ struct EventView: View {
                     ScrollView {
                         VStack(spacing: 16) {
                             EventListView()
-                            UserCreatedEventView()
+                                                        UserCreatedEventView()
                             Spacer().frame(height : 100)
                             EventButton()
                                 .environmentObject(tabRouter)

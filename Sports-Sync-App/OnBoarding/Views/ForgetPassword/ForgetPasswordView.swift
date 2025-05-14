@@ -8,34 +8,28 @@
 import SwiftUI
 
 struct ForgetPasswordView: View {
-    
+
     @StateObject var formViewModal = FormViewModal()
     @StateObject var firebaseValidation = FirebaseValidation()
-    @Environment(\.dismiss) private var dismiss
-    
+
     var body: some View {
-        VStack{
+        VStack {
             ForgetPasswordText()
                 .padding()
             ForgetPaswordTextField()
-            
+
             ForgetPasswordButton()
         }
         .environmentObject(formViewModal)
         .environmentObject(firebaseValidation)
-      
-        Spacer()
-            .navigationBarCustombackButton(content:{
-                Button(action : {dismiss() }, label: {
-                    ImageConstants.navigationBackImage
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50 , height: 30)
-                        
-                })
-            })
+         Spacer()
+        .navigationBarBackButtonHidden(false)
+        .toolbarBackground(.white, for: .navigationBar)
+        .toolbarColorScheme(.light, for: .navigationBar)
+        .navigationTitle("")
+        .navigationBarTitleDisplayMode(.inline)
     }
-    
+
 }
 
 #Preview {

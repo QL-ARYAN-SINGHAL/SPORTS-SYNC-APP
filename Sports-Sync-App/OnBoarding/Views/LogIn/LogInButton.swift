@@ -74,7 +74,10 @@ struct LogInButton: View {
             .navigationDestination(isPresented: $navigateToForgotPassword) {
                 ForgetPasswordView()
             }
+           
+            .navigationBarBackButtonHidden(false)
         }
+        
     }
 }
 

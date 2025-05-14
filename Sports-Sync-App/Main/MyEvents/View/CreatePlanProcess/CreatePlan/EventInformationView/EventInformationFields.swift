@@ -12,7 +12,6 @@ struct EventInformationFields: View {
     @State private var selectedDate = Date()
     @State private var selectedTime = Date()
     @State private var showAlert = false
- 
 
     var selectedMonth: String {
         let formatter = DateFormatter()
@@ -33,12 +32,25 @@ struct EventInformationFields: View {
                         .eventName,
                     placeholder: .eventNameString
                 )
+                .onChange(of: eventInformationViewModel.eventInfoData.eventName)
+                { newValue in
+                    eventInformationViewModel.eventInfoData.eventName =
+                        eventInformationViewModel.characterLimit(
+                            newValue, limit: 15)
+                }
 
                 FormTextfields(
                     textField: $eventInformationViewModel.eventInfoData
                         .sportsName,
                     placeholder: .sportsNameString
                 )
+                .onChange(
+                    of: eventInformationViewModel.eventInfoData.sportsName
+                ) { newValue in
+                    eventInformationViewModel.eventInfoData.sportsName =
+                        eventInformationViewModel.characterLimit(
+                            newValue, limit: 15)
+                }
 
                 ZStack(alignment: .trailing) {
                     FormTextfields(
@@ -119,7 +131,9 @@ struct EventInformationFields: View {
             Spacer()
 
             ActivatedButton(buttonText: .createPlanString) {
-                if eventInformationViewModel.checkValidation() {
+                if eventInformationViewModel.checkValidation()
+                    && eventInformationViewModel.validateEventData()
+                {
                     eventInformationViewModel.isSubmitting = true
                     eventInformationViewModel.eventInformationStoreDB(
                         id: firebaseValidation.currentUser?.id ?? "id",
@@ -133,18 +147,15 @@ struct EventInformationFields: View {
                             .eventTime,
                         state: eventInformationViewModel.eventInfoData
                             .searchText,
-                        selectedStadium: eventInformationViewModel
-                            .eventInfoData.selectedStadium
-                            ?? "Failed to get stadium name!"
+                        selectedStadium: eventInformationViewModel.eventInfoData
+                            .selectedStadium ?? "Failed to get stadium name!"
                     )
 
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        
                         if eventInformationViewModel.didSubmitSuccessfully {
                             Task {
                                 await eventInformationViewModel
                                     .getUserCreatedEvent()
-
                                 DispatchQueue.main.async {
                                     eventInformationViewModel.resetFields()
                                     selectedDate = Date()
@@ -153,10 +164,8 @@ struct EventInformationFields: View {
                                     showTimePicker = false
                                     eventInformationViewModel.eventInfoData
                                         .selectedStadium = nil
-                           
-                                    eventInformationViewModel.isSubmitting = false
-                                    
-                               
+                                    eventInformationViewModel.isSubmitting =
+                                        false
                                     tabRouter.tabDataModal.selectedTab = 1
                                     dismiss()
                                 }
@@ -170,14 +179,18 @@ struct EventInformationFields: View {
                     showAlert = true
                 }
             }
-         
+
         }
-        
+
         .padding(.horizontal)
         .disabled(eventInformationViewModel.isSubmitting)
-        .alert("Please fill out all the fields.", isPresented: $showAlert) {
+        .alert(
+            eventInformationViewModel.eventAlertMessage ?? "Validation Error",
+            isPresented: $showAlert
+        ) {
             Button("OK", role: .cancel) {}
         }
+
     }
 }
 
