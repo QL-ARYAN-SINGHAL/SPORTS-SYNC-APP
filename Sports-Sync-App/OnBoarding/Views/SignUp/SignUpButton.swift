@@ -19,11 +19,11 @@ struct SignUpButton: View {
     // MARK: - Body
     var body: some View {
         VStack {
-            ActivatedButton(buttonText: isLoading ? "Signing Up..." : .signUpText, isDisabled: isLoading) {
+            ActivatedButton(buttonText: isLoading ? "Signing Up..." : .signUpText, action:  {
                 
                 // MARK: - Form Validation Flags
                 let isEmailSignup = formViewModal.signUpData.signUpWith == .withEmail
-              
+                
                 if isEmailSignup {
                     if formViewModal.validateSignUpData() {
                         
@@ -48,7 +48,7 @@ struct SignUpButton: View {
                         credentialAlert = true
                     }
                 }
-            }
+            }, isDisabled: isLoading)
         }
         .alert(isPresented: $credentialAlert) {
             Alert(

@@ -6,8 +6,8 @@ import Foundation
 import SwiftUI
 import _PhotosUI_SwiftUI
 
-@MainActor
-class FeedViewModal: ObservableObject {
+
+class FeedViewModal: ObservableObject,@unchecked Sendable {
 
     /// ARRAYS COTAINING THE USER POST DETAILS AND USER DETAILS
     @Published var userPosts: [FeedDataModal] = []
@@ -27,28 +27,28 @@ class FeedViewModal: ObservableObject {
             setPostImage(from: selectedDeviceImage)
         }
     }
-    
-
 
     //MARK: - function to set the image selected from gallery / camera on create post section
     private func setPostImage(from selection: PhotosPickerItem?) {
         guard let selection else { return }
 
-        Task {
+        Task{
             do {
                 let data = try await selection.loadTransferable(type: Data.self)
                 guard let data, let uiImage = UIImage(data: data) else {
                     throw URLError(.cannotDecodeContentData)
                 }
-
-                await MainActor.run  {
-                    self.feedData.localImage = uiImage
-                }
+                
+                self.feedData.localImage = uiImage
+                
             } catch {
                 print("Error loading image from picker:", error)
             }
         }
     }
+    
+    
+    
 
     //MARK: - Function to upload image in base64 format to firebase when user clicks on post button
 
@@ -69,6 +69,9 @@ class FeedViewModal: ObservableObject {
         savePostToFirestore(userId: userId, base64Image: base64Image)
     }
 
+    
+    
+    
     //MARK: -  function that saves post & details in firestore
     private func savePostToFirestore(userId: String, base64Image: String) {
         guard let userSession = FirebaseAuth.Auth.auth().currentUser else {
@@ -76,45 +79,50 @@ class FeedViewModal: ObservableObject {
             self.isUploading = false
             return
         }
-        
+
         if userSession.uid != userId {
             self.errorMessage = "User ID mismatch."
             self.isUploading = false
             return
         }
-        let profileImageURL = userSession.photoURL?.absoluteString ?? "defaultProfileImageURL"
+        let profileImageURL =
+            userSession.photoURL?.absoluteString ?? "defaultProfileImageURL"
         let postData: [String: Any] = [
             "captionPost": feedData.captionPost,
             "postLike": feedData.postLike,
             "postTime": Timestamp(date: feedData.postTime),
             "base64Image": base64Image,
             "id": userId,
-            "profileImageURL": profileImageURL
+            "profileImageURL": profileImageURL,
         ]
-        
+
         let db = Firestore.firestore()
-        
+
         db.collection("users")
             .document(userId)
             .collection("MyPosts")
             .addDocument(data: postData) { error in
                 if let error = error {
                     self.errorMessage =
-                    "Failed to save user post: \(error.localizedDescription)"
+                        "Failed to save user post: \(error.localizedDescription)"
                 }
             }
-        
+
         db.collection("UniversalFeeds")
             .addDocument(data: postData) { error in
                 if let error = error {
                     self.errorMessage =
-                    "Failed to save universal post: \(error.localizedDescription)"
+                        "Failed to save universal post: \(error.localizedDescription)"
                 }
                 self.isUploading = false
-                
+
             }
     }
     
+    
+    
+    
+
     //MARK: -  pre check to confirm if user has post or not , if not then he wont be getting any posts
     func checkIfUserHasPosts(userId: String) {
         Firestore.firestore()
@@ -122,7 +130,9 @@ class FeedViewModal: ObservableObject {
             .document(userId)
             .collection("MyPosts")
             .limit(to: 1)
-            .getDocuments { snapshot, error in
+            .getDocuments {
+                snapshot, error in
+                
                 if let error = error {
                     print("Error checking posts:", error)
                     self.hasPostedBefore = false
@@ -130,15 +140,22 @@ class FeedViewModal: ObservableObject {
                 }
 
                 if let documents = snapshot?.documents, !documents.isEmpty {
+                    
                     self.hasPostedBefore = true
-                } else {
+                }
+                
+                else {
+                    
                     self.hasPostedBefore = false
                 }
             }
     }
 
+    
+    
+    
     //MARK: -  get user posts from databse to show on views
-  
+@MainActor
     func fetchUserPostsAsync(userId: String) async {
         do {
             let snapshot = try await Firestore.firestore()
@@ -150,39 +167,46 @@ class FeedViewModal: ObservableObject {
 
             // Fetch display name and profile image URL
             var displayName = "Anonymous"
-            var profileImageURL = "defaultProfileImageURL" // Set a default URL
+            var profileImageURL = "defaultProfileImageURL"  // Set a default URL
+            
             do {
                 let userSnapshot = try await Firestore.firestore()
                     .collection("users")
                     .document(userId)
                     .getDocument()
-                displayName = userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
-                profileImageURL = userSnapshot.data()?["profileImageURL"] as? String ?? "defaultProfileImageURL"  // Fetch profile image URL
+                displayName =
+                    userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
+                profileImageURL =
+                    userSnapshot.data()?["profileImageURL"] as? String
+                    ?? "defaultProfileImageURL"
+                
             } catch {
                 print("Failed to get name for user:", error)
             }
 
+            
             // Create posts with displayName and profileImageURL set
             let posts = snapshot.documents.compactMap { doc -> FeedDataModal? in
                 var post = decodePost(from: doc)
                 post?.displayName = displayName
-                post?.profileImageURL = profileImageURL // Set profile image URL
+                post?.profileImageURL = profileImageURL  // Set profile image URL
                 return post
             }
 
-            await MainActor.run {
+            
                 self.userPosts = posts
-            }
+            
 
         } catch {
             print("@Error fetching user posts async:", error)
         }
     }
 
-
-
+    
+    
     //MARK: -  This fetches all the post , currentuser and other users
-    //MARK: -  This fetches all the post , currentuser and other users
+  
+    
     func fetchUniversalPostsAsync() async {
         do {
             let snapshot = try await Firestore.firestore()
@@ -195,21 +219,32 @@ class FeedViewModal: ObservableObject {
             for i in posts.indices {
                 let userId = posts[i].id
                 do {
+                    
                     let userSnapshot = try await Firestore.firestore()
                         .collection("users")
                         .document(userId)
                         .getDocument()
 
-                    let name = userSnapshot.data()?["firstName"] as? String ?? "Anonymous"
-                    let profileImageURL = userSnapshot.data()?["profileImageURL"] as? String ?? "defaultProfileImageURL" // Fetch profile image URL
+                    
+                    
+                    let name =
+                        userSnapshot.data()?["firstName"] as? String
+                        ?? "Anonymous"
+                    
+                    let profileImageURL =
+                        userSnapshot.data()?["profileImageURL"] as? String
+                        ?? "defaultProfileImageURL"  // Fetch profile image URL
+                    
                     posts[i].displayName = name
-                    posts[i].profileImageURL = profileImageURL // Set profile image URL
+                    
+                    posts[i].profileImageURL = profileImageURL  // Set profile image URL
+                    
                 } catch {
                     print("Failed to get name for \(userId):", error)
                 }
             }
 
-            await MainActor.run {
+            await MainActor.run{
                 self.universalPosts = posts
             }
 
@@ -218,16 +253,19 @@ class FeedViewModal: ObservableObject {
         }
     }
 
-
+    
+    
     //MARK: - general function that decodes the data and image and are called by universal and user functions
-    private func decodePost(from document: QueryDocumentSnapshot) -> FeedDataModal? {
+    private func decodePost(from document: QueryDocumentSnapshot)
+        -> FeedDataModal?
+    {
         let data = document.data()
 
         guard let captionPost = data["captionPost"] as? String,
-              let postLike = data["postLike"] as? Int,
-              let timestamp = data["postTime"] as? Timestamp,
-              let base64Image = data["base64Image"] as? String,
-              let userId = data["id"] as? String
+            let postLike = data["postLike"] as? Int,
+            let timestamp = data["postTime"] as? Timestamp,
+            let base64Image = data["base64Image"] as? String,
+            let userId = data["id"] as? String
         else {
             return nil
         }
@@ -246,7 +284,9 @@ class FeedViewModal: ObservableObject {
         )
     }
 
-
+    
+    
+    
     //MARK: - Manages to count of like , each id can have 1 like and if dislike then 0
     func toggleLike(for post: FeedDataModal) {
         guard let userId = Auth.auth().currentUser?.uid else { return }
@@ -254,7 +294,7 @@ class FeedViewModal: ObservableObject {
         let postRef = Firestore.firestore()
             .collection("UniversalFeeds")
             .document(post.uniqueID)
-       
+
         postRef.getDocument { document, error in
             if let document = document, document.exists {
                 let data = document.data()
@@ -272,109 +312,121 @@ class FeedViewModal: ObservableObject {
 
                 postRef.updateData([
                     "postLike": likeCount,
-                    "likedUsers": likedUsers
+                    "likedUsers": likedUsers,
                 ]) { error in
                     if error == nil {
-                        DispatchQueue.main.async {
+                       
                             // Refresh the universal feed
                             Task {
                                 await self.fetchUniversalPostsAsync()
                                 await self.fetchUserPostsAsync(userId: userId)
                             }
-                        }
+                        
                     }
                 }
             }
         }
     }
-
-
+    
+    
+    
 
     //MARK: - FUNCTION TO DELETE USER POST FROM FIREBASE AND FROM UI
-    
+
     func deleteUserPost(post: FeedDataModal) {
-            guard let currentUserId = Auth.auth().currentUser?.uid else {
-                print("No user logged in")
-                return
-            }
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            print("No user logged in")
+            return
+        }
 
-            guard post.id == currentUserId else {
-                print("User is not the owner of this post")
-                return
-            }
+        guard post.id == currentUserId else {
+            print("User is not the owner of this post")
+            return
+        }
 
-            let db = Firestore.firestore()
-            
-            // Start a batch write operation for atomic updates
-            let batch = db.batch()
-            
-           
-            let userPostRef = db
-                .collection("users")
-                .document(currentUserId)
-                .collection("MyPosts")
-                .document(post.uniqueID)
-            
-           
-            batch.deleteDocument(userPostRef)
-            
-           
-            db.collection("UniversalFeeds")
-                .whereField("id", isEqualTo: post.id)
-                .whereField("captionPost", isEqualTo: post.captionPost)
-                .getDocuments { querySnapshot, error in
-                    
-                    if let error = error {
-                        print("Error finding universal post: \(error.localizedDescription)")
-                        return
-                    }
-                    
-                    guard let documents = querySnapshot?.documents, !documents.isEmpty else {
-                        print("No matching universal post found")
-                        
-                     ///batch is used to allow operation to be performed atomically , if dleted then deleted from both places else not deleted at all
-                        batch.commit { error in
-                            if let error = error {
-                                print("Error deleting user post: \(error.localizedDescription)")
-                            } else {
-                                print("User post deleted successfully")
-                                
-                               
-                                DispatchQueue.main.async {
-                                    self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
-                                }
-                            }
-                        }
-                        return
-                    }
-                    
-                    // Add each matching universal post to the batch delete operation
-                    for document in documents {
-                        batch.deleteDocument(document.reference)
-                        print("Adding universal post \(document.documentID) to batch delete")
-                    }
-                    
-                    // Commit the batch operation
+        let db = Firestore.firestore()
+
+        // Start a batch write operation for atomic updates
+        let batch = db.batch()
+
+        let userPostRef =
+            db
+            .collection("users")
+            .document(currentUserId)
+            .collection("MyPosts")
+            .document(post.uniqueID)
+
+        batch.deleteDocument(userPostRef)
+
+        db.collection("UniversalFeeds")
+            .whereField("id", isEqualTo: post.id)
+            .whereField("captionPost", isEqualTo: post.captionPost)
+            .getDocuments { querySnapshot, error in
+
+                if let error = error {
+                    print(
+                        "Error finding universal post: \(error.localizedDescription)"
+                    )
+                    return
+                }
+
+                guard let documents = querySnapshot?.documents,
+                    !documents.isEmpty
+                else {
+                    print("No matching universal post found")
+
+                    ///batch is used to allow operation to be performed atomically , if dleted then deleted from both places else not deleted at all
                     batch.commit { error in
                         if let error = error {
-                            print("Error in batch delete: \(error.localizedDescription)")
+                            print(
+                                "Error deleting user post: \(error.localizedDescription)"
+                            )
                         } else {
-                            print("All posts deleted successfully")
-                            
-                            // Update UI
-                            DispatchQueue.main.async {
-                                self.userPosts.removeAll { $0.uniqueID == post.uniqueID }
-                                
-                                // For universal posts, we need to match by content since the ID might be different
-                                self.universalPosts.removeAll {
-                                    $0.id == post.id &&
-                                    $0.captionPost == post.captionPost &&
-                                    $0.base64Image == post.base64Image
+                            print("User post deleted successfully")
+
+                           
+                                self.userPosts.removeAll {
+                                    $0.uniqueID == post.uniqueID
                                 }
-                            }
+                            
                         }
                     }
+                    return
                 }
-        }
+
+                // Add each matching universal post to the batch delete operation
+                for document in documents {
+                    batch.deleteDocument(document.reference)
+                    print(
+                        "Adding universal post \(document.documentID) to batch delete"
+                    )
+                }
+
+                // Commit the batch operation
+                batch.commit { error in
+                    if let error = error {
+                        print(
+                            "Error in batch delete: \(error.localizedDescription)"
+                        )
+                    } else {
+                        print("All posts deleted successfully")
+
+                        // Update UI
+                       
+                            self.userPosts.removeAll {
+                                $0.uniqueID == post.uniqueID
+                            }
+
+                            // For universal posts, we need to match by content since the ID might be different
+                            self.universalPosts.removeAll {
+                                $0.id == post.id
+                                    && $0.captionPost == post.captionPost
+                                    && $0.base64Image == post.base64Image
+                            }
+                        
+                    }
+                }
+            }
+    }
 
 }

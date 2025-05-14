@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 import FirebaseFirestore
 
-@MainActor
+
 class CardViewModel: ObservableObject {
 
     private var db = Firestore.firestore()
@@ -108,7 +108,6 @@ class CardViewModel: ObservableObject {
                 }
             }
 
-            DispatchQueue.main.async {
                 self.cardsHomeData = allCards
                 self.filteredCards = allCards
                 self.nearbyCards = nearby
@@ -118,7 +117,6 @@ class CardViewModel: ObservableObject {
                 self.filteredRecommendedCards = self.recommendedCards
                 self.filteredTrendingCards = self.trendingCards
 
-            }
         }
     }
 

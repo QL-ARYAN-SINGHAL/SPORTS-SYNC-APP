@@ -4,7 +4,7 @@ import FirebaseStorage
 import SwiftUI
 
 @MainActor
-class FirebaseValidation: ObservableObject {
+class FirebaseValidation: ObservableObject{
     
     static let firebaseInstance = FirebaseValidation()
 

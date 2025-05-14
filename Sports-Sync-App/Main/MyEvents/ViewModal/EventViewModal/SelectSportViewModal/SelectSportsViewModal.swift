@@ -9,7 +9,7 @@ import FirebaseFirestore
 //MARK: RESPONSIBILITY : PUBLISHING THE CHANGES MADE IN DATA MODAL AND FETCH DETAILS FROM DATABASE TO BE STORED IN DATA MODAL
 import SwiftUI
 
-@MainActor
+
 class SelectSportsViewModal: ObservableObject {
 
     private var db = Firestore.firestore()
@@ -55,9 +55,8 @@ class SelectSportsViewModal: ObservableObject {
                 fetchedSports.append(sport)
             }
 
-            DispatchQueue.main.async {
                 self.selectSportsData = fetchedSports
-            }
+            
         }
     }
 

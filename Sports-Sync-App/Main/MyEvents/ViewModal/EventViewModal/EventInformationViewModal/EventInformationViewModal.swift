@@ -8,8 +8,8 @@
     import FirebaseFirestore
     import FirebaseAuth
 
-    @MainActor
-    class EventInformationViewModal: ObservableObject {
+ 
+    class EventInformationViewModal: ObservableObject,@unchecked Sendable {
         
         // MARK: - Published Properties
         @Published var eventDataModal = EventDataModal()
@@ -174,7 +174,7 @@
                     events.append(event)
                 }
 
-                DispatchQueue.main.async {
+                await MainActor.run{
                     self.userCreatedEvents = events
                     let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))! ///year and week is fetched from the current Date
                     self.filterEvents(for: startOfWeek)

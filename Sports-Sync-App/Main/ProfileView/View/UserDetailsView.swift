@@ -8,6 +8,7 @@
 import PhotosUI
 import SwiftUI
 
+
 struct UserDetailsView: View {
     @EnvironmentObject var firebaseValidation: FirebaseValidation
     @State var photoPickerItem: PhotosPickerItem?
@@ -83,10 +84,6 @@ struct UserDetailsView: View {
             firebaseValidation.userData = firebaseValidation.getUserData()
             if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
                 firebaseValidation.avatarImage = UIImage(data: imageData)
-
-                if let data = firebaseValidation.avatarImage?.pngData() {
-                    print(data, "Size")
-                }
             }
 
         }
