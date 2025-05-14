@@ -14,7 +14,7 @@ struct SportSelection: View {
     ]
 
     var body: some View {
-        NavigationStack {
+        
             VStack(alignment: .leading, spacing: 16) {
 
                 HStack(spacing: 12) {
@@ -80,7 +80,7 @@ struct SportSelection: View {
             .navigationBarBackButtonHidden()
         }
     }
-}
+
 
 #Preview {
     NavigationStack {

@@ -7,6 +7,7 @@
 import Foundation
 import SwiftUI
 
+@MainActor
 class FormViewModal: ObservableObject {
     //MARK: Published to keep track of the data modal inside view modal
 

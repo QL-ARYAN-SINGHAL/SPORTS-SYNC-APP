@@ -5,34 +5,33 @@
 //  Created by ARYAN SINGHAL on 11/04/25.
 //
 
-import SwiftUI
-import FirebaseAuth
 import FirebaseAppCheck
+import FirebaseAuth
 import FirebaseCore
-import UserNotifications
 import FirebaseMessaging
+import SwiftUI
+import UserNotifications
 
 @main
 struct Sports_Sync_AppApp: App {
     @StateObject var firebaseValidation = FirebaseValidation()
-    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
+    init() {
+        FirebaseApp.configure()
+    }
     var body: some Scene {
-        
-        
+
         WindowGroup {
-            if !firebaseValidation.isAuthenticated{
+            // use app storage / user defaults
+            
+            if !firebaseValidation.isAuthenticated {
                 LandingScreen()
                     .environmentObject(firebaseValidation)
-            }
-            else{
+            } else {
                 MainTabView()
             }
-               
-               
+
         }
-        
-        
-       
+
     }
 }

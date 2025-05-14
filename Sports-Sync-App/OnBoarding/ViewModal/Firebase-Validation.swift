@@ -1,10 +1,12 @@
-import FirebaseAuth
+@preconcurrency import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
 import SwiftUI
 
 @MainActor
 class FirebaseValidation: ObservableObject {
+    
+    static let firebaseInstance = FirebaseValidation()
 
     // MARK: - Published Properties
     @Published var signUpData = SignUpDataModel()
@@ -121,7 +123,7 @@ class FirebaseValidation: ObservableObject {
                 withEmail: email!, password: password)
             self.userSession = result.user
 
-            var user = SignUpDataModel(
+            let user = SignUpDataModel(
                 id: result.user.uid,
                 signUpEmail: email ?? "aryan123",
                 signUpPassword: password,

@@ -7,16 +7,15 @@
 
 import Foundation
 
-struct EventInformationDataModal : Codable,Hashable{
-    var searchText : String = ""
-    var eventName : String = ""
-    var eventDate : String = ""
-    var sportsName : String = ""
-    var eventTime : String = ""
+struct EventInformationDataModal: Codable, Hashable {
+    var searchText: String = ""
+    var eventName: String = ""
+    var eventDate: String = ""
+    var sportsName: String = ""
+    var eventTime: String = ""
     var selectedStadium: String? = nil
     var stadium = ""
-    var showStadiumDetail : Bool = false
-    var id : String  = ""
-    
-    
+    var showStadiumDetail: Bool = false
+    var id: String = ""
+
 }

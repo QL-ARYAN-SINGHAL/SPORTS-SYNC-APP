@@ -79,6 +79,7 @@ struct UserDetailsView: View {
             }
         }
         .onAppear {
+            
             firebaseValidation.userData = firebaseValidation.getUserData()
             if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
                 firebaseValidation.avatarImage = UIImage(data: imageData)

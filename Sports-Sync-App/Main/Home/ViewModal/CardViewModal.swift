@@ -8,6 +8,7 @@ import Foundation
 import SwiftUI
 import FirebaseFirestore
 
+@MainActor
 class CardViewModel: ObservableObject {
 
     private var db = Firestore.firestore()

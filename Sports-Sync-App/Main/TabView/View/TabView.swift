@@ -6,7 +6,7 @@ struct MainTabView: View {
     let locationManager = LocationManager()
 
     @State private var currentLocation: String = "Fetching..."
-    @State private var navigateNotification : Bool = false
+    @State private var navigateNotification: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -131,15 +131,15 @@ struct MainTabView: View {
                     locationViewModel.requestLocationPermission()
                 }
                 .navigationBarBackButtonHidden()
-                .navigationDestination(isPresented: $navigateNotification){
+                .navigationDestination(isPresented: $navigateNotification) {
                     Notifications()
                 }
-                
+
             }
         }
-//        .onAppear{
-//            NotificationManager.notificationInstance.requestAuthorization()
-//        }
+        //        .onAppear{
+        //            NotificationManager.notificationInstance.requestAuthorization()
+        //        }
     }
 }
 

@@ -9,6 +9,8 @@ final class LocationManager: NSObject, CLLocationManagerDelegate,ObservableObjec
         locationManager.delegate = self
     }
 
+    //escaping closures are used to pass a closure that will be called later outside the function scopeee
+    
     func requestLocation(completion: @escaping (String?) -> Void) {
         locationCompletion = completion
         checkLocationAuthorization()

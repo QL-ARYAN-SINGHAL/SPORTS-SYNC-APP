@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ForgetPaswordTextField: View {
     @EnvironmentObject var formViewModal: FormViewModal
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+   
     
     var body: some View {
         VStack{

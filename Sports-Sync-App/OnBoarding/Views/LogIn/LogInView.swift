@@ -3,7 +3,7 @@ import SwiftUI
 struct LogInView: View {
     @Binding var isLoading: Bool
     @StateObject var formViewModal = FormViewModal()
-    @StateObject var firebaseValidation = FirebaseValidation()
+    
 
     var body: some View {
         VStack {
@@ -15,7 +15,7 @@ struct LogInView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .environmentObject(formViewModal)
-        .environmentObject(firebaseValidation)
+       
     }
 }
 

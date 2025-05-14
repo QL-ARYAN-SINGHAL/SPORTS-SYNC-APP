@@ -19,13 +19,11 @@ class LocationViewModel: ObservableObject {
 
     func requestLocationPermission() {
         locationManager.requestLocation { [weak self] location in
-            DispatchQueue.main.async {
                 if let location = location {
                     self?.currentLocation = location
                 } else {
                     self?.currentLocation = "Location Not Available"
                 }
-            }
         }
     }
 

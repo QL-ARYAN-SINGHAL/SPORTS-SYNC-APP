@@ -12,48 +12,49 @@ struct UserPostCreationSection: View {
     @State private var navigateToCreatePost = false
 
     var body: some View {
-        VStack {
-            NavigationLink(
-                destination: CreatePostParent().environmentObject(
-                    firebaseValidation), isActive: $navigateToCreatePost
-            ) {
-                EmptyView()
-            }
-            .hidden()
-
+        NavigationStack {
             VStack {
-                if let user = firebaseValidation.currentUser {
-                    Text("What's on your mind, \(user.firstName)?")
-                        .font(Font.custom(.fontJakarta, size: 15))
-                        .frame(width: 343, height: 39, alignment: .leading)
-                        .foregroundStyle(.disabledFont)
-                } else {
-                    Text("What's on your mind?")
-                        .font(Font.custom(.fontJakarta, size: 15))
-                        .frame(width: 343, height: 39, alignment: .leading)
-                        .foregroundStyle(.disabledFont)
+                NavigationLink(
+                    destination: CreatePostParent().environmentObject(
+                        firebaseValidation), isActive: $navigateToCreatePost
+                ) {
+                    EmptyView()
                 }
+                .hidden()
 
-                HStack {
-                    ReusablePhotoVideoPicker(
-                        iconName: "camera.fill", labelText: .cameraString)
-                    ReusablePhotoVideoPicker(
-                        iconName: "photo.fill.on.rectangle.fill",
-                        labelText: .photoVideoString)
+                VStack {
+                    if let user = firebaseValidation.currentUser {
+                        Text("What's on your mind, \(user.firstName)?")
+                            .font(Font.custom(.fontJakarta, size: 15))
+                            .frame(width: 343, height: 39, alignment: .leading)
+                            .foregroundStyle(.disabledFont)
+                    } else {
+                        Text("What's on your mind?")
+                            .font(Font.custom(.fontJakarta, size: 15))
+                            .frame(width: 343, height: 39, alignment: .leading)
+                            .foregroundStyle(.disabledFont)
+                    }
+
+                    HStack {
+                        ReusablePhotoVideoPicker(
+                            iconName: "camera.fill", labelText: .cameraString)
+                        ReusablePhotoVideoPicker(
+                            iconName: "photo.fill.on.rectangle.fill",
+                            labelText: .photoVideoString)
+                    }
+                    .frame(width: 343, height: 30, alignment: .leading)
                 }
-                .frame(width: 343, height: 30, alignment: .leading)
+                .onTapGesture {
+                    navigateToCreatePost = true
+                }
             }
-            .onTapGesture {
-                navigateToCreatePost = true
-            }
+            .frame(width: 343, height: 34)
+            .padding(.vertical, 30)
+            .environmentObject(firebaseValidation)
+
         }
-        .frame(width: 343, height: 34)
-        .padding(.vertical, 30)
-        .environmentObject(firebaseValidation)
-
     }
 }
-
 #Preview {
     NavigationStack {
         UserPostCreationSection()

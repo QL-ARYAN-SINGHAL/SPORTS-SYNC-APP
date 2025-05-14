@@ -10,7 +10,7 @@ import SwiftUI
 struct ForgetPasswordView: View {
 
     @StateObject var formViewModal = FormViewModal()
-    @StateObject var firebaseValidation = FirebaseValidation()
+   
 
     var body: some View {
         VStack {
@@ -21,7 +21,6 @@ struct ForgetPasswordView: View {
             ForgetPasswordButton()
         }
         .environmentObject(formViewModal)
-        .environmentObject(firebaseValidation)
          Spacer()
         .navigationBarBackButtonHidden(false)
         .toolbarBackground(.white, for: .navigationBar)

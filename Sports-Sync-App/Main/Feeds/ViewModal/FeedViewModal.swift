@@ -6,6 +6,7 @@ import Foundation
 import SwiftUI
 import _PhotosUI_SwiftUI
 
+@MainActor
 class FeedViewModal: ObservableObject {
 
     /// ARRAYS COTAINING THE USER POST DETAILS AND USER DETAILS
@@ -252,6 +253,7 @@ class FeedViewModal: ObservableObject {
                 var likeCount = data?["postLike"] as? Int ?? 0
                 var likedUsers = data?["likedUsers"] as? [String] ?? []
 
+                ///here we have maintained the like count by checking if the current user has liked then if he will click then it will be unliked and updates
                 if likedUsers.contains(userId) {
                     likedUsers.removeAll { $0 == userId }
                     likeCount = max(0, likeCount - 1)
@@ -322,7 +324,7 @@ class FeedViewModal: ObservableObject {
                     guard let documents = querySnapshot?.documents, !documents.isEmpty else {
                         print("No matching universal post found")
                         
-                     
+                     ///batch is used to allow operation to be performed atomically , if dleted then deleted from both places else not deleted at all
                         batch.commit { error in
                             if let error = error {
                                 print("Error deleting user post: \(error.localizedDescription)")

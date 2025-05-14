@@ -9,8 +9,9 @@ struct LogInButton: View {
     @State private var alertMessage = ""
 
     @EnvironmentObject var formViewModal: FormViewModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
-
+  
+    let firebaseValidation = FirebaseValidation.firebaseInstance
+    
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading) {

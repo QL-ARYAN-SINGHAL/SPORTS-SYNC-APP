@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-
 struct ForgetPasswordButton: View {
     @State private var showErrorAlert = false
     @State private var shouldNavigate = false
     @EnvironmentObject var formViewModal: FormViewModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
 
+    let firebaseValidation = FirebaseValidation.firebaseInstance
+    
     var body: some View {
         NavigationStack {
             VStack {

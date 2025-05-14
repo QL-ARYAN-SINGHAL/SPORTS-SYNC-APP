@@ -126,7 +126,7 @@
             return formatter.date(from: dateString)
         }
 
-        // Week filtering method
+        // Week filtering method as per the user time scheduleddd ffor the starting week
         func filterEvents(for weekStartDate: Date) {
             let calendar = Calendar.current
             let weekEndDate = calendar.date(byAdding: .day, value: 6, to: weekStartDate)!
@@ -176,7 +176,7 @@
 
                 DispatchQueue.main.async {
                     self.userCreatedEvents = events
-                    let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+                    let startOfWeek = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))! ///year and week is fetched from the current Date
                     self.filterEvents(for: startOfWeek)
                     self.isSubmitting = false
                 }

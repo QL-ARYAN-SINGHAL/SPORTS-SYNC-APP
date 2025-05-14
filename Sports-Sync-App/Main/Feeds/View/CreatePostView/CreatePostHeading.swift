@@ -1,3 +1,4 @@
+import FirebaseAuth
 //
 //  CreatePostHeading.swift
 //  Sports-Sync-App
@@ -6,18 +7,17 @@
 //
 //MARK: RESPONSIBILITY - CREATE POST HEADER SECTION
 import SwiftUI
-import FirebaseAuth
 
 struct CreatePostHeading: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var feedViewModal: FeedViewModal
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+    @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     @State private var errorMessage: String? = nil
 
     var body: some View {
         VStack {
-           
+
             PostSection()
                 .padding()
 
@@ -49,13 +49,14 @@ struct CreatePostHeading: View {
 
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
-                    
-                    guard let userSession = firebaseValidation.userSession else {
+
+                    guard let userSession = firebaseValidation.userSession
+                    else {
                         feedViewModal.errorMessage = "User not authenticated."
                         return
                     }
                     feedViewModal.uploadPostToFirebase(userId: userSession.uid)
-                    
+
                     dismiss()
                 }) {
                     Text(verbatim: .postString)
@@ -69,9 +70,9 @@ struct CreatePostHeading: View {
                 .disabled(feedViewModal.isUploading)
             }
         }
-       
+
         .environmentObject(feedViewModal)
-       
+
     }
 }
 
