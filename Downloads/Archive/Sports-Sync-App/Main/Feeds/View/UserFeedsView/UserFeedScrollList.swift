@@ -1,0 +1,59 @@
+//
+//  UserFeedScrollList.swift
+//  Sports-Sync-App
+//
+//  Created by ARYAN SINGHAL on 08/05/25.
+//
+import SwiftUI
+
+struct UserFeedScrollList: View {
+    @EnvironmentObject var feedViewModal: FeedViewModal
+    
+    @Binding var selectedOption: String
+
+
+    var filteredPosts: [FeedDataModal] {
+        switch selectedOption {
+        case "My Feed":
+            return feedViewModal.universalPosts.filter {
+                $0.id == FirebaseValidation.shared.currentUser?.id
+            }
+        case "All":
+            return feedViewModal.universalPosts
+        default:
+            return feedViewModal.userPosts
+        }
+    }
+
+    var body: some View {
+        List {
+            HStack {
+                Spacer()
+                UserDropdownMenu(selectedOption: $selectedOption)
+            }
+            .listRowSeparator(.hidden)
+            .listRowInsets(.none)
+
+            if filteredPosts.isEmpty {
+                Text("No posts to show.")
+                    .foregroundColor(.gray)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.none)
+            } else {
+                ForEach(filteredPosts, id: \.uniqueID) { post in
+                    UserPostsList(post: post, selectedOption: $selectedOption)  
+                        .environmentObject(FirebaseValidation.shared)
+                        .environmentObject(feedViewModal)
+                        .frame(maxWidth: .infinity)
+                        .listRowSeparator(.hidden)
+                        .listRowInsets(.none)
+                        .background(Color.clear)
+                }
+            }
+        }
+        .listStyle(.plain)
+        .buttonStyle(PlainButtonStyle())
+    }
+}
+

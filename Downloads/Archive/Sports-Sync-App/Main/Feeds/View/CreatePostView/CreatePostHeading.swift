@@ -1,0 +1,82 @@
+import FirebaseAuth
+//
+//  CreatePostHeading.swift
+//  Sports-Sync-App
+//
+//  Created by ARYAN SINGHAL on 05/05/25.
+//
+//MARK: RESPONSIBILITY - CREATE POST HEADER SECTION
+import SwiftUI
+
+struct CreatePostHeading: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var feedViewModal: FeedViewModal
+  
+
+    @State private var errorMessage: String? = nil
+
+    var body: some View {
+        VStack {
+
+            PostSection()
+                .padding()
+
+            if let errorMessage = feedViewModal.errorMessage {
+                Text(errorMessage)
+                    .foregroundColor(.red)
+                    .padding()
+            }
+
+            Spacer()
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    dismiss()
+                }) {
+                    Image(systemName: "arrow.left")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 24)
+                }
+            }
+
+            ToolbarItem(placement: .navigationBarLeading) {
+                Text(verbatim: .createPostHeading)
+                    .font(Font.custom(.fontJakartaBold, size: 18))
+            }
+
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+
+                    guard let userSession = FirebaseValidation.shared.userSession
+                    else {
+                        feedViewModal.errorMessage = "User not authenticated."
+                        return
+                    }
+                    feedViewModal.uploadPostToFirebase(userId: userSession.uid)
+
+                    dismiss()
+                }) {
+                    Text(verbatim: .postString)
+                        .foregroundColor(.white)
+                        .font(Font.custom("JakartaBold", size: 12))
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 10)
+                        .background(Color.appTint)
+                        .cornerRadius(6)
+                }
+                .disabled(feedViewModal.isUploading)
+            }
+        }
+
+        .environmentObject(feedViewModal)
+
+    }
+}
+
+#Preview {
+    CreatePostHeading()
+        .environmentObject(FeedViewModal())
+}
