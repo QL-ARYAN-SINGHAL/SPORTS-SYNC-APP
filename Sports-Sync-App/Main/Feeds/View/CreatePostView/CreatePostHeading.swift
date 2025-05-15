@@ -11,7 +11,6 @@ import SwiftUI
 struct CreatePostHeading: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var feedViewModal: FeedViewModal
-    @EnvironmentObject var firebaseValidation: FirebaseValidation
 
     @State private var errorMessage: String? = nil
 
@@ -50,7 +49,7 @@ struct CreatePostHeading: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
 
-                    guard let userSession = firebaseValidation.userSession
+                    guard let userSession = FirebaseValidation.firebaseInstance.userSession
                     else {
                         feedViewModal.errorMessage = "User not authenticated."
                         return

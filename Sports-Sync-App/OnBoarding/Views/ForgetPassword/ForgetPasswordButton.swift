@@ -12,14 +12,14 @@ struct ForgetPasswordButton: View {
     @State private var shouldNavigate = false
     @EnvironmentObject var formViewModal: FormViewModal
 
-    let firebaseValidation = FirebaseValidation.firebaseInstance
+  
     
     var body: some View {
         NavigationStack {
             VStack {
                 ActivatedButton(buttonText: .resetPasswordString) {
                     Task {
-                        let success = await firebaseValidation.resetPassword(email: formViewModal.logInData.forgotEmailText)
+                        let success = await FirebaseValidation.firebaseInstance.resetPassword(email: formViewModal.logInData.forgotEmailText)
                         if success {
                             shouldNavigate = true
                         } else {

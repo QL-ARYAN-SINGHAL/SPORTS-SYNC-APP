@@ -7,8 +7,7 @@
 import SwiftUI
 
 struct UserPostCreationSection: View {
-
-    let firebaseValidation = FirebaseValidation.firebaseInstance
+    
     @State private var navigateToCreatePost = false
 
     var body: some View {
@@ -16,14 +15,14 @@ struct UserPostCreationSection: View {
             VStack {
                 NavigationLink(
                     destination: CreatePostParent().environmentObject(
-                        firebaseValidation), isActive: $navigateToCreatePost
+                        FirebaseValidation.firebaseInstance), isActive: $navigateToCreatePost
                 ) {
                     EmptyView()
                 }
                 .hidden()
 
                 VStack {
-                    if let user = firebaseValidation.currentUser {
+                    if let user = FirebaseValidation.firebaseInstance.currentUser {
                         Text("What's on your mind, \(user.firstName)?")
                             .font(Font.custom(.fontJakarta, size: 15))
                             .frame(width: 343, height: 39, alignment: .leading)
@@ -50,7 +49,7 @@ struct UserPostCreationSection: View {
             }
             .frame(width: 343, height: 34)
             .padding(.vertical, 30)
-            .environmentObject(firebaseValidation)
+            .environmentObject(FirebaseValidation.firebaseInstance)
 
         }
     }

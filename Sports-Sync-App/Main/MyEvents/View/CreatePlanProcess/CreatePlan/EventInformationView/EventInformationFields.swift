@@ -13,7 +13,6 @@ struct EventInformationFields: View {
     @State private var showAlert = false
     @State private var shouldNavigate = false
     
-    let firebaseValidation = FirebaseValidation.firebaseInstance
     
     var selectedMonth: String {
         let formatter = DateFormatter()
@@ -141,7 +140,7 @@ struct EventInformationFields: View {
                     {
                         eventInformationViewModel.isSubmitting = true
                         eventInformationViewModel.eventInformationStoreDB(
-                            id: firebaseValidation.currentUser?.id ?? "got No ID ",
+                            id: FirebaseValidation.firebaseInstance.currentUser?.id ?? "got No ID ",
                             eventName: eventInformationViewModel.eventInfoData
                                 .eventName,
                             sportsName: eventInformationViewModel.eventInfoData
@@ -206,5 +205,5 @@ struct EventInformationFields: View {
     EventInformationFields()
         .environmentObject(EventInformationViewModal())
         .environmentObject(TabRouter())
-        .environmentObject(FirebaseValidation())
+      
 }

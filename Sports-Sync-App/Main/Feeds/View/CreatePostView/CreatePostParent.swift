@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CreatePostParent: View {
     @StateObject var feedViewModal = FeedViewModal()
-    @EnvironmentObject var firebaseValidation : FirebaseValidation
+   
 
     var body: some View {
         NavigationStack {
@@ -34,7 +34,7 @@ struct CreatePostParent: View {
             }
         }
         .environmentObject(feedViewModal)
-        .environmentObject(firebaseValidation)
+     
         
     }
 }

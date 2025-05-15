@@ -8,15 +8,14 @@ import SwiftUI
 
 struct UserLogOut: View {
     @State private var logOutNavigation: Bool = false
-    let firebaseValidation = FirebaseValidation.firebaseInstance
-
+    
     var body: some View {
         NavigationStack {
             VStack {
                 ActivatedButton(
                     buttonText: .logOutString,
                     action: {
-                        firebaseValidation.signOut()
+                        FirebaseValidation.firebaseInstance.signOut()
                         logOutNavigation = true
                     })
             }

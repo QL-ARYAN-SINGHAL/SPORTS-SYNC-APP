@@ -8,7 +8,7 @@ import SwiftUI
 
 struct UserFeedScrollList: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
-    let firebaseValidation = FirebaseValidation.firebaseInstance
+    
     @Binding var selectedOption: String
 
 
@@ -16,7 +16,7 @@ struct UserFeedScrollList: View {
         switch selectedOption {
         case "My Feed":
             return feedViewModal.universalPosts.filter {
-                $0.id == firebaseValidation.currentUser?.id
+                $0.id == FirebaseValidation.firebaseInstance.currentUser?.id
             }
         case "All":
             return feedViewModal.universalPosts
@@ -42,8 +42,8 @@ struct UserFeedScrollList: View {
                     .listRowInsets(.none)
             } else {
                 ForEach(filteredPosts, id: \.uniqueID) { post in
-                    UserPostsList(post: post, selectedOption: $selectedOption)  // Pass selectedOption here
-                        .environmentObject(firebaseValidation)
+                    UserPostsList(post: post, selectedOption: $selectedOption)  
+                        .environmentObject(FirebaseValidation.firebaseInstance)
                         .environmentObject(feedViewModal)
                         .frame(maxWidth: .infinity)
                         .listRowSeparator(.hidden)

@@ -9,8 +9,7 @@ struct LogInButton: View {
     @State private var alertMessage = ""
 
     @EnvironmentObject var formViewModal: FormViewModal
-  
-    let firebaseValidation = FirebaseValidation.firebaseInstance
+
     
     var body: some View {
         NavigationStack {
@@ -30,19 +29,19 @@ struct LogInButton: View {
                         Task {
                             isLoading = true
                             do {
-                                try await firebaseValidation.signIn(
+                                try await FirebaseValidation.firebaseInstance.signIn(
                                     withEmail: formViewModal.logInData
                                         .loginEmail,
                                     withPassword: formViewModal.logInData
                                         .loginPassword
                                 )
 
-                                if firebaseValidation.isAuthenticated {
+                                if FirebaseValidation.firebaseInstance.isAuthenticated {
                                     shouldNavigate = true
 
                                     let defaultImage = UIImage(
                                         systemName: "person.circle")!
-                                    await firebaseValidation.saveUserData(
+                                    await FirebaseValidation.firebaseInstance.saveUserData(
                                         with: defaultImage)
 
                                 } else {

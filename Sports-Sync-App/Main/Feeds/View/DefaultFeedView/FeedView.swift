@@ -9,7 +9,6 @@ import SwiftUI
 
 struct FeedView: View {
     @StateObject var feedViewModal = FeedViewModal()
-    let firebaseValidation = FirebaseValidation.firebaseInstance
 
     var body: some View {
         VStack {
@@ -33,7 +32,7 @@ struct FeedView: View {
             }
         }
         .environmentObject(feedViewModal)
-        .environmentObject(firebaseValidation)
+       
 
     }
 }

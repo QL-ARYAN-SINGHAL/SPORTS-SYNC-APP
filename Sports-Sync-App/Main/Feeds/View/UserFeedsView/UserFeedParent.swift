@@ -12,7 +12,7 @@ import SwiftUI
 struct UserFeedParent: View {
     @State private var selectedOption: String = "All"
     @EnvironmentObject var feedViewModal: FeedViewModal
-    let firebaseValidation = FirebaseValidation.firebaseInstance
+   
 
     var body: some View {
         VStack(spacing: 0) {
@@ -25,12 +25,12 @@ struct UserFeedParent: View {
             // Dropdown and Feed List in scrollable List
             UserFeedScrollList(selectedOption: $selectedOption)
                 .environmentObject(feedViewModal)
-                .environmentObject(firebaseValidation)
+                
         }
         .onAppear {
             Task {
                 await feedViewModal.fetchUniversalPostsAsync()
-                if let uid = firebaseValidation.userSession?.uid {
+                if let uid = FirebaseValidation.firebaseInstance.userSession?.uid {
                     await feedViewModal.fetchUserPostsAsync(userId: uid)
                 }
             }

@@ -1,10 +1,9 @@
 import SwiftUI
 
 struct SignUpButton: View {
-    
+
     // MARK: - Environment Objects
     @EnvironmentObject var formViewModal: FormViewModal
-   
 
     // MARK: - Props
     @Binding var isLoading: Bool
@@ -13,42 +12,53 @@ struct SignUpButton: View {
     @State private var shouldNavigate = false
     @State private var credentialAlert = false
     @State private var alertMessage = ""
-    
-    let firebaseValidation = FirebaseValidation.firebaseInstance
 
     // MARK: - Body
     var body: some View {
         VStack {
-            ActivatedButton(buttonText: isLoading ? "Signing Up..." : .signUpText, action:  {
-                
-                // MARK: - Form Validation Flags
-                let isEmailSignup = formViewModal.signUpData.signUpWith == .withEmail
-                
-                if isEmailSignup {
-                    if formViewModal.validateSignUpData() {
-                        
-                        Task {
-                            isLoading = true
-                            await firebaseValidation.register(
-                                withEmail: formViewModal.signUpData.signUpEmail,
-                                password: formViewModal.signUpData.signUpPassword,
-                                firstName: formViewModal.signUpData.firstName,
-                                lastName: formViewModal.signUpData.lastName,
-                                age: formViewModal.signUpData.ageValue,
-                                gender: formViewModal.signUpData.selectedGender?.rawValue ?? ""
-                            )
-                            let defaultImage = UIImage(systemName: "person.circle")!
-                            await firebaseValidation.saveUserData(with: defaultImage)
-                            shouldNavigate = true
-                            isLoading = false
+            ActivatedButton(
+                buttonText: isLoading ? "Signing Up..." : .signUpText,
+                action: {
+
+                    // MARK: - Form Validation Flags
+                    let isEmailSignup =
+                        formViewModal.signUpData.signUpWith == .withEmail
+
+                    if isEmailSignup {
+                        if formViewModal.validateSignUpData() {
+
+                            Task {
+                                isLoading = true
+                                await FirebaseValidation.firebaseInstance
+                                    .register(
+                                        withEmail: formViewModal.signUpData
+                                            .signUpEmail,
+                                        password: formViewModal.signUpData
+                                            .signUpPassword,
+                                        firstName: formViewModal.signUpData
+                                            .firstName,
+                                        lastName: formViewModal.signUpData
+                                            .lastName,
+                                        age: formViewModal.signUpData.ageValue,
+                                        gender: formViewModal.signUpData
+                                            .selectedGender?.rawValue ?? ""
+                                    )
+                                let defaultImage = UIImage(
+                                    systemName: "person.circle")!
+                                await FirebaseValidation.firebaseInstance
+                                    .saveUserData(with: defaultImage)
+                                shouldNavigate = true
+                                isLoading = false
+                            }
+                        } else {
+                            // Set the alert message if validation fails
+                            alertMessage =
+                                formViewModal.alertMessage
+                                ?? "Please fill out all required fields."
+                            credentialAlert = true
                         }
-                    } else {
-                        // Set the alert message if validation fails
-                        alertMessage = formViewModal.alertMessage ?? "Please fill out all required fields."
-                        credentialAlert = true
                     }
-                }
-            }, isDisabled: isLoading)
+                }, isDisabled: isLoading)
         }
         .alert(isPresented: $credentialAlert) {
             Alert(
@@ -70,6 +80,6 @@ struct SignUpButton: View {
     NavigationStack {
         SignUpButton(isLoading: .constant(false))
             .environmentObject(FormViewModal())
-            .environmentObject(FirebaseValidation())
+
     }
 }

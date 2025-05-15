@@ -12,7 +12,6 @@ struct UserPostsList: View {
     @EnvironmentObject var feedViewModal: FeedViewModal
     @Binding var selectedOption: String
     
-    let firebaseValidation = FirebaseValidation.firebaseInstance
     // Get the current user's profile image
     var userProfileImage: UIImage {
         if let profileImageURL = post.profileImageURL,
@@ -27,7 +26,7 @@ struct UserPostsList: View {
     
     var body: some View {
         Group {
-            if let user = firebaseValidation.currentUser {
+            if let user = FirebaseValidation.firebaseInstance.currentUser {
                 let isOwner = user.id == post.id
                 let isLiked = post.likedUsers?.contains(user.id) ?? false
                 
