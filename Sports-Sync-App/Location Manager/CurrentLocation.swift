@@ -1,6 +1,12 @@
+
+
+
+//MARK: - RESPONSIBILITY - COER RESINSIBLE FOR LOCATION PERMISSION FROM CLLOCATIONMANAGER AND HANDLE THE COORDINATES AND REVERSE GEOCODING
+
 import CoreLocation
 
 final class LocationManager: NSObject, CLLocationManagerDelegate,ObservableObject {
+    
     private var locationManager = CLLocationManager()
     var locationCompletion: ((String?) -> Void)?
 

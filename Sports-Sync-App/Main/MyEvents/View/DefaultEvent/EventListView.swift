@@ -35,6 +35,7 @@ struct EventListView: View {
 
                     ForEach(0..<weeks.count, id: \.self) { index in
                         let startOfMonth = currentMonth.startOfMonth
+                        
                         let weekStart = Calendar.current.date(
                             byAdding: .day, value: index * 7, to: startOfMonth)!
 

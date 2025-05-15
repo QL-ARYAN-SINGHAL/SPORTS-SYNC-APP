@@ -4,9 +4,10 @@
 //
 //  Created by ARYAN SINGHAL on 29/04/25.
 //
+//MARK: RESPONSIBILITY : PUBLISHING THE CHANGES MADE IN DATA MODAL AND FETCH DETAILS FROM DATABASE TO BE STORED IN DATA MODAL
 
 import FirebaseFirestore
-//MARK: RESPONSIBILITY : PUBLISHING THE CHANGES MADE IN DATA MODAL AND FETCH DETAILS FROM DATABASE TO BE STORED IN DATA MODAL
+
 import SwiftUI
 
 
@@ -39,6 +40,7 @@ class SelectSportsViewModal: ObservableObject {
 
             var fetchedSports: [SelectSportDataModal] = []
 
+           // key,valuepair,ignore the key only we need value
             for (_, sportInfo) in selectSportsData {
                 guard
                     let sportsName = sportInfo["sportsName"] as? String,

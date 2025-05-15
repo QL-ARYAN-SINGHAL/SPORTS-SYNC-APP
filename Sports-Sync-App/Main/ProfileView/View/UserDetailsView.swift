@@ -24,7 +24,7 @@ struct UserDetailsView: View {
                         PhotosPicker(
                             selection: $photoPickerItem, matching: .images
                         ) {
-                            //uiImage is for rendering your image as in UIKit way
+                           
                             Image(
                                 uiImage: firebaseValidation.avatarImage
                                     ?? UIImage(
@@ -82,10 +82,9 @@ struct UserDetailsView: View {
         .onAppear {
             
             firebaseValidation.userData = firebaseValidation.getUserData()
-            if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
+            if let imageData = UserDefaults.standard.data(forKey: .userDefaultUserImage) {
                 firebaseValidation.avatarImage = UIImage(data: imageData)
             }
-
         }
 
         .onChange(of: photoPickerItem) { newItem in

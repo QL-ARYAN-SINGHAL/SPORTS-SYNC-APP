@@ -29,7 +29,7 @@ struct SignUpButton: View {
 
                             Task {
                                 isLoading = true
-                                await FirebaseValidation.firebaseInstance
+                                await FirebaseValidation.shared
                                     .register(
                                         withEmail: formViewModal.signUpData
                                             .signUpEmail,
@@ -45,7 +45,7 @@ struct SignUpButton: View {
                                     )
                                 let defaultImage = UIImage(
                                     systemName: "person.circle")!
-                                await FirebaseValidation.firebaseInstance
+                                await FirebaseValidation.shared
                                     .saveUserData(with: defaultImage)
                                 shouldNavigate = true
                                 isLoading = false

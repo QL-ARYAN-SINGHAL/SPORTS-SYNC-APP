@@ -26,7 +26,7 @@ struct UserPostsList: View {
     
     var body: some View {
         Group {
-            if let user = FirebaseValidation.firebaseInstance.currentUser {
+            if let user = FirebaseValidation.shared.currentUser {
                 let isOwner = user.id == post.id
                 let isLiked = post.likedUsers?.contains(user.id) ?? false
                 

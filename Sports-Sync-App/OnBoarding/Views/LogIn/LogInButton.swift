@@ -29,19 +29,19 @@ struct LogInButton: View {
                         Task {
                             isLoading = true
                             do {
-                                try await FirebaseValidation.firebaseInstance.signIn(
+                                try await FirebaseValidation.shared.signIn(
                                     withEmail: formViewModal.logInData
                                         .loginEmail,
                                     withPassword: formViewModal.logInData
                                         .loginPassword
                                 )
 
-                                if FirebaseValidation.firebaseInstance.isAuthenticated {
+                                if FirebaseValidation.shared.isAuthenticated {
                                     shouldNavigate = true
 
                                     let defaultImage = UIImage(
                                         systemName: "person.circle")!
-                                    await FirebaseValidation.firebaseInstance.saveUserData(
+                                    await FirebaseValidation.shared.saveUserData(
                                         with: defaultImage)
 
                                 } else {
@@ -85,5 +85,5 @@ struct LogInButton: View {
 #Preview {
     LogInButton(isLoading: .constant(true))
         .environmentObject(FormViewModal())
-        .environmentObject(FirebaseValidation())
+        
 }

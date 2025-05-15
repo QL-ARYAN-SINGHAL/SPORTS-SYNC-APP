@@ -124,17 +124,26 @@ class CardViewModel: ObservableObject {
     func filterCards(by sport: String?) {
         if let sport = sport, !sport.isEmpty {
             // Filter cards for each category based on sport
-            filteredNearbyCards = nearbyCards.filter { $0.sportsName == sport }
-            filteredRecommendedCards = recommendedCards.filter {
+            filteredNearbyCards = nearbyCards.filter
+            { $0.sportsName == sport
+            }
+            
+            filteredRecommendedCards = recommendedCards.filter
+            {
                 $0.sportsName == sport
             }
-            filteredTrendingCards = trendingCards.filter {
+            
+            filteredTrendingCards = trendingCards.filter
+            {
                 $0.sportsName == sport
             }
+            
         } else {
             // If no sport is selected, return all cards for each category
             filteredNearbyCards = nearbyCards
+            
             filteredRecommendedCards = recommendedCards
+            
             filteredTrendingCards = trendingCards
         }
 

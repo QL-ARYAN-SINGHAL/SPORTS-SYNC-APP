@@ -19,7 +19,7 @@ struct ForgetPasswordButton: View {
             VStack {
                 ActivatedButton(buttonText: .resetPasswordString) {
                     Task {
-                        let success = await FirebaseValidation.firebaseInstance.resetPassword(email: formViewModal.logInData.forgotEmailText)
+                        let success = await FirebaseValidation.shared.resetPassword(email: formViewModal.logInData.forgotEmailText)
                         if success {
                             shouldNavigate = true
                         } else {
@@ -43,6 +43,6 @@ struct ForgetPasswordButton: View {
 #Preview {
     ForgetPasswordButton()
         .environmentObject(FormViewModal())
-        .environmentObject(FirebaseValidation())
+       
 }
 

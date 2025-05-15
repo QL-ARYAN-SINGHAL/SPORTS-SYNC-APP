@@ -15,14 +15,14 @@ struct UserPostCreationSection: View {
             VStack {
                 NavigationLink(
                     destination: CreatePostParent().environmentObject(
-                        FirebaseValidation.firebaseInstance), isActive: $navigateToCreatePost
+                        FirebaseValidation.shared), isActive: $navigateToCreatePost
                 ) {
                     EmptyView()
                 }
                 .hidden()
 
                 VStack {
-                    if let user = FirebaseValidation.firebaseInstance.currentUser {
+                    if let user = FirebaseValidation.shared.currentUser {
                         Text("What's on your mind, \(user.firstName)?")
                             .font(Font.custom(.fontJakarta, size: 15))
                             .frame(width: 343, height: 39, alignment: .leading)
@@ -49,7 +49,7 @@ struct UserPostCreationSection: View {
             }
             .frame(width: 343, height: 34)
             .padding(.vertical, 30)
-            .environmentObject(FirebaseValidation.firebaseInstance)
+            .environmentObject(FirebaseValidation.shared)
 
         }
     }
@@ -57,6 +57,6 @@ struct UserPostCreationSection: View {
 #Preview {
     NavigationStack {
         UserPostCreationSection()
-            .environmentObject(FirebaseValidation())
+           
     }
 }

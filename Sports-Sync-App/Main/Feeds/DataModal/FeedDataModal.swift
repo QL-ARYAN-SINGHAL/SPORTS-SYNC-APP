@@ -9,8 +9,8 @@ import SwiftUI
 struct FeedDataModal: Identifiable, Codable {
     var makeNavigation: Bool = false
     var captionPost: String = ""
-    var id: String = ""              // Firestore Document ID
-    var uniqueID: String = ""        // User UID
+    var id: String = ""
+    var uniqueID: String = ""        
     var postLike: Int = 0
     var postTime: Date = Date()
     var base64Image: String? = nil

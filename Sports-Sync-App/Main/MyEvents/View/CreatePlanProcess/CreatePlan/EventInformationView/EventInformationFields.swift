@@ -140,7 +140,7 @@ struct EventInformationFields: View {
                     {
                         eventInformationViewModel.isSubmitting = true
                         eventInformationViewModel.eventInformationStoreDB(
-                            id: FirebaseValidation.firebaseInstance.currentUser?.id ?? "got No ID ",
+                            id: FirebaseValidation.shared.currentUser?.id ?? "got No ID ",
                             eventName: eventInformationViewModel.eventInfoData
                                 .eventName,
                             sportsName: eventInformationViewModel.eventInfoData

@@ -4,7 +4,7 @@
 //
 //  Created by ARYAN SINGHAL on 13/05/25.
 //
-
+//MARK: - RESPONSIBILITY - FETCH THE LOCATION DETAILS FROM LOCATION MANAGER TO DISPLAY THE LOCATION ON UI
 import SwiftUI
 
 class LocationViewModel: ObservableObject {

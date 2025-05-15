@@ -137,9 +137,7 @@ struct MainTabView: View {
 
             }
         }
-        //        .onAppear{
-        //            NotificationManager.notificationInstance.requestAuthorization()
-        //        }
+       
     }
 }
 

@@ -15,7 +15,7 @@ struct UserLogOut: View {
                 ActivatedButton(
                     buttonText: .logOutString,
                     action: {
-                        FirebaseValidation.firebaseInstance.signOut()
+                        FirebaseValidation.shared.signOut()
                         logOutNavigation = true
                     })
             }
@@ -28,5 +28,5 @@ struct UserLogOut: View {
 
 #Preview {
     UserLogOut()
-        .environmentObject(FirebaseValidation())
+       
 }

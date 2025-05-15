@@ -16,7 +16,7 @@ struct EventView: View {
 
     private var shouldShowUserCreatedEvents: Bool {
         eventViewModel.userCreatedEvents.contains {
-            $0.id == FirebaseValidation.firebaseInstance.currentUser?.id
+            $0.id == FirebaseValidation.shared.currentUser?.id
         }
     }
 

@@ -45,25 +45,35 @@ struct StadiumListSheet: View {
                         .padding(.horizontal)
 
                     List {
-                        ForEach(filteredStadiums, id: \.self) { stadium in
+                        
+                        ForEach(filteredStadiums, id: \.self) {
+                            
+                            stadium in
+                            
                             Button(action: {
+                                
                                 if eventInformationViewModal.eventInfoData.selectedStadium == stadium {
                                     eventInformationViewModal.eventInfoData.selectedStadium = ""
                                     cardViewModel.selectedCard = nil
+                                    
                                 } else {
+                                    
                                     eventInformationViewModal.eventInfoData.selectedStadium = stadium
                                     if let matchingCard = cardViewModel.cardsHomeData.first(where: {
                                         $0.stadiumName == stadium
-                                    }) {
+                                    })
+                                    {
                                         cardViewModel.selectCard(matchingCard)
                                     }
                                 }
                             }) {
                                 HStack {
+                                    
                                     Text(stadium)
                                         .font(Font.custom(.fontJakarta, size: 15))
                                         .frame(height: 50, alignment: .leading)
                                     Spacer()
+                                    
                                     if eventInformationViewModal.eventInfoData.selectedStadium == stadium {
                                         Image(systemName: "checkmark.circle.fill")
                                             .foregroundStyle(.green)

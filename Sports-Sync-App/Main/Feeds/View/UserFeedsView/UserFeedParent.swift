@@ -30,7 +30,7 @@ struct UserFeedParent: View {
         .onAppear {
             Task {
                 await feedViewModal.fetchUniversalPostsAsync()
-                if let uid = FirebaseValidation.firebaseInstance.userSession?.uid {
+                if let uid = FirebaseValidation.shared.userSession?.uid {
                     await feedViewModal.fetchUserPostsAsync(userId: uid)
                 }
             }
@@ -41,6 +41,6 @@ struct UserFeedParent: View {
 
 #Preview {
     UserFeedParent()
-        .environmentObject(FirebaseValidation())
+       
         .environmentObject(FeedViewModal())
 }

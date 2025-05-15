@@ -6,7 +6,7 @@ import SwiftUI
 @MainActor
 class FirebaseValidation: ObservableObject{
     
-    static let firebaseInstance = FirebaseValidation()
+    static let shared = FirebaseValidation()
 
     // MARK: - Published Properties
     @Published var signUpData = SignUpDataModel()
@@ -21,7 +21,7 @@ class FirebaseValidation: ObservableObject{
     @Published var avatarImage: UIImage? = nil
 
     // MARK: - Initializer
-    init() {
+     init() {
         // Check if user is already authenticated and set user session
         if let user = Auth.auth().currentUser {
             self.userSession = user
@@ -33,12 +33,9 @@ class FirebaseValidation: ObservableObject{
             self.isAuthenticated = false
         }
     }
+    
 
     // MARK: - Authentication Methods
-
-    /// Signs in a user using email and password
-    // make these functions static and make firebase servive
-
     func signIn(withEmail email: String, withPassword password: String)
         async throws
     {
@@ -57,17 +54,14 @@ class FirebaseValidation: ObservableObject{
     /// Signs out the current user
     func signOut() {
         do {
-            // Sign out from Firebase
-
-            // Clear UserDefaults data
-            UserDefaults.standard.removeObject(forKey: "FirstName")
-            UserDefaults.standard.removeObject(forKey: "LastName")
-            UserDefaults.standard.removeObject(forKey: "AgeValue")
-            UserDefaults.standard.removeObject(forKey: "SignUpEmail")
-            UserDefaults.standard.removeObject(forKey: "SelectedGender")
-            UserDefaults.standard.removeObject(forKey: "PhoneNumber")
-
-            // Reset session and current user data
+          
+            UserDefaults.standard.removeObject(forKey:.userDefaultEmail )
+            UserDefaults.standard.removeObject(forKey:.userDefaultAgeValue)
+            UserDefaults.standard.removeObject(forKey:.userDefaultLastName)
+            UserDefaults.standard.removeObject(forKey: .userDefaultFirstName)
+            UserDefaults.standard.removeObject(forKey:.userDefaultPhoneNumber)
+            UserDefaults.standard.removeObject(forKey: .userDefaultSelectedGender)
+        
             self.userSession = nil
             self.currentUser = nil
             self.isAuthenticated = false
@@ -134,11 +128,6 @@ class FirebaseValidation: ObservableObject{
                 phoneNumber: phoneNumber ?? ""
             )
 
-            //            if email?.contains("@") == true {
-            //                user.signUpEmail = email ?? ""
-            //                user.signUpWith = .withEmail
-            //            }
-
             let encodedUser = try Firestore.Encoder().encode(user)
             try await Firestore.firestore().collection("users").document(
                 user.id
@@ -194,7 +183,7 @@ class FirebaseValidation: ObservableObject{
                     "profileImageURL": base64String
                 ])
 
-            UserDefaults.standard.set(imageData, forKey: "UserImage")
+            UserDefaults.standard.set(imageData, forKey: .userDefaultUserImage)
             self.avatarImage = image
             self.currentUser?.profileImageURL = base64String
 
@@ -209,35 +198,32 @@ class FirebaseValidation: ObservableObject{
     /// Saves user data and avatar image to UserDefaults
     func saveUserData(with avatarImage: UIImage?) async {
         guard let currentUser = currentUser else {
-            print("No current user to save in UserDefaults")
             return
         }
 
         DispatchQueue.main.async {
             UserDefaults.standard.set(
-                currentUser.firstName, forKey: "FirstName")
-            UserDefaults.standard.set(currentUser.lastName, forKey: "LastName")
-            UserDefaults.standard.set(currentUser.ageValue, forKey: "AgeValue")
+                currentUser.firstName, forKey: .userDefaultFirstName)
+            UserDefaults.standard.set(currentUser.lastName, forKey: .userDefaultLastName)
+            UserDefaults.standard.set(currentUser.ageValue, forKey: .userDefaultAgeValue)
             UserDefaults.standard.set(
-                currentUser.signUpEmail, forKey: "SignUpEmail")
+                currentUser.signUpEmail, forKey: .userDefaultEmail)
 
             if let gender = currentUser.selectedGender?.rawValue {
-                UserDefaults.standard.set(gender, forKey: "SelectedGender")
+                UserDefaults.standard.set(gender, forKey: .userDefaultSelectedGender)
             }
 
             if !currentUser.phoneNumber.isEmpty {
                 UserDefaults.standard.set(
-                    currentUser.phoneNumber, forKey: "PhoneNumber")
+                    currentUser.phoneNumber, forKey: .userDefaultPhoneNumber)
             }
 
             if let avatarImage = avatarImage,
                 let imageData = avatarImage.jpegData(compressionQuality: 0.5)
             {
                 self.avatarImage = avatarImage
-                UserDefaults.standard.set(imageData, forKey: "UserImage")
-                print(
-                    "User image saved in UserDefaults, size: \(imageData.count) bytes"
-                )
+                UserDefaults.standard.set(imageData, forKey: .userDefaultUserImage)
+               
             }
         }
     }
@@ -251,16 +237,16 @@ class FirebaseValidation: ObservableObject{
 
     /// Retrieves user data from UserDefaults
     func getUserData() -> SignUpDataModel {
-        let firstName = UserDefaults.standard.string(forKey: "FirstName") ?? ""
-        let lastName = UserDefaults.standard.string(forKey: "LastName") ?? ""
-        let ageValue = UserDefaults.standard.double(forKey: "AgeValue")
+        let firstName = UserDefaults.standard.string(forKey: .userDefaultFirstName) ?? ""
+        let lastName = UserDefaults.standard.string(forKey: .userDefaultLastName) ?? ""
+        let ageValue = UserDefaults.standard.double(forKey: .userDefaultAgeValue)
         let genderRaw =
-            UserDefaults.standard.string(forKey: "SelectedGender") ?? ""
-        let email = UserDefaults.standard.string(forKey: "SignUpEmail") ?? ""
+        UserDefaults.standard.string(forKey: .userDefaultSelectedGender) ?? ""
+        let email = UserDefaults.standard.string(forKey: .userDefaultEmail) ?? ""
         let phoneNumber =
-            UserDefaults.standard.string(forKey: "PhoneNumber") ?? ""
+        UserDefaults.standard.string(forKey: .userDefaultPhoneNumber) ?? ""
 
-        if let imageData = UserDefaults.standard.data(forKey: "UserImage") {
+        if let imageData = UserDefaults.standard.data(forKey: .userDefaultUserImage) {
             avatarImage = UIImage(data: imageData)
         }
 

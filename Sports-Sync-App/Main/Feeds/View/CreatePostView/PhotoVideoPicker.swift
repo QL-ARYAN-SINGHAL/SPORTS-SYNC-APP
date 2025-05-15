@@ -36,15 +36,17 @@ struct PhotoVideoPickerFooter: View {
                 }
                 .frame(width: 343, height: 60, alignment: .leading)
 
-                // Hidden NavigationLink for camera navigation
-                NavigationLink(
-                    destination: CameraView(
-                        image: $feedViewModal.feedData.localImage),
-                    isActive: $navigateToCamera
-                ) {
-                    EmptyView()
-                }
-                .hidden()
+              
+                    
+                    NavigationLink(
+                        destination: CameraView(
+                            image: $feedViewModal.feedData.localImage),
+                        isActive: $navigateToCamera
+                    ) {
+                        EmptyView()
+                    }
+                    .hidden()
+                
             }
             // Debug log
             .onChange(of: feedViewModal.selectedDeviceImage) { newValue in
